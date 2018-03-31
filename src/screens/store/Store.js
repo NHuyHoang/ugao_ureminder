@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated } from 'react-native';
 import ui from '../../share/ui.constant';
-import { SearchInput, NavbarTab } from '../../components';
+import { SearchInput, NavbarTab, CartButton, ProductItem, PayButton } from '../../components';
 import StoreProduct from './storeProduct/StoreProduct';
 import StoreNoti from './storeNoti/StoreNoti';
 import StoreContact from './storeContact/StoreContact';
@@ -12,13 +12,20 @@ class Store extends React.Component {
         this.state = {
             tabSelection: 1,
             pageMounted: false,
-            checkCart: false
+            checkCart: false,
+            dimmerAnim: new Animated.Value(0)
         };
         this.tab = <StoreProduct />;
+        this.productArr = ["http://gaosach58.vn/wp-content/uploads/2017/08/BotNem_NguBang.jpg","http://gaosach58.vn/wp-content/uploads/2018/02/Gao-dan-toc-gao-ong-tung-gao-sach-58-gao-cha-doi-gao-xay-doi-gao-nguyen-cam.jpg","http://gaosach58.vn/wp-content/uploads/2017/07/tn-300x300.jpg"]
     }
 
     onSelectTab(tab) {
+        console.log('triger');
         this.setState({ tabSelection: tab })
+    }
+
+    onCheckCart() {
+        
     }
 
     render() {
@@ -37,7 +44,13 @@ class Store extends React.Component {
                 <StoreProduct show={this.state.tabSelection === 1} />
                 <StoreNoti show={this.state.tabSelection === 2} />
                 <StoreContact show={this.state.tabSelection === 3} />
-                {this.state.checkCart ? <View style={styles.dimmer}></View> : null}
+                {this.state.checkCart ? <View style={styles.dimmer} /> : null}
+                <CartButton checkCart={() => this.setState(prev => ({ checkCart: !prev.checkCart }))} />
+                {this.productArr.map((item,i) => {
+                    return (
+                        <ProductItem key={i} source={item} translateY={-70 - (i*70)} show={this.state.checkCart}/>)
+                })}
+                <PayButton show={this.state.checkCart}/>
             </View>
         )
     }
@@ -72,14 +85,14 @@ const styles = StyleSheet.create({
     navbarTab: {
         flex: 1,
     },
-    dimmer:{
-        position:'absolute',
-        height:_height,
-        width:_width,
-        zIndex:2,
-        backgroundColor:'black',
-        elevation:4,
-        opacity:0
+    dimmer: {
+        position: 'absolute',
+        height: _height,
+        width: _width,
+        zIndex: 2,
+        backgroundColor: 'black',
+        elevation: 4,
+        opacity: 0.6
     }
 
 })

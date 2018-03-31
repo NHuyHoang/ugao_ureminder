@@ -5,7 +5,8 @@ export default {
         black:"#000",
         light_gray:"#D5D5D5",
         dark_gray:"#9A9A9A",
-        smoke:"#F6F6F6"
+        smoke:"#F6F6F6",
+        red:'#FF5E5E'
     },
     fonts:{
         default:"Roboto-Regular",
