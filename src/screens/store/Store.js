@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated, PanResponder, Button } from 'react-native';
 import ui from '../../share/ui.constant';
 import { SearchInput, NavbarTab, CartButton, ProductItem, PayButton } from '../../components';
 import StoreProduct from './storeProduct/StoreProduct';
 import StoreNoti from './storeNoti/StoreNoti';
 import StoreContact from './storeContact/StoreContact';
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 class Store extends React.Component {
     constructor(props) {
@@ -13,10 +14,12 @@ class Store extends React.Component {
             tabSelection: 1,
             pageMounted: false,
             checkCart: false,
-            dimmerAnim: new Animated.Value(0)
+            dimmerAnim: new Animated.Value(0),
+            onProductRemove:false,
+            productArr: ["http://gaosach58.vn/wp-content/uploads/2017/08/BotNem_NguBang.jpg","http://gaosach58.vn/wp-content/uploads/2018/02/Gao-dan-toc-gao-ong-tung-gao-sach-58-gao-cha-doi-gao-xay-doi-gao-nguyen-cam.jpg","http://gaosach58.vn/wp-content/uploads/2017/07/tn-300x300.jpg"]
         };
-        this.tab = <StoreProduct />;
-        this.productArr = ["http://gaosach58.vn/wp-content/uploads/2017/08/BotNem_NguBang.jpg","http://gaosach58.vn/wp-content/uploads/2018/02/Gao-dan-toc-gao-ong-tung-gao-sach-58-gao-cha-doi-gao-xay-doi-gao-nguyen-cam.jpg","http://gaosach58.vn/wp-content/uploads/2017/07/tn-300x300.jpg"]
+    
+        this.onCheckCart = this.onCheckCartHandler.bind(this);
     }
 
     onSelectTab(tab) {
@@ -24,9 +27,18 @@ class Store extends React.Component {
         this.setState({ tabSelection: tab })
     }
 
-    onCheckCart() {
-        
+
+    onCheckCartHandler() {
+        this.setState(prev => ({ checkCart: !prev.checkCart }))
     }
+    //temp
+    onRemoveProductFromCart(content){
+        this.setState({
+            productArr: this.state.productArr.filter((item,i) => content != item)
+        })
+    }
+
+    
 
     render() {
         return (
@@ -44,11 +56,15 @@ class Store extends React.Component {
                 <StoreProduct show={this.state.tabSelection === 1} />
                 <StoreNoti show={this.state.tabSelection === 2} />
                 <StoreContact show={this.state.tabSelection === 3} />
-                {this.state.checkCart ? <View style={styles.dimmer} /> : null}
-                <CartButton checkCart={() => this.setState(prev => ({ checkCart: !prev.checkCart }))} />
-                {this.productArr.map((item,i) => {
+                {this.state.checkCart ? <View style={styles.dimmer}><Icon size={80} name="highlight-off" color="white" /></View> : null}
+                <CartButton checkCart={this.onCheckCart} quantity={this.state.productArr.length}/>
+                {this.state.productArr.map((item,i) => {
                     return (
-                        <ProductItem key={i} source={item} translateY={-70 - (i*70)} show={this.state.checkCart}/>)
+                        <ProductItem 
+                            removeProduct={this.onRemoveProductFromCart.bind(this,item)} 
+                            key={item} source={item} 
+                            translateY={-70 - (i*70)} 
+                            show={this.state.checkCart}/>)
                 })}
                 <PayButton show={this.state.checkCart}/>
             </View>
@@ -68,14 +84,13 @@ const styles = StyleSheet.create({
     navbarContainer: {
         height: 100,
         width: '100%',
-        elevation: 3,
         backgroundColor: 'white'
     },
     navbarInput: {
         width: '100%',
         height: 64,
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent:'center',
     },
     searchInput: {
         backgroundColor: 'transparent',
@@ -91,8 +106,9 @@ const styles = StyleSheet.create({
         width: _width,
         zIndex: 2,
         backgroundColor: 'black',
-        elevation: 4,
-        opacity: 0.6
+        opacity: 0.6,
+        alignItems:'center',
+        justifyContent:'center',
     }
 
 })

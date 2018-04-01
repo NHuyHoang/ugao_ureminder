@@ -1,6 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, Animated, Image } from 'react-native';
-export default class ProductItem extends React.Component {
+import { StyleSheet, Text, View, Animated } from 'react-native';
+import ui from '../../share/ui.constant';
+import Icon from 'react-native-vector-icons/MaterialIcons'
+export default class PayButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -28,15 +30,15 @@ export default class ProductItem extends React.Component {
     render() {
         let animTransform = {
             transform: [{
-                translateY: this.state.anim.interpolate({
+                translateX: this.state.anim.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [0, this.props.translateY]
+                    outputRange: [0, -70]
                 })
             }]
         }
         return (
             <Animated.View style={[styles.container, animTransform]}>
-                <Image style={styles.productImg} source={{uri:this.props.source}}/>
+                <Icon name="check" size={30} color="white"/>
             </Animated.View>
         );
     }
@@ -48,18 +50,11 @@ const styles = StyleSheet.create({
         width: 50,
         borderRadius: 25,
         position: 'absolute',
-        justifyContent:'center',
-        alignItems:'center',
         zIndex: 3,
         bottom: 30,
         right: 30,
-        padding:5,
-        backgroundColor: 'white',
-        elevation: 5,
-    },
-    productImg:{
-        resizeMode:'contain',
-        height: 30,
-        width: 30,
+        backgroundColor: ui.colors.highlight,
+        justifyContent:'center',
+        alignItems:'center',
     }
 })
