@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated, PanResponder, Button } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated, PanResponder, Button, Image } from 'react-native';
 import ui from '../../share/ui.constant';
 import { SearchInput, NavbarTab, CartButton, ProductItem, PayButton } from '../../components';
 import StoreProduct from './storeProduct/StoreProduct';
@@ -15,15 +15,14 @@ class Store extends React.Component {
             pageMounted: false,
             checkCart: false,
             dimmerAnim: new Animated.Value(0),
-            onProductRemove:false,
-            productArr: ["http://gaosach58.vn/wp-content/uploads/2017/08/BotNem_NguBang.jpg","http://gaosach58.vn/wp-content/uploads/2018/02/Gao-dan-toc-gao-ong-tung-gao-sach-58-gao-cha-doi-gao-xay-doi-gao-nguyen-cam.jpg","http://gaosach58.vn/wp-content/uploads/2017/07/tn-300x300.jpg"]
+            onProductRemove: false,
+            productArr: ["http://gaosach58.vn/wp-content/uploads/2017/08/BotNem_NguBang.jpg", "http://gaosach58.vn/wp-content/uploads/2018/02/Gao-dan-toc-gao-ong-tung-gao-sach-58-gao-cha-doi-gao-xay-doi-gao-nguyen-cam.jpg", "http://gaosach58.vn/wp-content/uploads/2017/07/tn-300x300.jpg"]
         };
-    
+
         this.onCheckCart = this.onCheckCartHandler.bind(this);
     }
 
     onSelectTab(tab) {
-        console.log('triger');
         this.setState({ tabSelection: tab })
     }
 
@@ -32,13 +31,15 @@ class Store extends React.Component {
         this.setState(prev => ({ checkCart: !prev.checkCart }))
     }
     //temp
-    onRemoveProductFromCart(content){
+    onRemoveProductFromCart(content) {
         this.setState({
-            productArr: this.state.productArr.filter((item,i) => content != item)
+            productArr: this.state.productArr.filter((item, i) => content != item)
         })
     }
 
-    
+
+
+
 
     render() {
         return (
@@ -57,16 +58,17 @@ class Store extends React.Component {
                 <StoreNoti show={this.state.tabSelection === 2} />
                 <StoreContact show={this.state.tabSelection === 3} />
                 {this.state.checkCart ? <View style={styles.dimmer}><Icon size={80} name="highlight-off" color="white" /></View> : null}
-                <CartButton checkCart={this.onCheckCart} quantity={this.state.productArr.length}/>
-                {this.state.productArr.map((item,i) => {
+                <CartButton checkCart={this.onCheckCart} quantity={this.state.productArr.length} />
+                {this.state.productArr.map((item, i) => {
                     return (
-                        <ProductItem 
-                            removeProduct={this.onRemoveProductFromCart.bind(this,item)} 
-                            key={item} source={item} 
-                            translateY={-70 - (i*70)} 
-                            show={this.state.checkCart}/>)
+                        <ProductItem
+                            initPosition={{ x: 30, y: 30 }}
+                            removeProduct={this.onRemoveProductFromCart.bind(this, item)}
+                            key={item} source={item}
+                            translateY={-70 - (i * 70)}
+                            show={this.state.checkCart} />)
                 })}
-                <PayButton show={this.state.checkCart}/>
+                <PayButton show={this.state.checkCart} />
             </View>
         )
     }
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 64,
         alignItems: 'center',
-        justifyContent:'center',
+        justifyContent: 'center',
     },
     searchInput: {
         backgroundColor: 'transparent',
@@ -107,9 +109,9 @@ const styles = StyleSheet.create({
         zIndex: 2,
         backgroundColor: 'black',
         opacity: 0.6,
-        alignItems:'center',
-        justifyContent:'center',
-    }
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 
 })
 export default Store;

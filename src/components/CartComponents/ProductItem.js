@@ -5,7 +5,6 @@ export default class ProductItem extends React.Component {
         super(props);
         this.state = {
             setDraggingAnim: false,
-            inRemoveZone: false,
             removeAnim: new Animated.Value(1)
         }
         this._height = Dimensions.get('screen').height;
@@ -23,15 +22,11 @@ export default class ProductItem extends React.Component {
             },
             onPanResponderMove: (e, gt) => {
                 Animated.event([null, { dx: this.anim.x, dy: this.anim.y }])(e, gt);
-                if (this.isInRemove(gt.moveX, gt.moveY) && !this.state.inRemoveZone) {
-                    this.setState({ inRemoveZone: true });
-                }
             },
             //
-            onPanResponderRelease: (evt, { dx, dy }) => {
-
+            onPanResponderRelease: (evt, { moveX, moveY, dx, dy }) => {
                 this.anim.flattenOffset();
-                if (this.state.inRemoveZone) {
+                if (this.isInRemove(moveX, moveY)) {
                     Animated.parallel([
                         Animated.timing(this.anim.x, {
                             toValue: 55 - (this._width / 2),
@@ -47,7 +42,7 @@ export default class ProductItem extends React.Component {
                         Animated.timing(this.state.removeAnim, {
                             toValue: 0,
                             timing: 10,
-                            useNativeDriver:true
+                            useNativeDriver: true
                         }).start(() => this.props.removeProduct())
                     })
                 } else {
@@ -73,10 +68,10 @@ export default class ProductItem extends React.Component {
     isInRemove(x, y) {
         const _height = this._height / 2;
         const _width = this._width / 2;
-        if (x <= _width + 40 &&
-            x >= _width - 40 &&
-            y <= _height + 40 &&
-            y >= _height - 40) return true;
+        if (x <= _width + 50 &&
+            x >= _width - 50 &&
+            y <= _height + 50 &&
+            y >= _height - 50) return true;
         return false
     }
 
@@ -104,8 +99,8 @@ export default class ProductItem extends React.Component {
                 translateY: this.anim.y
             }, {
                 translateX: this.anim.x,
-            },{
-                scale:this.state.removeAnim
+            }, {
+                scale: this.state.removeAnim
             }],
         }
         /*  let draggingTransform = {}
@@ -126,7 +121,7 @@ export default class ProductItem extends React.Component {
                     this.elementPos.x = x;
                     this.elementPos.y = y;
                 }}
-                {...this.panRes.panHandlers} style={[styles.container, animTransform]}>
+                {...this.panRes.panHandlers} style={[styles.container,{bottom:this.props.initPosition.x,right:this.props.initPosition.y}, animTransform]}>
                 <Image style={styles.productImg} source={{ uri: this.props.source }} />
             </Animated.View>
         );
@@ -142,8 +137,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 3,
-        bottom: 30,
-        right: 30,
+        //bottom: 30,
+        //right: 30,
         padding: 5,
         backgroundColor: 'white',
     },

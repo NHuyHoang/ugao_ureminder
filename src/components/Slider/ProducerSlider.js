@@ -114,7 +114,8 @@ const styles = StyleSheet.create({
         marginLeft: 12,
         marginRight: 12,
         borderRadius: 8,
-        elevation: 2
+        borderWidth:1,
+        borderColor:ui.colors.light_gray
     },
     actIndicator: {
         width: '100%',

@@ -14,10 +14,12 @@ export default class CartButton extends React.Component {
                     <View style={styles.cartBtn}>
                         <Icon name="shopping-cart" size={30} color="white" />
                     </View>
-                    {this.props.quantity === 0 ?
-                        null : <View style={styles.counter}>
-                            <Text style={styles.counterTxt}>{this.props.quantity}</Text>
-                        </View>}
+                    {
+                        this.props.quantity === 0 ?
+                            null : <View style={styles.counter}>
+                                <Text style={styles.counterTxt}>{this.props.quantity}</Text>
+                            </View>
+                    }
                 </View>
             </TouchableWithoutFeedback>
         );
@@ -65,6 +67,5 @@ const styles = StyleSheet.create({
         fontFamily: ui.fonts.bold,
         fontSize: 13,
         color: 'white'
-    }
-
+    },
 })

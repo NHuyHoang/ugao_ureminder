@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
 import ui from '../../share/ui.constant';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
@@ -14,7 +14,7 @@ export default ProductPanel = (props) => {
                 <View style={styles.productNameContainer}>
                     <Text style={styles.productName}>Gạo Hạt Ngọc Trời Phượng Hoàng</Text>
                 </View>
-                <TouchableOpacity style={styles.addToCart}>
+                <TouchableOpacity style={styles.addToCart} >
                     <Icon name="add-shopping-cart" size={20} color={ui.colors.highlight} />
                     <Text style={styles.productCost}>89k VND</Text>
                 </TouchableOpacity>
@@ -23,13 +23,15 @@ export default ProductPanel = (props) => {
     );
 }
 
+const _width = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
     container: {
         height: 217.5,
-        width: 166.5,
+        width: _width/2 - 20,
         borderRadius: 12,
-        marginLeft: 5,
-        marginRight: 5,
+        marginLeft: 8,
+        marginRight: 8,
         elevation: 2,
         backgroundColor: 'white'
     },

@@ -8,19 +8,19 @@ export default class NavbarTab extends React.Component {
         super(props);
         this.state = {
             onFocus: 1,
-            indicatorAnim: new Animated.Value(0)
+            //indicatorAnim: new Animated.Value(0)
         }
+        this.indicatorAnim = new Animated.Value(0);
         this.tabWidth = Dimensions.get('window').width / 3;
     }
 
     onSelectTab(tab) {
-        Animated.spring(this.state.indicatorAnim,{
-            toValue: ( tab - 1) * this.tabWidth,
-            stiffness:80,
-            damping:12,
-        }).start()
         this.setState({onFocus:tab});
-        this.props.selectTab(tab);
+        Animated.timing(this.indicatorAnim,{
+            toValue: ( tab - 1) * this.tabWidth,
+            duration:100,
+            useNativeDriver:true
+        }).start(() => this.props.selectTab(tab))
     }
 
 
@@ -56,7 +56,7 @@ export default class NavbarTab extends React.Component {
                 </TouchableWithoutFeedback>
                 <Animated.View style={[styles.indicator,{
                     transform:[{
-                        translateX:this.state.indicatorAnim
+                        translateX:this.indicatorAnim
                     }]
                 }]}></Animated.View>
             </View>
