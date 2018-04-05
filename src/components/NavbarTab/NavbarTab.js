@@ -12,9 +12,14 @@ export default class NavbarTab extends React.Component {
         }
         this.indicatorAnim = new Animated.Value(0);
         this.tabWidth = Dimensions.get('window').width / 3;
+        this.onSelectTab = (tab) => this.onSelectTabHandler(tab)
     }
 
-    onSelectTab(tab) {
+    componentDidMount(){
+        console.log(this.props)
+    }
+
+    onSelectTabHandler(tab) {
         this.setState({onFocus:tab});
         Animated.timing(this.indicatorAnim,{
             toValue: ( tab - 1) * this.tabWidth,
@@ -28,7 +33,7 @@ export default class NavbarTab extends React.Component {
         return (
             <View style={styles.container}>
                 <TouchableWithoutFeedback
-                    onPress={this.onSelectTab.bind(this,1)} >
+                    onPress={() => this.onSelectTab(1)} >
                     <View style={styles.tabItem}>
                         <Icon
                             size={this.props.iconSize}
@@ -37,7 +42,7 @@ export default class NavbarTab extends React.Component {
                     </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
-                    onPress={this.onSelectTab.bind(this,2)}>
+                    onPress={() => this.onSelectTab(2)}>
                     <View style={styles.tabItem}>
                         <Icon
                             size={this.props.iconSize}
@@ -46,7 +51,7 @@ export default class NavbarTab extends React.Component {
                     </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
-                    onPress={this.onSelectTab.bind(this,3)}>
+                    onPress={() => this.onSelectTab(3)}>
                     <View style={styles.tabItem}>
                         <Icon
                             size={this.props.iconSize}

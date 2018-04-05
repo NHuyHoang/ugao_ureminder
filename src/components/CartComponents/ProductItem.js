@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Animated, Image, PanResponder, Dimensions } from 'react-native';
+import ui from '../../share/ui.constant'
 export default class ProductItem extends React.Component {
     constructor(props) {
         super(props);
@@ -26,7 +27,7 @@ export default class ProductItem extends React.Component {
             //
             onPanResponderRelease: (evt, { moveX, moveY, dx, dy }) => {
                 this.anim.flattenOffset();
-                if (this.isInRemove(moveX, moveY)) {
+                if (this.isInRemove(moveX, moveY) && !this.props.quantity) {
                     Animated.parallel([
                         Animated.timing(this.anim.x, {
                             toValue: 55 - (this._width / 2),
@@ -43,7 +44,10 @@ export default class ProductItem extends React.Component {
                             toValue: 0,
                             timing: 10,
                             useNativeDriver: true
-                        }).start(() => this.props.removeProduct())
+                        }).start(() => {
+                            if(this.props.removeProduct)
+                                this.props.removeProduct()
+                        })
                     })
                 } else {
                     Animated.parallel([
@@ -84,7 +88,8 @@ export default class ProductItem extends React.Component {
                 damping: 10,
                 useNativeDriver: true
             }).start()
-        } else {
+        }
+        else {
             Animated.timing(this.anim.y, {
                 toValue: 0,
                 duration: 200,
@@ -103,6 +108,7 @@ export default class ProductItem extends React.Component {
                 scale: this.state.removeAnim
             }],
         }
+        
         /*  let draggingTransform = {}
          if (this.state.setDraggingAnim) {
              draggingTransform = {
@@ -121,8 +127,8 @@ export default class ProductItem extends React.Component {
                     this.elementPos.x = x;
                     this.elementPos.y = y;
                 }}
-                {...this.panRes.panHandlers} style={[styles.container,{bottom:this.props.initPosition.x,right:this.props.initPosition.y}, animTransform]}>
-                <Image style={styles.productImg} source={{ uri: this.props.source }} />
+                {...this.panRes.panHandlers} style={[styles.container, { bottom: this.props.initPosition.x, right: this.props.initPosition.y}, animTransform]}>
+                {this.props.quantity ? <Text style={styles.quantityTxt}>{this.props.quantity}</Text> : <Image style={styles.productImg} source={{ uri: this.props.source }} />}
             </Animated.View>
         );
     }
@@ -137,6 +143,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 3,
+        elevation: 1,
         //bottom: 30,
         //right: 30,
         padding: 5,
@@ -146,5 +153,10 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         height: 30,
         width: 30,
+    },
+    quantityTxt:{
+        fontSize:30,
+        fontFamily:ui.fonts.bold,
+        color:'black'
     }
 })

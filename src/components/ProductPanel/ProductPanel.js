@@ -14,7 +14,7 @@ export default ProductPanel = (props) => {
                 <View style={styles.productNameContainer}>
                     <Text style={styles.productName}>Gạo Hạt Ngọc Trời Phượng Hoàng</Text>
                 </View>
-                <TouchableOpacity style={styles.addToCart} >
+                <TouchableOpacity onPress={props.pressed} style={styles.addToCart}>
                     <Icon name="add-shopping-cart" size={20} color={ui.colors.highlight} />
                     <Text style={styles.productCost}>89k VND</Text>
                 </TouchableOpacity>

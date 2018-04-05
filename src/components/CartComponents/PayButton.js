@@ -56,5 +56,6 @@ const styles = StyleSheet.create({
         backgroundColor: ui.colors.highlight,
         justifyContent:'center',
         alignItems:'center',
+        elevation:1
     }
 })

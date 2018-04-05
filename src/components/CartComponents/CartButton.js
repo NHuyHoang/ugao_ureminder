@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
         bottom: 20,
         right: 20,
         backgroundColor: 'transparent',
+        elevation:1
     },
     cartBtn: {
         height: 60,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated, PanResponder, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated, Image, PanResponder, Button } from 'react-native';
 import ui from '../../share/ui.constant';
 import { SearchInput, NavbarTab, CartButton, ProductItem, PayButton } from '../../components';
 import StoreProduct from './storeProduct/StoreProduct';
@@ -15,31 +15,48 @@ class Store extends React.Component {
             pageMounted: false,
             checkCart: false,
             dimmerAnim: new Animated.Value(0),
-            onProductRemove: false,
-            productArr: ["http://gaosach58.vn/wp-content/uploads/2017/08/BotNem_NguBang.jpg", "http://gaosach58.vn/wp-content/uploads/2018/02/Gao-dan-toc-gao-ong-tung-gao-sach-58-gao-cha-doi-gao-xay-doi-gao-nguyen-cam.jpg", "http://gaosach58.vn/wp-content/uploads/2017/07/tn-300x300.jpg"]
+            addingProduct: false,
+            productArr: [
+                { id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2017/08/BotNem_NguBang.jpg" },
+                { id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2018/02/Gao-dan-toc-gao-ong-tung-gao-sach-58-gao-cha-doi-gao-xay-doi-gao-nguyen-cam.jpg" },
+                { id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2017/07/tn-300x300.jpg" }
+            ]
         };
 
         this.onCheckCart = this.onCheckCartHandler.bind(this);
+        this.onAddtoCart = this.onAddToCartHandler.bind(this);
+        this.onSelectTab = (tab) => this.onSelectTabHandler(tab);
+
     }
 
-    onSelectTab(tab) {
+    onSelectTabHandler(tab) {
+        console.log(tab)
         this.setState({ tabSelection: tab })
     }
 
-
     onCheckCartHandler() {
+        if (this.state.addingProduct) return
         this.setState(prev => ({ checkCart: !prev.checkCart }))
     }
+
+    onStopCheckCartHandler() {
+        this.setState(prev => ({ checkCart: false }))
+    }
     //temp
-    onRemoveProductFromCart(content) {
+    onRemoveProductFromCart(id) {
         this.setState({
-            productArr: this.state.productArr.filter((item, i) => content != item)
+            productArr: this.state.productArr.filter((item) => item.id != id)
         })
     }
 
-
-
-
+    onAddToCartHandler() {
+        if (this.state.addingProduct) return;
+        this.setState(prevState => {
+            let arr = [...prevState.productArr];
+            arr.push({ id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2016/07/bac-dau.jpg" });
+            return { productArr: arr, addingProduct: true }
+        })
+    }
 
     render() {
         return (
@@ -51,25 +68,105 @@ class Store extends React.Component {
                         </View>
                     </View>
                     <View style={styles.navbarTab}>
-                        <NavbarTab iconSize={22} selectTab={this.onSelectTab.bind(this)} />
+                        <NavbarTab iconSize={22} selectTab={this.onSelectTab} />
                     </View>
                 </View>
-                <StoreProduct show={this.state.tabSelection === 1} />
+                <StoreProduct addToCart={this.onAddtoCart} show={this.state.tabSelection === 1} />
                 <StoreNoti show={this.state.tabSelection === 2} />
                 <StoreContact show={this.state.tabSelection === 3} />
-                {this.state.checkCart ? <View style={styles.dimmer}><Icon size={80} name="highlight-off" color="white" /></View> : null}
+                {this.state.checkCart ?
+                    <TouchableWithoutFeedback onPress={this.onStopCheckCartHandler.bind(this)}>
+                        <View style={styles.dimmer}>
+                            <Icon size={80} name="highlight-off" color="white" />
+                        </View>
+                    </TouchableWithoutFeedback> : null}
                 <CartButton checkCart={this.onCheckCart} quantity={this.state.productArr.length} />
                 {this.state.productArr.map((item, i) => {
+                    if (i >= 4) {
+                        if (i === 4)
+                            return (
+                                <ProductItem
+                                    initPosition={{ x: 30, y: 30 }}
+                                    removeProduct={null}
+                                    key={item.id}
+                                    quantity={"+" + (this.state.productArr.length - i).toString()}
+                                    translateY={-70 - (i * 70)}
+                                    show={this.state.checkCart} />
+                            );
+                        else if (i > 4) {
+                            return (
+                                <ProductItem
+                                    initPosition={{ x: 30, y: 30 }}
+                                    removeProduct={null}
+                                    key={item.id}
+                                    quantity={"+" + (this.state.productArr.length - i).toString()}
+                                    translateY={-70 - (i * 70)}
+                                    show={false} />
+                            );
+                        }
+                    }
                     return (
                         <ProductItem
                             initPosition={{ x: 30, y: 30 }}
-                            removeProduct={this.onRemoveProductFromCart.bind(this, item)}
-                            key={item} source={item}
+                            removeProduct={this.onRemoveProductFromCart.bind(this, item.id)}
+                            key={item.id} source={item.img}
                             translateY={-70 - (i * 70)}
-                            show={this.state.checkCart} />)
+                            show={this.state.checkCart} />
+                    )
                 })}
                 <PayButton show={this.state.checkCart} />
+                <AditionalProduct stopAddingProduct={() => this.setState({ addingProduct: false })} addingProduct={this.state.addingProduct} />
             </View>
+        )
+    }
+}
+
+class AditionalProduct extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.postion = _height - 300;
+        this.anim = new Animated.Value(this.postion);
+        this.scaleAnim = new Animated.Value(0.01);
+        this.state = {
+            added: false
+        }
+    }
+
+    componentWillReceiveProps(props) {
+        console.log(props.addingProduct)
+        if (props.addingProduct && !this.state.added) {
+
+            Animated.sequence([
+                Animated.timing(this.scaleAnim, {
+                    toValue: 1,
+                    duration: 200,
+                }),
+                Animated.timing(this.anim, {
+                    toValue: 30,
+                    duration: 400,
+                    delay: 100,
+                })
+            ]).start(() => {
+                this.anim.setValue(this.postion),
+                    this.scaleAnim.setValue(0.01);
+                this.state.added = true;
+                this.props.stopAddingProduct();
+            })
+        } else {
+            this.setState({ added: false })
+        }
+    }
+    render() {
+        let animTransform = {
+            bottom: this.anim,
+            transform: [{
+                scale: this.scaleAnim,
+            }]
+        }
+        return (
+            <Animated.View style={[styles.aditionalProduct, animTransform]}>
+                <Image style={styles.additionalProductImg} source={{ uri: "http://gaosach58.vn/wp-content/uploads/2016/07/bac-dau.jpg" }} />
+            </Animated.View>
         )
     }
 }
@@ -111,7 +208,29 @@ const styles = StyleSheet.create({
         opacity: 0.6,
         alignItems: 'center',
         justifyContent: 'center',
+        elevation: 1
     },
-
+    aditionalProduct: {
+        position: 'absolute',
+        height: 50,
+        width: 50,
+        zIndex: 3,
+        backgroundColor: 'white',
+        right: 30,
+        borderRadius: 25,
+        borderWidth: 0.5,
+        elevation: 1,
+        borderColor: ui.colors.light_gray,
+        transform: [
+            { scale: 0.01 }
+        ],
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    additionalProductImg: {
+        height: 30,
+        width: 30,
+        resizeMode: 'contain'
+    }
 })
 export default Store;

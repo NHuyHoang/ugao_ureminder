@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, ScrollView, Dimensions, ActivityIndicator, SectionList } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Dimensions, ActivityIndicator, TouchableWithoutFeedback, SectionList } from 'react-native';
 import ui from '../../../share/ui.constant';
 import { ProducerSlider, ProductPanel } from '../../../components'
 
@@ -7,14 +7,18 @@ export default class StoreProduct extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            templateArr: [1, 2, 3, 4, 5,1, 2],
+            templateArr: [1, 2, 3, 4, 5, 1, 2],
             isLoading: false,
         }
-        this.templateArr = [1, 2, 3, 4, 5,1, 2, 3, 4, 5,1, 2, 3, 4, 5];
+        this.templateArr = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5];
     }
 
     componentWillUnmount() {
         console.log('unmounted')
+    }
+
+    onAddToCartHander = () => {
+
     }
 
     render() {
@@ -22,7 +26,9 @@ export default class StoreProduct extends React.PureComponent {
             <SectionList
                 ListHeaderComponent={() => (
                     <View>
-                        <Text style={styles.title} >Nhà cung cấp</Text>
+                        <View>
+                            <Text style={styles.title}>Nhà cung cấp</Text>
+                        </View>
                         <View style={styles.sliderContainer}>
                             <ProducerSlider />
                         </View>
@@ -31,17 +37,17 @@ export default class StoreProduct extends React.PureComponent {
                 style={[styles.container, { opacity: this.props.show ? 1 : 0 }]}
                 renderItem={() => (
                     <View style={styles.productContainer}>
-                        <ProductPanel />
-                        <ProductPanel/>
+                        <ProductPanel pressed={this.props.addToCart} />
+                        <ProductPanel pressed={this.props.addToCart} />
                     </View>
                 )}
                 sections={[
                     { data: this.state.templateArr },
                 ]}
                 keyExtractor={() => Math.random()}
-                onEndReachedThreshold = {0.05}
+                onEndReachedThreshold={0.05}
                 onEndReached={(info) => console.log(info)}
-                onRefresh={() => {}}
+                onRefresh={() => { }}
                 refreshing={false}
             />
         );
@@ -56,7 +62,7 @@ const styles = StyleSheet.create({
         top: 100,
         bottom: 0,
         backgroundColor: ui.colors.white,
-      
+
         position: 'absolute',
         zIndex: 1
     },
