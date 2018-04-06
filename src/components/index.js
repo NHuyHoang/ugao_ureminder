@@ -7,4 +7,5 @@ export { default as ProductItem } from './CartComponents/ProductItem';
 export { default as PayButton } from './CartComponents/PayButton';
 export { default as RemoveButton } from './CartComponents/RemoveBtn';
 export { default as Header } from './Header/Header';
-export { default as Input } from './Input/Input'
+export { default as Input } from './Input/Input';
+export { default as UButton } from './UButton/UButton';

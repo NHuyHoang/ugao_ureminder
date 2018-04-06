@@ -21,7 +21,7 @@ export default {
     fontSize:{
         massive:22,
         normal:18,
-        small:12,
+        small:15,
         tiny:10
     },
 }

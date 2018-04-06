@@ -1,42 +1,53 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, KeyboardAvoidingView, Dimensions, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import Slider from '../../components/Slider/Slider'
 import ui from '../../share/ui.constant'
-import { Header, Input } from '../../components/index';
+import { Header, Input, UButton } from '../../components/index';
 class Invoice extends React.Component {
     constructor(props) {
         super(props);
+        this.tempPickerData = [{ key: 'Thanh toán trực tiếp' }, { key: 'VISA' }, { key: 'Internet banking' }];
     }
 
     render() {
         return (
             <View style={styles.container}>
                 <Header />
-                <Slider style={styles.slider} productItem={true} />
-                <View style={styles.formContainer}>
-                    <Input type={'picker'} label={"Phương thức:"}/>
-                    <Input type={'text'} label={"Nơi nhận:"}/>
-                </View>
-                
+                <KeyboardAvoidingView behavior="position" style={{ flex: 1 }}>
+                    <Slider style={styles.slider} productItem={true} />
+                    <View style={styles.formContainer}>
+                        <Input type={'picker'} config={{ data: this.tempPickerData }} label={"Thanh toán"} />
+                        <Input iconBtn={{ name: "place" }} config={{ placeholder: "Số 1 Võ Văn Ngân,Q.Thủ Đức" }} type={'text'} label={"Nơi nhận"} />
+                    </View>
+                    <View style={styles.submitButton}>
+                        <UButton cost="999.000 VND" iconName="done"/>
+                    </View>
+                </KeyboardAvoidingView>
             </View>
         )
     }
 }
 
+const _width = Dimensions.get('window').width
+
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: 'white'
+        width: "100%",
+        height: "100%",
+        backgroundColor: 'white',
     },
     slider: {
         marginTop: 10
     },
     formContainer: {
-        width: '100%',
-        height: 100,
+        width: _width,
         marginTop: 20,
-        justifyContent:'center'
+        justifyContent: 'flex-start'
+    },
+    submitButton:{
+        width:_width,
+        alignItems:'center',
+        marginTop:50
     }
 })
 export default Invoice;
