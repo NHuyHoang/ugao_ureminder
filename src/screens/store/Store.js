@@ -83,27 +83,17 @@ class Store extends React.Component {
                 <CartButton checkCart={this.onCheckCart} quantity={this.state.productArr.length} />
                 {this.state.productArr.map((item, i) => {
                     if (i >= 4) {
-                        if (i === 4)
-                            return (
-                                <ProductItem
-                                    initPosition={{ x: 30, y: 30 }}
-                                    removeProduct={null}
-                                    key={item.id}
-                                    quantity={"+" + (this.state.productArr.length - i).toString()}
-                                    translateY={-70 - (i * 70)}
-                                    show={this.state.checkCart} />
-                            );
-                        else if (i > 4) {
-                            return (
-                                <ProductItem
-                                    initPosition={{ x: 30, y: 30 }}
-                                    removeProduct={null}
-                                    key={item.id}
-                                    quantity={"+" + (this.state.productArr.length - i).toString()}
-                                    translateY={-70 - (i * 70)}
-                                    show={false} />
-                            );
-                        }
+                        return (
+                            <ProductItem
+                                opacity={i > 4 ? 0 : 1}
+                                zIndex={i}
+                                initPosition={{ x: 30, y: 30 }}
+                                removeProduct={null}
+                                key={item.id}
+                                quantity={"+" + (this.state.productArr.length - i).toString()}
+                                translateY={-70 - (4 * 70)}
+                                show={this.state.checkCart} />
+                        );
                     }
                     return (
                         <ProductItem

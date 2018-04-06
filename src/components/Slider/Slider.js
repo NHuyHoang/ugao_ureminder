@@ -10,7 +10,9 @@ import {
     ActivityIndicator,
     Image
 } from 'react-native';
-import ui from '../../share/ui.constant'
+import ui from '../../share/ui.constant';
+import ProductItem from './ProductItem';
+
 export default class ProducerSlider extends React.Component {
     constructor(props) {
         super(props);
@@ -19,8 +21,8 @@ export default class ProducerSlider extends React.Component {
         this.maxSlideLenght = 0;
         this.positionX = new Animated.Value(0);
         this._panResponder = PanResponder.create({
-            onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
-            onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+            onStartShouldSetPanResponderCapture: (evt, gestureState) => gestureState.dx >= 10 || gestureState.dx <= -10,
+            onMoveShouldSetPanResponderCapture: (evt, gestureState) => gestureState.dx >= 10 || gestureState.dx <= -10,
             onPanResponderMove: (e, gt) => {
                 if (this.maxSlideLenght == 0) return;
                 this.positionX.setValue(this.animationHandler(this.savedPositon, gt.dx))
@@ -51,7 +53,7 @@ export default class ProducerSlider extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container,this.props.style]}>
                 <Animated.View
                     onLayout={(event) => {
                         this.sliderWidth = event.nativeEvent.layout.width;
@@ -63,10 +65,22 @@ export default class ProducerSlider extends React.Component {
                             translateX: this.positionX
                         }]
                     }]}>
-                    <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-gao-sach.png" />
-                    <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-hat-ngoc-troi.png" />
-                    <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-hoa-lua.png" />
-                    <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2017/08/hp2-680x238.jpg" />
+                    {
+                        this.props.productItem ?
+                        <View style={{ flexDirection: 'row' }}>
+                            <ProductItem />
+                            <ProductItem />
+                            <ProductItem />
+                            <ProductItem />
+                        </View> :
+                        <View style={{ flexDirection: 'row' }}>
+                            <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-gao-sach.png" />
+                            <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-hat-ngoc-troi.png" />
+                            <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-hoa-lua.png" />
+                            <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2017/08/hp2-680x238.jpg" />
+                        </View>
+                    }
+
                 </Animated.View>
             </View>
         );
@@ -74,7 +88,7 @@ export default class ProducerSlider extends React.Component {
 }
 
 const ProducerItem = (props) => (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback >
         <View style={styles.producerItem}>
             <Image style={styles.producerImg} source={{ uri: props.imgSource }} />
         </View>
@@ -114,8 +128,8 @@ const styles = StyleSheet.create({
         marginLeft: 12,
         marginRight: 12,
         borderRadius: 8,
-        borderWidth:1,
-        borderColor:ui.colors.light_gray
+        borderWidth: 1,
+        borderColor: ui.colors.light_gray
     },
     actIndicator: {
         width: '100%',

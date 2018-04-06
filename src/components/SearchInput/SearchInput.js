@@ -8,7 +8,7 @@ export default SearchInput = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.logoContainer}>
-                <Image style={styles.logo} source={require('../../share/images/logo_txt.png')} />
+                <Image style={styles.logo} source={require('../../share/images/logo_txt_2.png')} />
             </View>
             <View style={styles.inputContainer}>
                 <TextInput 

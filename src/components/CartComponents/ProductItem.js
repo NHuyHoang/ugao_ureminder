@@ -17,15 +17,17 @@ export default class ProductItem extends React.Component {
             onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
             onPanResponderGrant: (evt, gt) => {
-
+                if (!this.props.show) return
                 this.anim.setOffset({ x: 0, y: this.props.translateY })
                 this.anim.setValue({ x: 0, y: 0 })
             },
             onPanResponderMove: (e, gt) => {
+                if (!this.props.show) return
                 Animated.event([null, { dx: this.anim.x, dy: this.anim.y }])(e, gt);
             },
             //
             onPanResponderRelease: (evt, { moveX, moveY, dx, dy }) => {
+                if (!this.props.show) return
                 this.anim.flattenOffset();
                 if (this.isInRemove(moveX, moveY) && !this.props.quantity) {
                     Animated.parallel([
@@ -45,7 +47,7 @@ export default class ProductItem extends React.Component {
                             timing: 10,
                             useNativeDriver: true
                         }).start(() => {
-                            if(this.props.removeProduct)
+                            if (this.props.removeProduct)
                                 this.props.removeProduct()
                         })
                     })
@@ -108,18 +110,6 @@ export default class ProductItem extends React.Component {
                 scale: this.state.removeAnim
             }],
         }
-        
-        /*  let draggingTransform = {}
-         if (this.state.setDraggingAnim) {
-             draggingTransform = {
-                 transform: [{
-                     translateX: this.state.draggingAnim.x,
-                 },
-                 {
-                     translateY: this.state.draggingAnim.y,
-                 }]
-             }
-         } */
         return (
             <Animated.View
                 onLayout={(event) => {
@@ -127,7 +117,7 @@ export default class ProductItem extends React.Component {
                     this.elementPos.x = x;
                     this.elementPos.y = y;
                 }}
-                {...this.panRes.panHandlers} style={[styles.container, { bottom: this.props.initPosition.x, right: this.props.initPosition.y}, animTransform]}>
+                {...this.panRes.panHandlers} style={[styles.container, { opacity: this.props.opacity, bottom: this.props.initPosition.x, right: this.props.initPosition.y }, animTransform]}>
                 {this.props.quantity ? <Text style={styles.quantityTxt}>{this.props.quantity}</Text> : <Image style={styles.productImg} source={{ uri: this.props.source }} />}
             </Animated.View>
         );
@@ -144,8 +134,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         zIndex: 3,
         elevation: 1,
-        //bottom: 30,
-        //right: 30,
         padding: 5,
         backgroundColor: 'white',
     },
@@ -154,9 +142,9 @@ const styles = StyleSheet.create({
         height: 30,
         width: 30,
     },
-    quantityTxt:{
-        fontSize:30,
-        fontFamily:ui.fonts.bold,
-        color:'black'
+    quantityTxt: {
+        fontSize: 20,
+        fontFamily: ui.fonts.bold,
+        color: ui.colors.dark_gray
     }
 })

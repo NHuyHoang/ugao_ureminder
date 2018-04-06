@@ -15,8 +15,8 @@ export default ProductPanel = (props) => {
                     <Text style={styles.productName}>Gạo Hạt Ngọc Trời Phượng Hoàng</Text>
                 </View>
                 <TouchableOpacity onPress={props.pressed} style={styles.addToCart}>
-                    <Icon name="add-shopping-cart" size={20} color={ui.colors.highlight} />
-                    <Text style={styles.productCost}>89k VND</Text>
+                    <Icon name="add-shopping-cart" size={20} color={ui.colors.black} />
+                    <Text style={styles.productCost}>89.000 VND</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -81,8 +81,8 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     productCost: {
-        fontFamily: ui.fonts.medium,
+        fontFamily: ui.fonts.bold,
         fontSize: 12,
-        color: ui.colors.highlight
+        color: ui.colors.black
     }
 })

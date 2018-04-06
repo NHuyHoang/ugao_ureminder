@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, ScrollView, Dimensions, ActivityIndicator, TouchableWithoutFeedback, SectionList } from 'react-native';
 import ui from '../../../share/ui.constant';
-import { ProducerSlider, ProductPanel } from '../../../components'
+import { Slider, ProductPanel } from '../../../components'
 
 export default class StoreProduct extends React.PureComponent {
     constructor(props) {
@@ -30,7 +30,7 @@ export default class StoreProduct extends React.PureComponent {
                             <Text style={styles.title}>Nhà cung cấp</Text>
                         </View>
                         <View style={styles.sliderContainer}>
-                            <ProducerSlider />
+                            <Slider />
                         </View>
                     </View>
                 )}
