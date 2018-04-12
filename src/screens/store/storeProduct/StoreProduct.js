@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         backgroundColor: ui.colors.white,
 
         position: 'absolute',
-        zIndex: 1
+        zIndex: 3
     },
     title: {
         marginTop: 10,

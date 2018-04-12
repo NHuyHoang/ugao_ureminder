@@ -8,7 +8,7 @@ export default ProductPanel = (props) => {
         <View style={styles.container}>
             <View style={styles.ImgContainer}>
                 <Image style={styles.productImg} source={require('../../share/images/phuong-hoang.jpg')} />
-                <View style={styles.dimmer} />
+                {/* <View style={styles.dimmer} /> */}
             </View>
             <View style={styles.InfoContainer}>
                 <View style={styles.productNameContainer}>
@@ -24,12 +24,12 @@ export default ProductPanel = (props) => {
 }
 
 const _width = Dimensions.get('window').width;
-
+const borderRadiusConst = 4;
 const styles = StyleSheet.create({
     container: {
         height: 217.5,
         width: _width/2 - 20,
-        borderRadius: 12,
+        borderRadius: borderRadiusConst,
         marginLeft: 8,
         marginRight: 8,
         elevation: 2,
@@ -48,10 +48,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: 'black',
-        opacity: 0.1,
+        opacity: 0.03,
         position: 'absolute',
-        borderTopRightRadius: 12,
-        borderTopLeftRadius: 12
+        borderTopRightRadius: borderRadiusConst,
+        borderTopLeftRadius: borderRadiusConst
     },
     InfoContainer: {
         width: '100%',
