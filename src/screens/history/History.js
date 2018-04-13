@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { Header, InvoiceItem } from '../../components'
 
-class History extends React.Component {
+class History extends React.PureComponent {
     constructor(props) {
         super(props);
     }

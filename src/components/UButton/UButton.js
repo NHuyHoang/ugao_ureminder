@@ -38,7 +38,7 @@ export default class UButton extends React.Component {
         return (
             <TouchableWithoutFeedback onPress={this.onBtnActive} >
                 <Animated.View style={[styles.container, buttonAnimTranform]}>
-                    {this.state.isActive ? null : <Text style={styles.costTxt}>{this.props.cost}</Text>}
+                    {!this.state.isActive && <Text style={styles.costTxt}>{this.props.cost}</Text>}
                     <Icon name={this.props.iconName} size={25} color={ui.colors.highlight} />
                 </Animated.View>
             </TouchableWithoutFeedback>

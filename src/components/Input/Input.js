@@ -15,7 +15,7 @@ export default class Input extends React.Component {
 
     render() {
         let inputType = null;
-        let borderStyle = { 
+        let borderStyle = {
             borderBottomColor: this.state.focus ? ui.colors.highlight : "black",
             borderBottomWidth: this.state.focus ? 2 : 0.3,
         }
@@ -42,13 +42,13 @@ export default class Input extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.label}>{this.props.label}</Text>
-                <View style={[styles.inputContainer,borderStyle]}>
+                <View style={[styles.inputContainer, borderStyle]}>
                     {inputType}
                     {
-                        this.props.iconBtn ?
-                            <TouchableOpacity>
-                                <Icon name={this.props.iconBtn.name} size={20} color="black" />
-                            </TouchableOpacity> : null
+                        this.props.iconBtn &&
+                        <TouchableOpacity>
+                            <Icon name={this.props.iconBtn.name} size={20} color="black" />
+                        </TouchableOpacity>
                     }
                 </View>
 

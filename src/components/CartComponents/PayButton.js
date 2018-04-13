@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         width: 50,
         borderRadius: 25,
         position: 'absolute',
-        zIndex: 3,
+        zIndex: 4,
         bottom: 30,
         right: 30,
         backgroundColor: ui.colors.highlight,

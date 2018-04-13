@@ -22,6 +22,7 @@ export default {
         massive:22,
         normal:18,
         small:15,
+        semiTiny:13,
         tiny:10
     },
 }

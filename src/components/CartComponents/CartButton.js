@@ -12,13 +12,13 @@ export default class CartButton extends React.Component {
             <TouchableWithoutFeedback onPress={this.props.checkCart}>
                 <View style={styles.container}>
                     <View style={styles.cartBtn}>
-                        <Icon name="shopping-cart" size={30} color="white" />
+                        <Icon name="shopping-cart" size={30} color={ui.colors.highlight} />
                     </View>
                     {
-                        this.props.quantity === 0 ?
-                            null : <View style={styles.counter}>
-                                <Text style={styles.counterTxt}>{this.props.quantity}</Text>
-                            </View>
+                        this.props.quantity > 0 &&
+                        <View style={styles.counter}>
+                            <Text style={styles.counterTxt}>{this.props.quantity}</Text>
+                        </View>
                     }
                 </View>
             </TouchableWithoutFeedback>
@@ -34,22 +34,23 @@ const styles = StyleSheet.create({
         height: 70,
         width: 70,
         position: 'absolute',
-        zIndex: 4,
+        zIndex: 5,
         justifyContent: 'center',
         alignItems: 'center',
         bottom: 20,
         right: 20,
         backgroundColor: 'transparent',
-        elevation:1
+        elevation: 1
     },
     cartBtn: {
         height: 60,
         width: 60,
         position: 'absolute',
         zIndex: 5,
-        backgroundColor: ui.colors.highlight,
+        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
+        elevation: 3,
         borderRadius: 30,
     },
     counter: {
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
         top: 0,
         zIndex: 6,
         right: 0,
+        elevation: 3,
         justifyContent: 'center',
         alignItems: 'center',
     },

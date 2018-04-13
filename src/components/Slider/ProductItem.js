@@ -7,7 +7,7 @@ export default class ProductItem extends React.Component {
         super(props);
         this.state = {
             showInfo: false,
-            counter: 0,
+            counter: 1,
         }
         this.slideAnim = new Animated.Value(100);
         this.onShowInfo = this.onShowInfoHandler.bind(this);
@@ -41,7 +41,7 @@ export default class ProductItem extends React.Component {
                 return { counter: prevState.counter + 1 }
             }); break;
             case ("-"): {
-                if (this.state.counter <= 0) return;
+                if (this.state.counter <= 1) return;
                 this.setState(prevState => {
                     return { counter: prevState.counter - 1 }
                 });
@@ -54,7 +54,7 @@ export default class ProductItem extends React.Component {
         return (
             <View>
                 {
-                    this.state.counter === 0 ? null :
+                    this.state.counter > 1 &&
                         <View style={styles.counterContainer}>
                             <Text style={styles.counterTxt}>{this.state.counter}</Text>
                         </View>
@@ -79,7 +79,7 @@ export default class ProductItem extends React.Component {
                                 <Icon name="remove" size={15} color="black" />
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.btnContainer}>
-                                <Icon name="remove-shopping-cart" size={15} color="black" />
+                                <Icon name="close" size={15} color={ui.colors.red} />
                             </TouchableOpacity>
                         </View>
                     </Animated.View>

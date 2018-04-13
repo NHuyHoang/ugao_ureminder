@@ -23,33 +23,33 @@ class Store extends React.Component {
             ]
         };
 
-        this.onCheckCart = this.onCheckCartHandler.bind(this);
+        /* this.onCheckCart = this.onCheckCartHandler.bind(this);
         this.onAddtoCart = this.onAddToCartHandler.bind(this);
         this.onSelectTab = (tab) => this.onSelectTabHandler(tab);
-
+ */
     }
 
-    onSelectTabHandler(tab) {
+    onSelectTabHandler = (tab) => {
         console.log(tab)
         this.setState({ tabSelection: tab })
     }
 
-    onCheckCartHandler() {
+    onCheckCartHandler = () => {
         if (this.state.addingProduct) return
         this.setState(prev => ({ checkCart: !prev.checkCart }))
     }
 
-    onStopCheckCartHandler() {
+    onStopCheckCartHandler = () => {
         this.setState(prev => ({ checkCart: false }))
     }
     //temp
-    onRemoveProductFromCart(id) {
+    onRemoveProductFromCart = (id) => {
         this.setState({
             productArr: this.state.productArr.filter((item) => item.id != id)
         })
     }
 
-    onAddToCartHandler() {
+    onAddToCartHandler = () => {
         if (this.state.addingProduct) return;
         this.setState(prevState => {
             let arr = [...prevState.productArr];
@@ -68,19 +68,17 @@ class Store extends React.Component {
                         </View>
                     </View>
                     <View style={styles.navbarTab}>
-                        <NavbarTab iconSize={22} selectTab={this.onSelectTab} />
+                        <NavbarTab iconSize={22} selectTab={(tab) => this.onSelectTabHandler(tab)} />
                     </View>
                 </View>
-                <StoreProduct addToCart={this.onAddtoCart} show={this.state.tabSelection === 1} />
+                <StoreProduct addToCart={this.onAddToCartHandler} show={this.state.tabSelection === 1} />
                 <StoreNoti show={this.state.tabSelection === 2} />
                 <StoreContact show={this.state.tabSelection === 3} />
-                {this.state.checkCart ?
-                    <TouchableWithoutFeedback onPress={this.onStopCheckCartHandler.bind(this)}>
-                        <View style={styles.dimmer}>
-                            <Icon size={80} name="highlight-off" color="white" />
-                        </View>
-                    </TouchableWithoutFeedback> : null}
-                <CartButton checkCart={this.onCheckCart} quantity={this.state.productArr.length} />
+                {
+                    this.state.checkCart &&
+                        <DimmerComponent onPress={this.onStopCheckCartHandler} />
+                }
+                <CartButton checkCart={this.onCheckCartHandler} quantity={this.state.productArr.length} />
                 {this.state.productArr.map((item, i) => {
                     if (i >= 4) {
                         return (
@@ -98,7 +96,7 @@ class Store extends React.Component {
                     return (
                         <ProductItem
                             initPosition={{ x: 30, y: 30 }}
-                            removeProduct={this.onRemoveProductFromCart.bind(this, item.id)}
+                            removeProduct={() => this.onRemoveProductFromCart(item.id)}
                             key={item.id} source={item.img}
                             translateY={-70 - (i * 70)}
                             show={this.state.checkCart} />
@@ -161,6 +159,16 @@ class AditionalProduct extends React.PureComponent {
     }
 }
 
+const DimmerComponent = (props) => {
+    return (
+        <TouchableWithoutFeedback onPress={props.onPress}>
+            <View style={styles.dimmer}>
+                <Icon size={80} name="highlight-off" color="white" />
+            </View>
+        </TouchableWithoutFeedback>
+    )
+}
+
 const _width = Dimensions.get('window').width;
 const _height = Dimensions.get('window').height;
 
@@ -193,7 +201,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         height: _height,
         width: _width,
-        zIndex: 2,
+        zIndex: 4,
         backgroundColor: 'black',
         opacity: 0.6,
         alignItems: 'center',

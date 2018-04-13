@@ -2,9 +2,13 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
 export default class StoreContact extends React.Component{
+    showScreen = () => {
+        return this.props.show ?
+            { opacity: 1, zIndex: 1, } : { opacity: 0, zIndex: 0, }
+    }
     render(){
         return (
-            <View style={{ opacity:this.props.show ? 1 : 0 }}><Text>StoreContact</Text></View>
+            <View style={this.showScreen()}><Text>StoreContact</Text></View>
         );
 
     }

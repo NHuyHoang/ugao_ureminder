@@ -21,6 +21,11 @@ export default class StoreProduct extends React.PureComponent {
 
     }
 
+    showScreen = () => {
+        return this.props.show ?
+            { opacity: 1, zIndex: 1, } : { opacity: 0, zIndex: 0, }
+    }
+
     render() {
         return (
             <SectionList
@@ -34,7 +39,7 @@ export default class StoreProduct extends React.PureComponent {
                         </View>
                     </View>
                 )}
-                style={[styles.container, { opacity: this.props.show ? 1 : 0 }]}
+                style={[styles.container, this.showScreen()]}
                 renderItem={() => (
                     <View style={styles.productContainer}>
                         <ProductPanel pressed={this.props.addToCart} />

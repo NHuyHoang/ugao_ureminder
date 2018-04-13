@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 3,
+        zIndex: 4,
         elevation: 1,
         padding: 5,
         backgroundColor: 'white',
