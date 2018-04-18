@@ -10,10 +10,12 @@ export default class ProductItem extends React.Component {
             counter: 1,
         }
         this.slideAnim = new Animated.Value(100);
-        this.onShowInfo = this.onShowInfoHandler.bind(this);
+        //this.onShowInfo = this.onShowInfoHandler.bind(this);
     }
 
-    onShowInfoHandler() {
+    onShowInfoHandler = () => {
+        // Print component dimensions to console
+
         this.setState(prevState => {
             this.scaleInfoPanel(!prevState.showInfo);
             return { showInfo: !prevState.showInfo }
@@ -21,20 +23,25 @@ export default class ProductItem extends React.Component {
     }
 
     scaleInfoPanel(show) {
+        const arrange = () => {
+            this.myComponent.measure((fx, fy, width, height, px, py) => {
+                this.props.arrange(px);
+            })
+        }
         if (show) {
             Animated.timing(this.slideAnim, {
                 toValue: 230,
                 duration: 300,
-            }).start()
+            }).start(arrange)
         }
         else {
             Animated.timing(this.slideAnim, {
                 toValue: 100,
                 duration: 300,
-            }).start()
+            }).start(arrange)
         }
     }
-    
+
     productQuantityHandler(operation) {
         switch (operation) {
             case ("+"): this.setState(prevState => {
@@ -49,18 +56,22 @@ export default class ProductItem extends React.Component {
         }
     }
 
+    componentDidMount() {
+
+    }
+
     render() {
         let infoSlideTransform = { width: this.slideAnim }
         return (
             <View>
                 {
                     this.state.counter > 1 &&
-                        <View style={styles.counterContainer}>
-                            <Text style={styles.counterTxt}>{this.state.counter}</Text>
-                        </View>
+                    <View style={styles.counterContainer}>
+                        <Text style={styles.counterTxt}>{this.state.counter}</Text>
+                    </View>
                 }
-                <View style={styles.container}>
-                    <TouchableWithoutFeedback onPress={this.onShowInfo}>
+                <View ref={view => { this.myComponent = view; }} style={styles.container}>
+                    <TouchableWithoutFeedback onPress={this.onShowInfoHandler}>
                         <View style={styles.productImgContainer}>
                             <Image style={styles.productImg} source={require('../../share/images/phuong-hoang.jpg')} />
                             <View style={styles.productPrice}><Text style={styles.priceTxt}>89.000 VND</Text></View>

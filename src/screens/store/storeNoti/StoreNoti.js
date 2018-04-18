@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
         top: 100,
         bottom: 0,
         position: 'absolute',
-        zIndex: 2,
     },
     notiPanel: {
         width: '100%',

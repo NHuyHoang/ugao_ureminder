@@ -20,6 +20,7 @@ export default class ProducerSlider extends React.Component {
         this.sliderWidth = 0;
         this.maxSlideLenght = 0;
         this.positionX = new Animated.Value(0);
+        this._width = Dimensions.get('window').width;
         this._panResponder = PanResponder.create({
             onStartShouldSetPanResponderCapture: (evt, gestureState) => gestureState.dx >= 10 || gestureState.dx <= -10,
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => gestureState.dx >= 10 || gestureState.dx <= -10,
@@ -51,6 +52,17 @@ export default class ProducerSlider extends React.Component {
 
     }
 
+    rearrangeSlider = (x) => {
+        const centerdX = this._width/2;
+        if(this._width - x >= 230) return;
+        const dx = -(x - centerdX + (230/2));
+        Animated.timing(this.positionX,{
+            toValue:dx,
+            duration:200
+        }).start(() => this.savedPositon = this.positionX._value);
+        console.log(dx);
+    }
+
     render() {
         return (
             <View style={[styles.container,this.props.style]}>
@@ -68,13 +80,13 @@ export default class ProducerSlider extends React.Component {
                     {
                         this.props.productItem ?
                         <View style={{ flexDirection: 'row' }}>
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
+                            <ProductItem arrange={this.rearrangeSlider}/>
+                            <ProductItem arrange={this.rearrangeSlider}/>
+                            <ProductItem arrange={this.rearrangeSlider}/>
+                            <ProductItem arrange={this.rearrangeSlider}/>
                         </View> :
                         <View style={{ flexDirection: 'row' }}>
-                            <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-gao-sach.png" />
+                            <ProducerItem  imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-gao-sach.png" />
                             <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-hat-ngoc-troi.png" />
                             <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-hoa-lua.png" />
                             <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2017/08/hp2-680x238.jpg" />
