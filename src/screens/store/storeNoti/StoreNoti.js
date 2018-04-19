@@ -3,13 +3,13 @@ import { Text, View, StyleSheet, FlatList, TouchableNativeFeedback } from 'react
 import ui from '../../../share/ui.constant'
 
 export default class StoreNoti extends React.Component {
-    showScreen = () => {
+/*     showScreen = () => {
         return this.props.show ?
             { opacity: 1, zIndex: 1, } : { opacity: 0, zIndex: 0, }
-    }
+    } */
     render() {
         return (
-            <View style={[styles.container, this.showScreen()]}>
+            <View style={styles.container}>
                 <FlatList
                     data={templateData}
                     keyExtractor={(item) => item._id}
@@ -68,9 +68,7 @@ const NotiItem = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        top: 100,
-        bottom: 0,
-        position: 'absolute',
+        
     },
     notiPanel: {
         width: '100%',

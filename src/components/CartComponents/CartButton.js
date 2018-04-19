@@ -3,27 +3,24 @@ import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, PanRespon
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import ui from '../../share/ui.constant';
 
-export default class CartButton extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return (
-            <TouchableWithoutFeedback onPress={this.props.checkCart}>
-                <View style={styles.container}>
-                    <View style={styles.cartBtn}>
-                        <Icon name="shopping-cart" size={30} color={ui.colors.highlight} />
-                    </View>
-                    {
-                        this.props.quantity > 0 &&
-                        <View style={styles.counter}>
-                            <Text style={styles.counterTxt}>{this.props.quantity}</Text>
-                        </View>
-                    }
+export default CartButton = (props) => {
+
+    return (
+        <TouchableWithoutFeedback onPress={props.checkCart}>
+            <View style={styles.container}>
+                <View style={styles.cartBtn}>
+                    <Icon name="shopping-cart" size={30} color={ui.colors.highlight} />
                 </View>
-            </TouchableWithoutFeedback>
-        );
-    }
+                {
+                    props.quantity > 0 &&
+                    <View style={styles.counter}>
+                        <Text style={styles.counterTxt}>{props.quantity}</Text>
+                    </View>
+                }
+            </View>
+        </TouchableWithoutFeedback>
+    );
+
 }
 
 const _height = Dimensions.get("screen").height;

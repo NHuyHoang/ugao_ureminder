@@ -2,24 +2,22 @@ import React from 'react';
 import { StyleSheet, Text, View, Animated } from 'react-native';
 import ui from '../../share/ui.constant';
 import Icon from 'react-native-vector-icons/MaterialIcons'
-export default class PayButton extends React.Component {
+export default class PayButton extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            anim: new Animated.Value(0)
-        }
+        this.anim = new Animated.Value(0)
     }
 
     componentWillReceiveProps(props) {
         if (props.show) {
-            Animated.spring(this.state.anim, {
+            Animated.spring(this.anim, {
                 toValue: 1,
                 stiffness: 120,
                 damping: 7,
                 useNativeDriver: true
             }).start()
         } else {
-            Animated.timing(this.state.anim, {
+            Animated.timing(this.anim, {
                 toValue: 0,
                 duration: 200,
                 useNativeDriver: true
@@ -30,7 +28,7 @@ export default class PayButton extends React.Component {
     render() {
         let animTransform = {
             transform: [{
-                translateX: this.state.anim.interpolate({
+                translateX: this.anim.interpolate({
                     inputRange: [0, 1],
                     outputRange: [0, -70]
                 })
@@ -38,7 +36,7 @@ export default class PayButton extends React.Component {
         }
         return (
             <Animated.View style={[styles.container, animTransform]}>
-                <Icon name="check" size={30} color="white"/>
+                <Icon name="check" size={30} color="white" />
             </Animated.View>
         );
     }
@@ -54,8 +52,8 @@ const styles = StyleSheet.create({
         bottom: 30,
         right: 30,
         backgroundColor: ui.colors.highlight,
-        justifyContent:'center',
-        alignItems:'center',
-        elevation:1
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 1
     }
 })

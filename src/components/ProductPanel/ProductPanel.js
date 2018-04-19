@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableNativeFeedback, TouchableOpacity, Dimensions } from 'react-native';
 import ui from '../../share/ui.constant';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
@@ -14,10 +14,12 @@ export default ProductPanel = (props) => {
                 <View style={styles.productNameContainer}>
                     <Text style={styles.productName}>Gạo Hạt Ngọc Trời Phượng Hoàng</Text>
                 </View>
-                <TouchableOpacity onPress={props.pressed} style={styles.addToCart}>
-                    <Icon name="add-shopping-cart" size={20} color={ui.colors.black} />
-                    <Text style={styles.productCost}>89.000 VND</Text>
-                </TouchableOpacity>
+                <TouchableNativeFeedback onPress={props.pressed}>
+                    <View  style={styles.addToCart}>
+                        <Icon name="add-shopping-cart" size={20} color={ui.colors.black} />
+                        <Text style={styles.productCost}>89k</Text>
+                    </View>
+                </TouchableNativeFeedback>
             </View>
         </View>
     );
@@ -28,7 +30,7 @@ const borderRadiusConst = 4;
 const styles = StyleSheet.create({
     container: {
         height: 217.5,
-        width: _width/2 - 20,
+        width: _width / 2 - 20,
         borderRadius: borderRadiusConst,
         marginLeft: 8,
         marginRight: 8,
@@ -38,13 +40,15 @@ const styles = StyleSheet.create({
     ImgContainer: {
         width: '100%',
         height: '60%',
+        borderTopLeftRadius:borderRadiusConst,
+        borderTopRightRadius:borderRadiusConst,
     },
     productImg: {
         width: '100%',
         height: '100%',
         resizeMode: 'contain'
     },
-    dimmer: {
+    /* dimmer: {
         width: '100%',
         height: '100%',
         backgroundColor: 'black',
@@ -52,14 +56,14 @@ const styles = StyleSheet.create({
         position: 'absolute',
         borderTopRightRadius: borderRadiusConst,
         borderTopLeftRadius: borderRadiusConst
-    },
+    }, */
     InfoContainer: {
         width: '100%',
         height: '40%',
     },
     productNameContainer: {
         width: '100%',
-        height: '60%',
+        height: '50%',
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 5,
@@ -69,20 +73,23 @@ const styles = StyleSheet.create({
     },
     addToCart: {
         width: '100%',
-        height: '40%',
+        height: '50%',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'flex-start'
+        alignItems: 'center',
+        borderBottomLeftRadius:borderRadiusConst,
+        borderBottomRightRadius:borderRadiusConst,
     },
     productName: {
-        fontFamily: ui.fonts.medium,
-        fontSize: 12,
-        color: ui.colors.dark_gray,
+        fontFamily: ui.fonts.light,
+        fontSize: ui.fontSize.semiTiny,
+        color: 'black',
         textAlign: 'center'
     },
     productCost: {
         fontFamily: ui.fonts.bold,
-        fontSize: 12,
-        color: ui.colors.black
+        fontSize: ui.fontSize.semiTiny,
+        color: ui.colors.black,
+        marginLeft:2
     }
 })

@@ -7,7 +7,7 @@ import StoreNoti from './storeNoti/StoreNoti';
 import StoreContact from './storeContact/StoreContact';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-class Store extends React.Component {
+class Store extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,7 +30,6 @@ class Store extends React.Component {
     }
 
     onSelectTabHandler = (tab) => {
-        console.log(tab)
         this.setState({ tabSelection: tab })
     }
 
@@ -72,11 +71,11 @@ class Store extends React.Component {
                     </View>
                 </View>
                 <StoreProduct addToCart={this.onAddToCartHandler} show={this.state.tabSelection === 1} />
-                <StoreNoti show={this.state.tabSelection === 2} />
-                <StoreContact show={this.state.tabSelection === 3} />
+                {this.state.tabSelection === 2 && <StoreNoti/>}
+                {this.state.tabSelection === 3 && <StoreContact/>}
                 {
                     this.state.checkCart &&
-                        <DimmerComponent onPress={this.onStopCheckCartHandler} />
+                    <DimmerComponent onPress={this.onStopCheckCartHandler} />
                 }
                 <CartButton checkCart={this.onCheckCartHandler} quantity={this.state.productArr.length} />
                 {this.state.productArr.map((item, i) => {
@@ -102,14 +101,14 @@ class Store extends React.Component {
                             show={this.state.checkCart} />
                     )
                 })}
-                <PayButton show={this.state.checkCart} />
+                { <PayButton show={this.state.checkCart} /> }
                 <AditionalProduct stopAddingProduct={() => this.setState({ addingProduct: false })} addingProduct={this.state.addingProduct} />
             </View>
         )
     }
 }
 
-class AditionalProduct extends React.PureComponent {
+class AditionalProduct extends React.Component {
     constructor(props) {
         super(props);
         this.postion = _height - 300;

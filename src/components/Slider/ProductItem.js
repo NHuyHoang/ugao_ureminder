@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, Animated, TouchableWithoutFeedback, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import ui from '../../share/ui.constant';
-export default class ProductItem extends React.Component {
+export default class ProductItem extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {

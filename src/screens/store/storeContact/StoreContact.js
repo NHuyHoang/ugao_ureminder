@@ -4,14 +4,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import ui from '../../../share/ui.constant'
 
 export default class StoreContact extends React.Component {
-    showScreen = () => {
+   /*  showScreen = () => {
         return this.props.show ?
             { opacity: 1, zIndex: 1, } : { opacity: 0, zIndex: 0, }
-    }
+    } */
     render() {
         return (
 
-            <View style={[styles.container, this.showScreen()]}>
+            <View style={styles.container}>
                 <FlatList
                     data={templateData}
                     keyExtractor={(item) => item._id}
@@ -117,16 +117,12 @@ const ContactItem = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        top: 100,
-        bottom: 0,
-        position: 'absolute',
+       width:'100%',
     },
     contactPanel: {
         width: "100%",
         height: 120,
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingLeft: 12,
         justifyContent: 'center',
         alignItems: 'flex-start',
         borderBottomWidth: 0.3,
