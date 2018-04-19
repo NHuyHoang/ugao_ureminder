@@ -13,16 +13,10 @@ class Profile extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Header>
-                    <View style={styles.btnContainer}>
-                        <TouchableOpacity style={styles.headerBtn}>
-                            <Icon name="done" size={20} color="black" />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.headerBtn}>
-                            <Icon name="power-settings-new" size={20} color={ui.colors.red} />
-                        </TouchableOpacity>
-                    </View>
-                </Header>
+                <Header data={[
+                    { name: 'done', onPress: () => alert('done'), color: 'black' },
+                    { name: 'power-settings-new', onPress: () => alert('power-settings-new'), color: 'red' },
+                ]}/>
                 <ScrollView>
                     <KeyboardAvoidingView behavior="position" >
                         <View style={styles.mainInfoContent}>
@@ -39,19 +33,20 @@ class Profile extends React.Component {
                             type={'text'}
                             label={"Họ & tên"} />
                         <Input
-                            config={{keyboardType:'email-address', defaultValue: "lilycollins@yahoo.com.vn" }}
+                            config={{ keyboardType: 'email-address', defaultValue: "lilycollins@yahoo.com.vn" }}
                             type={'text'}
-                            label={"Email"} /> 
+                            label={"Email"} />
                         <Input
-                            config={{keyboardType:'numeric', defaultValue: "0123456789" }}
+                            config={{ keyboardType: 'numeric', defaultValue: "0123456789" }}
                             type={'text'}
                             label={"Điện thoại"} />
                         <Input
                             config={{ defaultValue: "Số 1 Võ Văn Ngân, TP.HCM" }}
                             type={'text'}
                             label={"Địa chỉ"}
-                            iconBtn={{ name: "place" }} />
-                        <View style={{ height: 50, width: "100%", backgroundColor:'transparent' }}></View>
+                            iconBtn={{ name: "place" }}
+                            btnEvent={() => this.props.navigation.navigate('Location')} />
+                        <View style={{ height: 50, width: "100%", backgroundColor: 'transparent' }}></View>
                     </KeyboardAvoidingView>
                 </ScrollView>
 
@@ -63,13 +58,7 @@ class Profile extends React.Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        flex:1
-    },
-    btnContainer: {
-        flexDirection: 'row'
-    },
-    headerBtn: {
-        marginRight: 18
+        flex: 1
     },
     avatarContainer: {
         height: "100%",

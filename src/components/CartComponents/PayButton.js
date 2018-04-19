@@ -36,7 +36,7 @@ export default class PayButton extends React.PureComponent {
         }
         return (
             <Animated.View style={[styles.container, animTransform]}>
-                <Icon name="check" size={30} color="white" />
+                <Icon name="payment" size={30} color="black" />
             </Animated.View>
         );
     }
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         zIndex: 4,
         bottom: 30,
         right: 30,
-        backgroundColor: ui.colors.highlight,
+        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
         elevation: 1

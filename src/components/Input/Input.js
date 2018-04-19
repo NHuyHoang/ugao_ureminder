@@ -46,7 +46,7 @@ export default class Input extends React.Component {
                     {inputType}
                     {
                         this.props.iconBtn &&
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={this.props.btnEvent}>
                             <Icon name={this.props.iconBtn.name} size={20} color="black" />
                         </TouchableOpacity>
                     }

@@ -1,9 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { TabNavigator, TabBarBottom } from 'react-navigation';
+import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 import * as Screens from './src/screens';
 import ui from './src/share/ui.constant'
+
+export default class App extends React.Component {
+  render() {
+    return <RootStack style={styles.container} />;
+    //return <Record/>
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -14,13 +21,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TabNavigator(
+
+
+const Tabs = TabNavigator(
   {
     Store: { screen: Screens.Store },
     Invoice: { screen: Screens.Invoice },
     Profile: { screen: Screens.Profile },
     History: { screen: Screens.History },
-
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -49,6 +57,23 @@ export default TabNavigator(
         borderTopWidth: 1,
         borderTopColor: ui.colors.smoke
       },
+    },
+  }
+);
+
+const RootStack = StackNavigator(
+  {
+    Home: {
+      screen: Tabs,
+    },
+    Location:{
+      screen: Screens.Location
+    }
+  },
+  {
+    initialRouteName: 'Home',
+    navigationOptions: {
+      header: null,
     },
   }
 );
