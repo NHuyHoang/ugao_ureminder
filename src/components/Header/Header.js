@@ -9,13 +9,15 @@ export default Header = (props) => {
     return (
         <View style={styles.headerBar}>
             <Image style={styles.logo} source={require('../../share/images/logo_txt_2.png')} />
-            <View style={styles.btnContainer}>
-                {
-                    props.data.map((button, i) => (
-                        <IconButton key={i} {...button} />
-                    ))
-                }
-            </View>
+            {
+                props.data && <View style={styles.btnContainer}>
+                    {
+                        props.data.map((button, i) => (
+                            <IconButton key={i} {...button} />
+                        ))
+                    }
+                </View>
+            }
         </View>
     )
 }
