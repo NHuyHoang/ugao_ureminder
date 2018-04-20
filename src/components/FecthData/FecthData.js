@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, ActivityIndicator, Button, ScrollView, RefreshControl, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator, Button, ScrollView, RefreshControl, Dimensions, NetInfo } from 'react-native';
 import { gql, graphql } from 'react-apollo';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -19,21 +19,59 @@ export default (query, type, props, LoadedContent) => {
     return <Fetch ownProps={{ ...props }} />
 }
 
-const NetworkError = (props) => (
-    <ScrollView  refreshControl={
-        // This enables the pull-to-refresh functionality
-        <RefreshControl
-            refreshing={false}
-            onRefresh={() => refetchHandler(props.refetch)}
-        />
-    }>
-        <View style={styles.container}>
-            <Icon name="signal-wifi-off" size={50} color={ui.colors.dark_gray} />
-            <Text style={styles.notiText}>Lỗi kết nối</Text>
-            <Text style={styles.notiText}>Kéo xuống để reload</Text>
-        </View>
-    </ScrollView>
-)
+class NetworkError extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            tryConnect: false
+        }
+    }
+
+    componentDidMount() {
+        NetInfo.isConnected.addEventListener(
+            'connectionChange',
+            this.handleConnectivityChange
+        );
+    }
+
+
+    componentWillUnmount() {
+        NetInfo.isConnected.removeEventListener(
+            'connectionChange',
+            this.handleConnectivityChange
+        );
+    }
+
+    handleConnectivityChange = (isConnected) => {
+        if (isConnected) {
+            this.setState({
+                tryConnect: true
+            }, () => {
+                //refetchHandler(this.props.refetch);
+                this.props.refetch()
+                    .catch(err => this.setState({ tryConnect: false }))
+            })
+
+        }
+
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+                {
+                    this.state.tryConnect ?
+                        <Spinner /> :
+                        <View style={styles.center}>
+                            <Text style={styles.sadMeme}>: (</Text>
+                            <Text style={styles.notiText}>Vui lòng kiểm tra kết nối</Text>
+                        </View>
+                }
+            </View>
+        )
+    }
+}
+
 
 const refetchHandler = (funct) => {
     return funct().catch(err => console.log('network err'))
@@ -41,21 +79,33 @@ const refetchHandler = (funct) => {
 
 const Spinner = () => (
     <View style={styles.container}>
-        <ActivityIndicator size={50} color="#000000" />
+        <View style={styles.center}>
+            <ActivityIndicator size="large" color="#000000" />
+        </View>
     </View>
 )
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        height: Dimensions.get('window').height/2,
-        justifyContent:'flex-end',
-        alignItems: 'center',
+        flex: 1
     },
     notiText: {
-        marginTop: 8,
-        fontFamily: ui.fonts.default,
-        fontSize: ui.fontSize.normal,
-        color: ui.colors.dark_gray
+        fontFamily: ui.fonts.light,
+        fontSize: 18,
+        marginLeft: 6,
+        color: 'black',
+    },
+    center: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+    sadMeme: {
+        fontSize: 60,
+        transform: [{ rotate: '90deg' }],
+        color: 'black',
+        alignSelf: 'center'
     }
 })
