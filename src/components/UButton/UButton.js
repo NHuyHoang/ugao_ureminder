@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, TouchableWithoutFeedback, Text, Animated } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Animated,
+    TouchableNativeFeedback,
+    PanResponder
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ui from '../../share/ui.constant'
 
@@ -10,38 +17,49 @@ export default class UButton extends React.Component {
             isActive: false
         }
         this.anim = {
-            widthScaleAnim: new Animated.Value(0),
-
+            colorAnim: new Animated.Value(0),
         }
-        this.onBtnActive = this.onBtnActiveHandler.bind(this)
-    }
-
-    onBtnActiveHandler() {
-
-        if (!this.state.isActive) {
-            this.setState({ isActive: true }, () => {
-                Animated.timing(this.anim.widthScaleAnim, {
+        this.panRes = PanResponder.create({
+            onStartShouldSetPanResponder: (evt, gestureState) => true,
+            onPanResponderGrant: (evt, gestureState) => {
+                Animated.timing(this.anim.colorAnim, {
                     toValue: 1,
-                    timing: 50
+                    duration: 10
                 }).start()
-            })
+            },
+            onPanResponderRelease: (evt, gestureState) => {
+                Animated.timing(this.anim.colorAnim, {
+                    toValue: 0,
+                    duration: 10
+                }).start()
+            },
+        })
+        this.colors = {
+            highlight: this.props.color ? this.props.highlight : 'black',
+            fadeColor: this.props.fadeColor ? this.props.fadeColor : ui.colors.dark_gray,
         }
     }
+
+
 
     render() {
-        let buttonAnimTranform = {
-            width: this.anim.widthScaleAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [250, 50]
-            }),
-        }
+        let colorHandler = this.anim.colorAnim.interpolate({
+            inputRange: [0, 1],
+            outputRange: [this.colors.highlight, this.colors.fadeColor]
+        })
         return (
-            <TouchableWithoutFeedback onPress={this.onBtnActive} >
-                <Animated.View style={[styles.container, buttonAnimTranform]}>
-                    {!this.state.isActive && <Text style={styles.costTxt}>{this.props.cost}</Text>}
-                    <Icon name={this.props.iconName} size={25} color={ui.colors.highlight} />
-                </Animated.View>
-            </TouchableWithoutFeedback>
+            <Animated.View    {...this.panRes.panHandlers} style={[styles.container, { borderColor: colorHandler }]}>
+                <View style={[styles.innerContainer]}>
+                    {
+                        !this.state.isActive &&
+                        <Animated.Text
+                            style={[styles.txtStyle, { color: colorHandler }]}>
+                            {this.props.txt}
+                        </Animated.Text>
+                    }
+                </View>
+            </Animated.View>
+
         )
     }
 }
@@ -50,17 +68,22 @@ const styles = StyleSheet.create({
     container: {
         height: 50,
         width: 250,
-        borderWidth: 2,
-        borderColor: ui.colors.highlight,
-        borderRadius: 25,
+        borderRadius: 8,
+        borderWidth: 1,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
     },
-    costTxt: {
+    innerContainer: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    txtStyle: {
         fontFamily: ui.fonts.bold,
         fontSize: 18,
-        color: ui.colors.highlight,
+        color: 'black',
         marginRight: 5
     }
 })

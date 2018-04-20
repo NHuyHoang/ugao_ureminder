@@ -9,4 +9,5 @@ export { default as RemoveButton } from './CartComponents/RemoveBtn';
 export { default as Header } from './Header/Header';
 export { default as Input } from './Input/Input';
 export { default as UButton } from './UButton/UButton';
-export { default as InvoiceItem } from './InvoiceItem/InvoiceItem'
+export { default as InvoiceItem } from './InvoiceItem/InvoiceItem';
+export { default as IconButton } from './IconButton/IconButton';

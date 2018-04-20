@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput, Picker, TouchableWithoutFeedback, TouchableOpacity, Animated, FlatList, KeyboardAvoidingView } from 'react-native';
+import IconButton from '../IconButton/IconButton';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ui from '../../share/ui.constant'
 
@@ -46,9 +47,8 @@ export default class Input extends React.Component {
                     {inputType}
                     {
                         this.props.iconBtn &&
-                        <TouchableOpacity onPress={this.props.btnEvent}>
-                            <Icon name={this.props.iconBtn.name} size={20} color="black" />
-                        </TouchableOpacity>
+                        <IconButton size={35} onPress={this.props.btnEvent} name={this.props.iconBtn.name} />
+                        
                     }
                 </View>
 
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingLeft: 20,
         paddingRight: 20,
-        marginTop: 8
+        marginTop: 8,
     },
     label: {
         fontFamily: ui.fonts.bold,

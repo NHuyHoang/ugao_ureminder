@@ -17,10 +17,11 @@ class Invoice extends React.Component {
                     <Slider style={styles.slider} productItem={true} />
                     <View style={styles.formContainer}>
                         <Input type={'picker'} config={{ data: this.tempPickerData }} label={"Thanh toán"} />
-                        <Input iconBtn={{ name: "place" }} config={{ placeholder: "Số 1 Võ Văn Ngân,Q.Thủ Đức" }} type={'text'} label={"Nơi nhận"} />
+                        <Input iconBtn={{ name: "place" }} config={{ value: "Số 1 Võ Văn Ngân,Q.Thủ Đức" }} type={'text'} label={"Nơi nhận"} />
+                        <Input  config={{ editable:false, value:'97.000 VND' }} type={'text'} label={"Tổng cộng"} />
                     </View>
                     <View style={styles.submitButton}>
-                        <UButton cost="999.000 VND" iconName="done"/>
+                        <UButton  txt="Thanh toán" iconName="done"/>
                     </View>
                 </KeyboardAvoidingView>
             </View>
