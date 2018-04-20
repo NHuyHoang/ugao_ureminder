@@ -2,12 +2,28 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { Header, Input } from '../../components';
+import { Header, Input, FecthData } from '../../components';
 import ui from '../../share/ui.constant';
 
 class Profile extends React.Component {
     constructor(props) {
         super(props);
+        this.query = `
+        {
+            customer(id: "5ac98126ce697734441d5214") {
+            _id
+            location {
+                address
+                lat
+                lng
+            }
+            email
+            name
+            img
+            phone
+            }
+        }
+        `
     }
 
     render() {
@@ -16,44 +32,55 @@ class Profile extends React.Component {
                 <Header data={[
                     { name: 'done', onPress: () => alert('done'), color: 'black' },
                     { name: 'power-settings-new', onPress: () => alert('power-settings-new'), color: 'red' },
-                ]}/>
-                <ScrollView>
-                    <KeyboardAvoidingView behavior="position" >
-                        <View style={styles.mainInfoContent}>
-                            <View style={styles.avatarContainer} >
-                                <Image style={styles.avatar} source={require('../../share/images/avatar_edited.png')} />
-                            </View>
-                            <View style={styles.infoContainer}>
-                                <Text style={styles.nameTxt}>LiLy CoLlins</Text>
-                                <Text style={styles.emailTxt}>lilycollins@yahoo.com.vn</Text>
-                            </View>
-                        </View>
-                        <Input
-                            config={{ defaultValue: "Lily Collins" }}
-                            type={'text'}
-                            label={"Họ & tên"} />
-                        <Input
-                            config={{ keyboardType: 'email-address', defaultValue: "lilycollins@yahoo.com.vn" }}
-                            type={'text'}
-                            label={"Email"} />
-                        <Input
-                            config={{ keyboardType: 'numeric', defaultValue: "0123456789" }}
-                            type={'text'}
-                            label={"Điện thoại"} />
-                        <Input
-                            config={{ defaultValue: "Số 1 Võ Văn Ngân, TP.HCM" }}
-                            type={'text'}
-                            label={"Địa chỉ"}
-                            iconBtn={{ name: "place" }}
-                            btnEvent={() => this.props.navigation.navigate('Location')} />
-                        <View style={{ height: 50, width: "100%", backgroundColor: 'transparent' }}></View>
-                    </KeyboardAvoidingView>
-                </ScrollView>
-
+                ]} />
+                {
+                    FecthData(this.query,"customer", this.props, LoadedContent)
+                }
             </View>
         )
     }
 }
+
+
+
+const LoadedContent = (props) => {
+    const { email, img, location, name, phone } = props.data;
+    return (
+        <ScrollView>
+            <KeyboardAvoidingView behavior="position" >
+                <View style={styles.mainInfoContent}>
+                    <View style={styles.avatarContainer} >
+                        <Image style={styles.avatar} source={{ uri: img }} />
+                    </View>
+                    <View style={styles.infoContainer}>
+                        <Text style={styles.nameTxt}>{name}</Text>
+                        <Text style={styles.emailTxt}>{email}</Text>
+                    </View>
+                </View>
+                <Input
+                    config={{ defaultValue: name }}
+                    type={'text'}
+                    label={"Họ & tên"} />
+                <Input
+                    config={{ keyboardType: 'email-address', defaultValue: email }}
+                    type={'text'}
+                    label={"Email"} />
+                <Input
+                    config={{ keyboardType: 'numeric', defaultValue: phone }}
+                    type={'text'}
+                    label={"Điện thoại"} />
+                <Input
+                    config={{ defaultValue: location.address }}
+                    type={'text'}
+                    label={"Địa chỉ"}
+                    iconBtn={{ name: "place" }}
+                    btnEvent={() => props.navigation.navigate('Location')} />
+                <View style={{ height: 50, width: "100%", backgroundColor: 'transparent' }}></View>
+            </KeyboardAvoidingView>
+        </ScrollView>
+    )
+}
+
 
 const styles = StyleSheet.create({
     container: {
@@ -98,8 +125,8 @@ const styles = StyleSheet.create({
         color: ui.colors.black,
     },
     emailTxt: {
-        fontFamily: ui.fonts.light_italic,
-        fontSize: ui.fontSize.small,
+        fontFamily: ui.fonts.thin_italic,
+        fontSize: ui.fontSize.semiTiny,
         color: ui.colors.black,
         textDecorationLine: 'underline'
     },
