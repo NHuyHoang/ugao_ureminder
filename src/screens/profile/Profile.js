@@ -1,9 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import { connect } from 'react-redux';
 import { Header, Input, FecthData } from '../../components';
 import ui from '../../share/ui.constant';
+
+import { tryGetCustomer } from '../../store/actions'
 
 class Profile extends React.Component {
     constructor(props) {
@@ -23,7 +25,7 @@ class Profile extends React.Component {
             phone
             }
         }
-        `
+        `;
     }
 
     render() {
@@ -34,7 +36,7 @@ class Profile extends React.Component {
                     { name: 'power-settings-new', onPress: () => alert('power-settings-new'), color: 'red' },
                 ]} />
                 {
-                    FecthData(this.query,"customer", this.props, LoadedContent)
+                    FecthData(this.query, "customer", this.props, LoadedContent)
                 }
             </View>
         )
@@ -134,4 +136,16 @@ const styles = StyleSheet.create({
         paddingTop: 15,
     },
 })
-export default Profile;
+
+const mapStateToProps = state => {
+    return {
+        name: state.customer.name
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        tryGetCustomer: () => dispatch(tryGetCustomer())
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

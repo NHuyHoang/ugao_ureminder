@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, ScrollView, Dimensions, ActivityIndicator, TouchableWithoutFeedback, SectionList } from 'react-native';
 import ui from '../../../share/ui.constant';
-import { Slider, ProductPanel } from '../../../components'
+import { Slider, ProductPanel, FecthData } from '../../../components'
 
 export default class StoreProduct extends React.PureComponent {
     constructor(props) {
@@ -11,6 +11,22 @@ export default class StoreProduct extends React.PureComponent {
             isLoading: false,
         }
         this.templateArr = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5];
+        this.query = `
+        {
+            customer(id: "5ac98126ce697734441d5214") {
+            _id
+            location {
+                address
+                lat
+                lng
+            }
+            email
+            name
+            img
+            phone
+            }
+        }
+        `;
     }
 
     componentWillUnmount() {
@@ -28,35 +44,48 @@ export default class StoreProduct extends React.PureComponent {
 
     render() {
         return (
-            <SectionList
-                ListHeaderComponent={() => (
-                    <View>
-                        <View>
-                            <Text style={styles.title}>Nhà cung cấp</Text>
-                        </View>
-                        <View style={styles.sliderContainer}>
-                            <Slider />
-                        </View>
-                    </View>
-                )}
-                style={[styles.container, this.showScreen()]}
-                renderItem={() => (
-                    <View style={styles.productContainer}>
-                        <ProductPanel pressed={this.props.addToCart} />
-                        <ProductPanel pressed={this.props.addToCart} />
-                    </View>
-                )}
-                sections={[
-                    { data: this.state.templateArr },
-                ]}
-                keyExtractor={() => Math.random()}
-                onEndReachedThreshold={0.05}
-                onEndReached={(info) => console.log(info)}
-                onRefresh={() => { }}
-                refreshing={false}
-            />
+            <View
+                style={[styles.container, this.showScreen()]}>
+                {
+                    FecthData(this.query, "customer", this.props, LoadedContent)
+                }
+            </View>
+
         );
     }
+}
+
+const LoadedContent = (props) => {
+    const templateArr = [1, 2, 3, 4, 5, 1, 2];
+    return (
+        <SectionList
+            ListHeaderComponent={() => (
+                <View>
+                    <View>
+                        <Text style={styles.title}>Nhà cung cấp</Text>
+                    </View>
+                    <View style={styles.sliderContainer}>
+                        <Slider />
+                    </View>
+                </View>
+            )}
+
+            renderItem={() => (
+                <View style={styles.productContainer}>
+                    <ProductPanel pressed={props.addToCart} />
+                    <ProductPanel pressed={props.addToCart} />
+                </View>
+            )}
+            sections={[
+                { data: templateArr },
+            ]}
+            keyExtractor={() => Math.random()}
+            onEndReachedThreshold={0.05}
+            onEndReached={(info) => console.log(info)}
+            onRefresh={() => { }}
+            refreshing={false}
+        />
+    )
 }
 
 

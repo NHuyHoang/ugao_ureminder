@@ -104,12 +104,12 @@
         "source": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\drawable\\abc_item_background_holo_dark.xml"
     },
     {
-        "merged": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_dark_normal.xml",
-        "source": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.2.4\\res\\drawable\\common_google_signin_btn_text_dark_normal.xml"
-    },
-    {
         "merged": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_disabled.xml",
         "source": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.2.4\\res\\drawable\\common_google_signin_btn_text_disabled.xml"
+    },
+    {
+        "merged": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_dark_normal.xml",
+        "source": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.2.4\\res\\drawable\\common_google_signin_btn_text_dark_normal.xml"
     },
     {
         "merged": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_spinner_textfield_background_material.xml",
