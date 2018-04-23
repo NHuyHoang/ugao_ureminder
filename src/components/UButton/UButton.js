@@ -43,10 +43,12 @@ export default class UButton extends React.Component {
 
 
     render() {
-        let colorHandler = this.anim.colorAnim.interpolate({
-            inputRange: [0, 1],
-            outputRange: [this.colors.highlight, this.colors.fadeColor]
-        })
+        let colorHandler = this.props.disabled ?
+            ui.colors.dark_gray :
+            this.anim.colorAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [this.colors.highlight, this.colors.fadeColor]
+            })
         return (
             <Animated.View    {...this.panRes.panHandlers} style={[styles.container, { borderColor: colorHandler }]}>
                 <View style={[styles.innerContainer]}>

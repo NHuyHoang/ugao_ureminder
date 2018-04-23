@@ -16,14 +16,14 @@ class Invoice extends React.Component {
                 <KeyboardAvoidingView behavior="position" style={{ flex: 1 }}>
                     <Slider style={styles.slider} productItem={true} />
                     <View style={styles.formContainer}>
-                        <Input type={'picker'} config={{ data: this.tempPickerData }} label={"Thanh toán"} />
-                        <Input
+                        {/* <Input type='picker' config={{ data: this.tempPickerData }} label={"Thanh toán"} /> */}
+                         <Input
                             iconBtn={{ name: "place" }}
-                            config={{ value: "Số 1 Võ Văn Ngân,Q.Thủ Đức" }}
-                            type={'text'}
-                            label={"Nơi nhận"}
+                            value = "Số 1 Võ Văn Ngân,Q.Thủ Đức"
+                            type='text'
+                            label="Nơi nhận"
                             btnEvent={() => this.props.navigation.navigate('Location')} />
-                        <Input config={{ editable: false, value: '97.000 VND' }} type={'text'} label={"Tổng cộng"} />
+                        <Input config={{ editable: false, value: '97.000 VND' }} type={'text'} label={"Tổng cộng"} /> 
                     </View>
                     <View style={styles.submitButton}>
                         <UButton txt="Thanh toán" iconName="done" />

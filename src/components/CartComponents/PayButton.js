@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Animated } from 'react-native';
 import ui from '../../share/ui.constant';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/Ionicons'
 export default class PayButton extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -36,7 +36,7 @@ export default class PayButton extends React.PureComponent {
         }
         return (
             <Animated.View style={[styles.container, animTransform]}>
-                <Icon name="payment" size={30} color="black" />
+                <Icon name="ios-card" size={30} color="black" />
             </Animated.View>
         );
     }

@@ -1,26 +1,34 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicon from 'react-native-vector-icons/Ionicons'
 
 export default IconButton = (props) => {
     return (
         <View style={[{
             height: props.size,
             width: props.size,
-            borderRadius: props.size * 0.2,
+
 
         }]}>
-            <TouchableNativeFeedback
-                background={TouchableNativeFeedback.Ripple('rgba(0,0,0,0.3)', true)}
-                onPress={props.onPress}>
-                <View style={{
+            <TouchableHighlight
+                onLongPress={props.onLongPress}
+                onPressOut={props.onPressOut}
+                onPress={props.onPress}
+                underlayColor={'rgba(0,0,0,0.1)'}
+                style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    flex: 1
+                    borderRadius: props.size * 0.2,
+                    flex: 1,
                 }}>
-                    <Icon name={props.name} size={props.size * 0.6} color='black' />
-                </View>
-            </TouchableNativeFeedback>
+                {
+                    props.ionicon ?
+                        <Ionicon name={props.name} size={props.size * 0.6} color={props.color ? props.color : 'black'} /> :
+                        <Icon name={props.name} size={props.size * 0.6} color={props.color ? props.color : 'black'} />
+                }
+
+            </TouchableHighlight>
         </View>
     )
 }

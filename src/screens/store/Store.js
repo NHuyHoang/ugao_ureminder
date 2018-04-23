@@ -5,7 +5,9 @@ import { SearchInput, NavbarTab, CartButton, ProductItem, PayButton } from '../.
 import StoreProduct from './storeProduct/StoreProduct';
 import StoreNoti from './storeNoti/StoreNoti';
 import StoreContact from './storeContact/StoreContact';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import Login from '../profile/Login';
 
 class Store extends React.PureComponent {
     constructor(props) {
@@ -60,7 +62,7 @@ class Store extends React.PureComponent {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.navbarContainer}>
+                {/* <View style={styles.navbarContainer}>
                     <View style={styles.navbarInput}>
                         <View style={styles.searchInput}>
                             <SearchInput />
@@ -71,8 +73,8 @@ class Store extends React.PureComponent {
                     </View>
                 </View>
                 <StoreProduct addToCart={this.onAddToCartHandler} show={this.state.tabSelection === 1} />
-                {this.state.tabSelection === 2 && <StoreNoti/>}
-                {this.state.tabSelection === 3 && <StoreContact/>}
+                {this.state.tabSelection === 2 && <StoreNoti />}
+                {this.state.tabSelection === 3 && <StoreContact />}
                 {
                     this.state.checkCart &&
                     <DimmerComponent onPress={this.onStopCheckCartHandler} />
@@ -101,8 +103,9 @@ class Store extends React.PureComponent {
                             show={this.state.checkCart} />
                     )
                 })}
-                { <PayButton show={this.state.checkCart} /> }
-                <AditionalProduct stopAddingProduct={() => this.setState({ addingProduct: false })} addingProduct={this.state.addingProduct} />
+                {<PayButton show={this.state.checkCart} />}
+                <AditionalProduct stopAddingProduct={() => this.setState({ addingProduct: false })} addingProduct={this.state.addingProduct} /> */}
+                <Login />
             </View>
         )
     }

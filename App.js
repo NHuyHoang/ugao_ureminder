@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 import * as Screens from './src/screens';
 import ui from './src/share/ui.constant'
@@ -38,9 +39,10 @@ const Tabs = TabNavigator(
         switch (routeName) {
           case ('Store'): iconName = 'store'; break;
           case ('Invoice'): iconName = 'receipt'; break;
-          case ('Profile'): iconName = 'perm-identity'; break;
-          case ('History'): iconName = 'account-balance-wallet'; break;
+          case ('Profile'): return <Ionicon name="ios-contact" size={25} color={tintColor} />
+          case ('History'): return <Ionicon name="ios-folder-open-outline" size={25} color={tintColor} />
         }
+
         return <Icon name={iconName} size={25} color={tintColor} />;
       },
     }),
@@ -66,7 +68,7 @@ const RootStack = StackNavigator(
     Home: {
       screen: Tabs,
     },
-    Location:{
+    Location: {
       screen: Screens.Location
     }
   },

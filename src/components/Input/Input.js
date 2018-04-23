@@ -2,24 +2,114 @@ import React from 'react';
 import { StyleSheet, View, Text, TextInput, Picker, TouchableWithoutFeedback, TouchableOpacity, Animated, FlatList, KeyboardAvoidingView } from 'react-native';
 import IconButton from '../IconButton/IconButton';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ui from '../../share/ui.constant'
+import ui from '../../share/ui.constant';
+import validator from './validator';
+
+const controlTypes = Object.freeze(['password', 'email']);
 
 export default class Input extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            paymentMetod: 'Thanh toán trực tiếp',
-            focus: false
+            paymentMethod: 'Thanh toán trực tiếp',
+            focus: false,
+            control: {
+                value: this.props.value ? this.props.value : "",
+                controlType: controlTypes.indexOf(this.props.controlType) === -1
+                    ? null : this.props.controlType,
+                valid: true,
+                touched: false,
+                hint: this.props.controlType && `${this.props.controlType} của bạn`,
+            },
+            showPassword: true,
         }
-        this.onFocus = () => this.setState(prevState => ({ focus: !prevState.focus }))
+
+        this.onFocus = () => this.setState(prevState => ({ focus: !prevState.focus }));
+
+    }
+
+    onChangeTextHandler = (text) => {
+        console.log(text);
+        let valid = validator(true, this.state.control.controlType, text)
+        this.setState(prevState => {
+            return {
+                control: {
+                    ...prevState.control,
+                    value: text,
+                    valid,
+                    touched: true,
+                }
+            }
+        }, () => {
+            if (this.props.checkValidity)
+                this.props.checkValidity(this.state.control.controlType, valid)
+        });
+    }
+
+    validStyleHandler = (type) => {
+        switch (type) {
+            case "border":
+                if (this.state.control.valid) {
+                    return {
+                        borderBottomColor: this.state.focus ? ui.colors.highlight : "black",
+                        borderBottomWidth: this.state.focus ? 2 : 0.3,
+                    }
+                }
+                else return {
+                    borderBottomColor: ui.colors.red,
+                    borderBottomWidth: 2,
+                }
+                break;
+            case "color":
+                return this.state.control.valid ? ui.colors.black : ui.colors.red;
+            case "icon":
+                if (this.state.control.controlType === "email") {
+                    if (!this.state.control.touched)
+                        return null;
+                    if (this.state.control.valid)
+                        return (
+                            <IconButton size={35} name="check" color={ui.colors.highlight} />
+                        );
+                    else return (
+                        <IconButton size={35} name="clear" color={ui.colors.red} />
+                    );
+                }
+                else if (this.state.control.controlType === "password") {
+                    if (!this.state.control.touched)
+                        return null;
+                    if (this.state.control.valid)
+                        return (
+                            <IconButton
+                                onLongPress={() => this.setState({ showPassword: false })}
+                                onPressOut={() => this.setState({ showPassword: true })}
+                                ionicon
+                                size={35} name="ios-eye"
+                                color={ui.colors.highlight} />
+                        );
+                    else return (
+                        <IconButton
+                            ionicon
+                            onLongPress={() => this.setState({ showPassword: false })}
+                            onPressOut={() => this.setState({ showPassword: true })}
+                            size={35}
+                            name="ios-eye"
+                            color={ui.colors.red} />
+                    );
+                }
+            case "hint":
+                if (!this.state.control.valid) {
+                    if (this.state.control.controlType === "email")
+                        return "Email sai định dạng";
+                    if (this.state.control.controlType === "password")
+                        return "Password có tối thiểu 8 ký tự, ít nhất 1 ký tự số và 1 ký tự đặc biệt";
+                }
+                return this.state.control.hint;
+        }
     }
 
     render() {
         let inputType = null;
-        let borderStyle = {
-            borderBottomColor: this.state.focus ? ui.colors.highlight : "black",
-            borderBottomWidth: this.state.focus ? 2 : 0.3,
-        }
+        let borderStyle = this.validStyleHandler('border');
         switch (this.props.type) {
             case ('picker'): {
                 inputType = (
@@ -29,29 +119,38 @@ export default class Input extends React.Component {
             case ('text'): {
                 inputType = (
                     <TextInput
-                        {...this.props.config}
+                        secureTextEntry={this.state.control.controlType === "password" && this.state.showPassword}
+                        value={this.state.control.value}
+                        onChangeText={(text) => this.onChangeTextHandler(text)}
                         onFocus={() => this.onFocus()}
                         onBlur={() => this.onFocus()}
+
                         //defaultValue="Số 1 Võ Văn Ngân, Q.Thủ Đức, TP.HCM"
                         style={styles.txtInput}
                         underlineColorAndroid="transparent"
+                        {...this.props.config}
                     />
                 )
             }; break;
             default: inputType = null; break;
         }
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, this.props.style]}>
                 <Text style={styles.label}>{this.props.label}</Text>
                 <View style={[styles.inputContainer, borderStyle]}>
                     {inputType}
                     {
                         this.props.iconBtn &&
-                        <IconButton size={35} onPress={this.props.btnEvent} name={this.props.iconBtn.name} />
-                        
+                        <IconButton ionicon={this.props.ionicon} size={35} onPress={this.props.btnEvent} name={this.props.iconBtn.name} />
+
+                    }
+                    {
+                        this.state.control.controlType &&
+                        this.validStyleHandler('icon')
+
                     }
                 </View>
-
+                <Text style={[styles.hint, { color: this.validStyleHandler('color') }]}>{this.validStyleHandler("hint")}</Text>
             </View>
         )
     }
@@ -162,6 +261,11 @@ const styles = StyleSheet.create({
         fontFamily: ui.fonts.light,
         fontSize: ui.fontSize.small,
         color: ui.colors.black,
+    },
+    hint: {
+        fontFamily: ui.fonts.light,
+        fontSize: ui.fontSize.tiny,
+        color: 'black',
     }
 
 })

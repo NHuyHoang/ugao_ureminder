@@ -12,17 +12,15 @@ class Profile extends React.Component {
         super(props);
         this.query = `
         {
-            customer(id: "5ac98126ce697734441d5214") {
-            _id
-            location {
-                address
-                lat
-                lng
-            }
-            email
-            name
-            img
-            phone
+            authenticateCustomer(email:"bluegasus@gmail.com",pass:"huyhoang3562927") {
+                _id
+                email
+                name
+                img
+                phone
+                location{
+                    address
+                }
             }
         }
         `;
@@ -36,7 +34,7 @@ class Profile extends React.Component {
                     { name: 'power-settings-new', onPress: () => alert('power-settings-new'), color: 'red' },
                 ]} />
                 {
-                    FecthData(this.query, "customer", this.props, LoadedContent)
+                    FecthData(this.query, "authenticateCustomer", this.props, LoadedContent)
                 }
             </View>
         )
