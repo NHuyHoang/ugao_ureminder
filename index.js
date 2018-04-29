@@ -10,7 +10,6 @@ const client = new ApolloClient({
     networkInterface: networkInterface
 }); */
 
-console.log(store);
 
 const ApolloApp = () => (
     <ApolloProvider store={store} client={client}>

@@ -8,7 +8,6 @@ import ui from '../../share/ui.constant'
 export default (query, type, props, LoadedContent) => {
     const configQuery = gql`${query}`;
     const Fetch = graphql(configQuery)(({ ownProps, data }) => {
-        console.log(data);
         if (data.error) console.log(data.error);
         if (data.loading) return <Spinner />
         if (data.networkStatus === 8) return <NetworkError refetch={data.refetch} />

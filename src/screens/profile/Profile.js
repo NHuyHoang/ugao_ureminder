@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Button, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import { Header, Input, FecthData } from '../../components';
 import ui from '../../share/ui.constant';
 
-import { tryGetCustomer } from '../../store/actions'
+import { tryGetLocalCustomer } from '../../store/actions'
 
 class Profile extends React.Component {
     constructor(props) {
@@ -24,6 +24,10 @@ class Profile extends React.Component {
             }
         }
         `;
+    }
+
+    componentWillMount() {
+        this.props.tryGetLocalCustomer()
     }
 
     render() {
@@ -58,19 +62,21 @@ const LoadedContent = (props) => {
                     </View>
                 </View>
                 <Input
-                    config={{ defaultValue: name }}
+                    value={name}
                     type={'text'}
                     label={"Họ & tên"} />
                 <Input
-                    config={{ keyboardType: 'email-address', defaultValue: email }}
+                    config={{ keyboardType: 'email-address' }}
+                    value={email}
                     type={'text'}
                     label={"Email"} />
                 <Input
-                    config={{ keyboardType: 'numeric', defaultValue: phone }}
+                    config={{ keyboardType: 'numeric' }}
+                    value={phone}
                     type={'text'}
                     label={"Điện thoại"} />
                 <Input
-                    config={{ defaultValue: location.address }}
+                    value={location.address}
                     type={'text'}
                     label={"Địa chỉ"}
                     iconBtn={{ name: "place" }}
@@ -143,7 +149,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        tryGetCustomer: () => dispatch(tryGetCustomer())
+        tryGetLocalCustomer: () => dispatch(tryGetLocalCustomer())
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
