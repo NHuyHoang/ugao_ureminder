@@ -62,7 +62,7 @@ class Store extends React.PureComponent {
     render() {
         return (
             <View style={styles.container}>
-                {/* <View style={styles.navbarContainer}>
+                <View style={styles.navbarContainer}>
                     <View style={styles.navbarInput}>
                         <View style={styles.searchInput}>
                             <SearchInput />
@@ -104,8 +104,8 @@ class Store extends React.PureComponent {
                     )
                 })}
                 {<PayButton show={this.state.checkCart} />}
-                <AditionalProduct stopAddingProduct={() => this.setState({ addingProduct: false })} addingProduct={this.state.addingProduct} /> */}
-                <Login />
+                <AditionalProduct stopAddingProduct={() => this.setState({ addingProduct: false })} addingProduct={this.state.addingProduct} />
+
             </View>
         )
     }

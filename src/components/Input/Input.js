@@ -27,9 +27,13 @@ export default class Input extends React.Component {
         this.onFocus = () => this.setState(prevState => ({ focus: !prevState.focus }));
 
     }
+    //parent component can get text value
+    //by ref to this component and invoke this function
+    getValue = () => {
+        return this.state.control.value;
+    }
 
     onChangeTextHandler = (text) => {
-        console.log(text);
         let valid = validator(true, this.state.control.controlType, text)
         this.setState(prevState => {
             return {

@@ -1,8 +1,12 @@
 import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER } from '../actions/ActionTypes'
 const initialState = {
-    customer: {
-        name: '',
-        phone: ''
+    info: {
+        _id: null,
+        name: null,
+        phone: null,
+        email: null,
+        img: null,
+        location: null
     }
 }
 
@@ -14,7 +18,7 @@ const reducer = (state = initialState, action) => {
             {
                 return {
                     ...state,
-                    customer: action.customer
+                    info: action.customer
                 }
             }
         default: return state;

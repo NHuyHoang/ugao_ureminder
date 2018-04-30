@@ -31,7 +31,10 @@ export default class UButton extends React.Component {
                 Animated.timing(this.anim.colorAnim, {
                     toValue: 0,
                     duration: 10
-                }).start()
+                }).start(() => {
+                    if (this.props.disabled) return
+                    this.props.onPress()
+                })
             },
         })
         this.colors = {
@@ -39,6 +42,7 @@ export default class UButton extends React.Component {
             fadeColor: this.props.fadeColor ? this.props.fadeColor : ui.colors.dark_gray,
         }
     }
+
 
 
 
@@ -50,7 +54,8 @@ export default class UButton extends React.Component {
                 outputRange: [this.colors.highlight, this.colors.fadeColor]
             })
         return (
-            <Animated.View    {...this.panRes.panHandlers} style={[styles.container, { borderColor: colorHandler }]}>
+            <Animated.View    {...this.panRes.panHandlers}
+                style={[styles.container, { borderColor: colorHandler, marginTop: this.props.top }]}>
                 <View style={[styles.innerContainer]}>
                     {
                         !this.state.isActive &&

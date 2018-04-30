@@ -2,25 +2,34 @@ import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import ui from '../../share/ui.constant';
-import { Input, UButton } from '../../components';
+import { Input, UButton, Form } from '../../components';
+import { FecthData } from '../../components';
 
 export default class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            validForm: false
-        }
-        this.input = { email: false, password: false };
     }
-    checkValidity = (type, value) => {
-        this.input[type] = value;
-        if (value === false && this.state.validForm === true)
-            this.setState({ validForm: false })
-        for (key in this.input) {
-            if (this.input[key] === false) return;
+
+    onLogin = () => {
+        /* let query = `
+        {
+            authenticatedCustomer(email:"bluegasus@gmail.com",pass:"huyhoang3562927") {
+                _id
+                email
+                name
+                img
+                phone
+                location{
+                    address
+                }
+            }
         }
-        this.setState({ validForm: true })
+        `; */
+        console.log(this.refs.emailInput.getValue());
+
     }
+
+
     render() {
         return (
             <View style={styles.container}>
@@ -33,23 +42,27 @@ export default class Login extends React.Component {
                 </View>
                 <View
                     style={styles.loginSegment}>
-                    <Input
-                        config={{keyboardType:"email-address"}}
-                        type='text'
-                        label="Email"
-                        controlType="email"
-                        btnEvent={() => { }}
-                        checkValidity={this.checkValidity} />
-                    <Input
-                        ionicon
-                        type={'text'}
-                        label={"Password"}
-                        controlType="password"
-                        btnEvent={() => { }}
-                        checkValidity={this.checkValidity} />
-                    <View style={styles.btnContainer}>
-                        <UButton disabled={!this.state.validForm} txt="Đăng nhập" iconName="done" />
-                    </View>
+                    <Form style={styles.loginForm}>
+                        <Input
+                            ref="emailInput"
+                            config={{ keyboardType: "email-address" }}
+                            type='text'
+                            label="Email"
+                            controlType="email"
+                            btnEvent={() => { }}
+                        />
+                        <Input
+                            ionicon
+                            ref="passwordInput"
+                            type={'text'}
+                            label={"Password"}
+                            controlType="password"
+                            btnEvent={() => { }}
+                        />
+
+                        <UButton top={32} onPress={this.onLogin}  txt="Đăng nhập" iconName="done" />
+
+                    </Form>
                     <View style={styles.oauthSegment}>
                         <Text style={styles.oauthTxt}>Sử dụng tài khoản</Text>
                         <TouchableOpacity style={{ marginLeft: 8, marginRight: 8 }}>
@@ -65,6 +78,8 @@ export default class Login extends React.Component {
         )
     }
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -107,11 +122,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     loginForm: {
-        height: '90%',
         width: '95%',
-        borderRadius: 12,
-        elevation: 5,
-        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center'
     },

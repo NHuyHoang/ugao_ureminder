@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import { Header, Input, FecthData } from '../../components';
+import Login from './Login';
 import ui from '../../share/ui.constant';
 
 import { tryGetLocalCustomer } from '../../store/actions'
@@ -12,7 +13,7 @@ class Profile extends React.Component {
         super(props);
         this.query = `
         {
-            authenticateCustomer(email:"bluegasus@gmail.com",pass:"huyhoang3562927") {
+            authenticatedCustomer(email:"bluegasus@gmail.com",pass:"huyhoang3562927") {
                 _id
                 email
                 name
@@ -33,12 +34,17 @@ class Profile extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Header data={[
-                    { name: 'done', onPress: () => alert('done'), color: 'black' },
-                    { name: 'power-settings-new', onPress: () => alert('power-settings-new'), color: 'red' },
-                ]} />
                 {
-                    FecthData(this.query, "authenticateCustomer", this.props, LoadedContent)
+                    this.props.customer._id && <Header data={[
+                        { name: 'done', onPress: () => alert('done'), color: 'black' },
+                        { name: 'power-settings-new', onPress: () => alert('power-settings-new'), color: 'red' },
+                    ]} />
+                }
+                {
+                    this.props.customer._id ?
+                        //FecthData(this.query, "authenticatedCustomer", this.props, LoadedContent) :
+                        <LoadedContent data={this.props.customer} /> :
+                        <Login />
                 }
             </View>
         )
@@ -143,7 +149,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        name: state.customer.name
+        customer: state.customer.info
     }
 }
 

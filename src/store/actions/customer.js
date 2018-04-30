@@ -29,10 +29,9 @@ const saveLocalCustomer = (customer) => {
 
 export const tryGetLocalCustomer = () => {
     return dispatch => {
-        console.log('dfsfsereeeeeeeeeeeeeeeeeeeeeee');
+        //AsyncStorage.removeItem(itemKey.customerKey);
         AsyncStorage.getItem(itemKey.customerKey)
             .then(data => {
-                console.log("dfdfdfs")
                 if (!data) dispatch(getCustomerFailed());
                 else {
                     let customer = JSON.parse(data);
