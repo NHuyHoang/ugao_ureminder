@@ -41,3 +41,18 @@ export const tryGetLocalCustomer = () => {
             .catch(err => console.log(err))
     }
 }
+
+export const trySaveLocalCustomer = (customer) => {
+    return dispatch => {
+        AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(customer))
+            .then(data => {
+
+                console.log(data)
+            });
+        dispatch(saveLocalCustomer(customer));
+        /*  AsyncStorage.getItem(itemKey.customerKey)
+             .then(data => {
+                 console.log(data)
+             }) */
+    }
+}

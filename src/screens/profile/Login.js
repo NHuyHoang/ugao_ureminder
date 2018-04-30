@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux';
+
+import { trySaveLocalCustomer } from '../../store/actions';
 import ui from '../../share/ui.constant';
 import { Input, UButton, Form } from '../../components';
 import { FecthData } from '../../components';
 
-export default class Login extends React.Component {
+class Login extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            fetchData: false
+        }
+        this.query = null;
     }
 
     onLogin = () => {
-        /* let query = `
+        const email = this.refs.loginForm.getInputValue("email_input_01");
+        const pass = this.refs.loginForm.getInputValue("password_input_01");
+        this.query = `
         {
-            authenticatedCustomer(email:"bluegasus@gmail.com",pass:"huyhoang3562927") {
+            authenticatedCustomer(email:"${email}",pass:"${pass}") {
                 _id
                 email
                 name
@@ -24,9 +33,16 @@ export default class Login extends React.Component {
                 }
             }
         }
-        `; */
-        console.log(this.refs.emailInput.getValue());
+        `;
+        this.setState({ fetchData: true })
 
+    }
+
+    loadedDataHandler = (props) => {
+        let customer = props.data;
+        //console.log(customer);
+        this.props.trySaveLocalCustomer(customer);
+        return null;
     }
 
 
@@ -42,8 +58,12 @@ export default class Login extends React.Component {
                 </View>
                 <View
                     style={styles.loginSegment}>
-                    <Form style={styles.loginForm}>
+                    {this.state.fetchData && FecthData(this.query, "authenticatedCustomer", null, this.loadedDataHandler, "Tài khoản không tồn tại")}
+                    <Form
+                        ref="loginForm"
+                        style={styles.loginForm}>
                         <Input
+                            id="email_input_01"
                             ref="emailInput"
                             config={{ keyboardType: "email-address" }}
                             type='text'
@@ -53,15 +73,14 @@ export default class Login extends React.Component {
                         />
                         <Input
                             ionicon
+                            id="password_input_01"
                             ref="passwordInput"
                             type={'text'}
                             label={"Password"}
                             controlType="password"
                             btnEvent={() => { }}
                         />
-
-                        <UButton top={32} onPress={this.onLogin}  txt="Đăng nhập" iconName="done" />
-
+                        <UButton top={32} onPress={this.onLogin} txt="Đăng nhập" iconName="done" />
                     </Form>
                     <View style={styles.oauthSegment}>
                         <Text style={styles.oauthTxt}>Sử dụng tài khoản</Text>
@@ -78,6 +97,7 @@ export default class Login extends React.Component {
         )
     }
 }
+
 
 
 
@@ -143,3 +163,11 @@ const styles = StyleSheet.create({
         marginTop: 32
     }
 })
+
+const mapDispatchToProps = dispatch => {
+    return {
+        trySaveLocalCustomer: (customer) => dispatch(trySaveLocalCustomer(customer))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Login);

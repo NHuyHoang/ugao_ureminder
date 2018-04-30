@@ -46,7 +46,7 @@ export default class Input extends React.Component {
             }
         }, () => {
             if (this.props.checkValidity)
-                this.props.checkValidity(this.state.control.controlType, valid)
+                this.props.checkValidity(this.props.id, true, text)
         });
     }
 

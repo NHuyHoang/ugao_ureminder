@@ -8,31 +8,34 @@ export default class Form extends React.Component {
             validForm: false,
         }
         this.input = {};
+        this.values = {};
         this.clonedChildren = null;
     }
 
-    checkValidity = (type, value) => {
-        console.log(type, value);
-        this.input[type] = value;
-        console.log(this.input, type);
-        if (value === false && this.state.validForm === true)
+    checkValidity = (id, isValid, value) => {
+        this.input[id].valid = isValid;
+        this.input[id].value = value;
+        if (isValid === false && this.state.validForm === true)
             this.setState({ validForm: false })
         for (key in this.input) {
-            if (this.input[key] === false) return;
+            if (this.input[key].valid === false) return;
         }
         this.setState({ validForm: true })
     }
 
+    getInputValue = (id) => {
+        return this.input[id].value;
+    }
+
     componentWillMount() {
         React.Children.forEach(this.props.children, (child) => {
-            if (child.type.displayName === "Input")
-                this.input[child.props.controlType] = false;
+            if (child.type.displayName === "Input") {
+                this.input[child.props.id] = { valid: false, value: "" };
+            }
+
         })
     }
 
-    componentDidMount() {
-        React.Children.forEach(this.clonedChildren, child => console.log(child))
-    }
 
     render() {
         //clone this.props.children and

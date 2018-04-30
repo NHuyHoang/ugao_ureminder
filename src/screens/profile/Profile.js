@@ -11,24 +11,11 @@ import { tryGetLocalCustomer } from '../../store/actions'
 class Profile extends React.Component {
     constructor(props) {
         super(props);
-        this.query = `
-        {
-            authenticatedCustomer(email:"bluegasus@gmail.com",pass:"huyhoang3562927") {
-                _id
-                email
-                name
-                img
-                phone
-                location{
-                    address
-                }
-            }
-        }
-        `;
+        this.props.tryGetLocalCustomer()
     }
 
     componentWillMount() {
-        this.props.tryGetLocalCustomer()
+        
     }
 
     render() {
@@ -54,6 +41,7 @@ class Profile extends React.Component {
 
 
 const LoadedContent = (props) => {
+
     const { email, img, location, name, phone } = props.data;
     return (
         <ScrollView>
