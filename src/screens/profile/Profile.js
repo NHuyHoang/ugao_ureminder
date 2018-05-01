@@ -6,7 +6,7 @@ import { Header, Input, FecthData } from '../../components';
 import Login from './Login';
 import ui from '../../share/ui.constant';
 
-import { tryGetLocalCustomer } from '../../store/actions'
+import { tryGetLocalCustomer, logout } from '../../store/actions'
 
 class Profile extends React.Component {
     constructor(props) {
@@ -15,7 +15,7 @@ class Profile extends React.Component {
     }
 
     componentWillMount() {
-        
+
     }
 
     render() {
@@ -24,13 +24,13 @@ class Profile extends React.Component {
                 {
                     this.props.customer._id && <Header data={[
                         { name: 'done', onPress: () => alert('done'), color: 'black' },
-                        { name: 'power-settings-new', onPress: () => alert('power-settings-new'), color: 'red' },
+                        { name: 'power-settings-new', onPress: this.props.logout, color: 'red' },
                     ]} />
                 }
                 {
                     this.props.customer._id ?
                         //FecthData(this.query, "authenticatedCustomer", this.props, LoadedContent) :
-                        <LoadedContent data={this.props.customer} /> :
+                        <LoadedContent {...this.props} data={this.props.customer} /> :
                         <Login />
                 }
             </View>
@@ -143,7 +143,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        tryGetLocalCustomer: () => dispatch(tryGetLocalCustomer())
+        tryGetLocalCustomer: () => dispatch(tryGetLocalCustomer()),
+        logout: () => dispatch(logout())
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

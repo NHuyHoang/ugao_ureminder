@@ -1,4 +1,4 @@
-import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER } from './ActionTypes';
+import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT } from './ActionTypes';
 import { AsyncStorage } from 'react-native'
 
 const itemKey = { customerKey: "get:info:customer" }
@@ -24,6 +24,13 @@ const saveLocalCustomer = (customer) => {
     return {
         type: SAVE_LOCAL_CUSTOMER,
         customer
+    }
+}
+
+export const logout = () => {
+    AsyncStorage.removeItem(itemKey.customerKey);
+    return {
+        type: LOG_OUT
     }
 }
 

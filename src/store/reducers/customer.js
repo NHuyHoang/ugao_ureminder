@@ -1,4 +1,4 @@
-import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER } from '../actions/ActionTypes'
+import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT } from '../actions/ActionTypes'
 const initialState = {
     info: {
         _id: null,
@@ -19,6 +19,13 @@ const reducer = (state = initialState, action) => {
                 return {
                     ...state,
                     info: action.customer
+                }
+            }
+        case (LOG_OUT):
+            {
+                return {
+                    ...state,
+                    info: { ...initialState.info }
                 }
             }
         default: return state;

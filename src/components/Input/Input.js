@@ -46,7 +46,7 @@ export default class Input extends React.Component {
             }
         }, () => {
             if (this.props.checkValidity)
-                this.props.checkValidity(this.props.id, true, text)
+                this.props.checkValidity(this.props.id, valid, text)
         });
     }
 
@@ -105,7 +105,7 @@ export default class Input extends React.Component {
                     if (this.state.control.controlType === "email")
                         return "Email sai định dạng";
                     if (this.state.control.controlType === "password")
-                        return "Password có tối thiểu 8 ký tự, ít nhất 1 ký tự số và 1 ký tự đặc biệt";
+                        return "Password có tối thiểu 8 ký tự và có ít nhất 1 ký tự ";
                 }
                 return this.state.control.hint;
         }

@@ -1,4 +1,5 @@
 export {
     tryGetLocalCustomer,
-    trySaveLocalCustomer
+    trySaveLocalCustomer,
+    logout
 } from './customer'
