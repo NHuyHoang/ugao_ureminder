@@ -1,5 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
-import { CutomerReducer } from './reducers';
+import { CutomerReducer, ProductReducer } from './reducers';
 import { ApolloClient, createNetworkInterface } from 'react-apollo';
 import thunk from 'redux-thunk';
 
@@ -17,6 +17,7 @@ export const client = new ApolloClient({
 
 const rootReducer = combineReducers({
     customer: CutomerReducer,
+    products: ProductReducer,
     apollo: client.reducer(),
 })
 

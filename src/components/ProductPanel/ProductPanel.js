@@ -1,23 +1,26 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableNativeFeedback, TouchableOpacity, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import ui from '../../share/ui.constant';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Ribbon from './Ribbon';
 
 export default ProductPanel = (props) => {
+    let { img, name, price, weight } = props.product;
     return (
         <View style={styles.container}>
+            <Ribbon weight={weight} />
             <View style={styles.ImgContainer}>
-                <Image style={styles.productImg} source={require('../../share/images/phuong-hoang.jpg')} />
+                <Image style={styles.productImg} source={{ uri: img }} />
                 {/* <View style={styles.dimmer} /> */}
             </View>
             <View style={styles.InfoContainer}>
                 <View style={styles.productNameContainer}>
-                    <Text style={styles.productName}>Gạo Hạt Ngọc Trời Phượng Hoàng</Text>
+                    <Text style={styles.productName}>{name}</Text>
                 </View>
                 <TouchableNativeFeedback onPress={props.pressed}>
-                    <View  style={styles.addToCart}>
+                    <View style={styles.addToCart}>
                         <Icon name="add-shopping-cart" size={20} color={ui.colors.black} />
-                        <Text style={styles.productCost}>89k</Text>
+                        <Text style={styles.productCost}>{price}k</Text>
                     </View>
                 </TouchableNativeFeedback>
             </View>
@@ -40,8 +43,8 @@ const styles = StyleSheet.create({
     ImgContainer: {
         width: '100%',
         height: '60%',
-        borderTopLeftRadius:borderRadiusConst,
-        borderTopRightRadius:borderRadiusConst,
+        borderTopLeftRadius: borderRadiusConst,
+        borderTopRightRadius: borderRadiusConst,
     },
     productImg: {
         width: '100%',
@@ -77,8 +80,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        borderBottomLeftRadius:borderRadiusConst,
-        borderBottomRightRadius:borderRadiusConst,
+        borderBottomLeftRadius: borderRadiusConst,
+        borderBottomRightRadius: borderRadiusConst,
     },
     productName: {
         fontFamily: ui.fonts.light,
@@ -90,6 +93,6 @@ const styles = StyleSheet.create({
         fontFamily: ui.fonts.bold,
         fontSize: ui.fontSize.semiTiny,
         color: ui.colors.black,
-        marginLeft:2
+        marginLeft: 2
     }
 })

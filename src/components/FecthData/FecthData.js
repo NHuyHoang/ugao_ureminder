@@ -73,7 +73,7 @@ FecthDataFailed = (props) => {
         <View style={{
             width: '100%',
             height: 20,
-            backgroundColor: "#F2D200",
+            backgroundColor: ui.colors.yellow,
             justifyContent: "center",
             alignItems: "center"
         }}>

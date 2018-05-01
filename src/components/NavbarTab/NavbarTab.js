@@ -15,9 +15,6 @@ export default class NavbarTab extends React.Component {
         this.onSelectTab = (tab) => this.onSelectTabHandler(tab)
     }
 
-    componentDidMount(){
-        console.log(this.props)
-    }
 
     onSelectTabHandler(tab) {
         this.setState({onFocus:tab});
