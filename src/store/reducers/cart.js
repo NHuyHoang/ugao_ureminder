@@ -8,6 +8,7 @@ export default reducer = (state = initialState, action) => {
             if (state.some(product => product._id === action.product._id))
                 return state;
             let newState = [...state];
+            action.product.quantity = 1;
             newState.push(action.product);
             return newState;
         }

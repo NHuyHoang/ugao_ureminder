@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, KeyboardAvoidingView, Dimensions, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import Slider from '../../components/Slider/Slider'
+import { StyleSheet, Text, ScrollView, View, Image, KeyboardAvoidingView, Dimensions, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import Ionicon from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux';
 import ui from '../../share/ui.constant'
-import { Header, Input, UButton } from '../../components/index';
+import { Header, Input, UButton, Slider } from '../../components';
 class Invoice extends React.Component {
     constructor(props) {
         super(props);
@@ -11,25 +12,29 @@ class Invoice extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <Header />
                 <KeyboardAvoidingView behavior="position" style={{ flex: 1 }}>
-                    <Slider style={styles.slider} productItem={true} />
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.title}> Hóa đơn mua hàng</Text>
+                    </View>
+                    {/*  <HorizonSlider  products={this.props.cart}/> */}
+                    <Slider style={styles.slider} productItem products={this.props.cart} />
                     <View style={styles.formContainer}>
                         {/* <Input type='picker' config={{ data: this.tempPickerData }} label={"Thanh toán"} /> */}
-                         <Input
+                        <Input
                             iconBtn={{ name: "place" }}
-                            value = "Số 1 Võ Văn Ngân,Q.Thủ Đức"
+                            value="Số 1 Võ Văn Ngân,Q.Thủ Đức"
                             type='text'
                             label="Nơi nhận"
                             btnEvent={() => this.props.navigation.navigate('Location')} />
-                        <Input config={{ editable: false, value: '97.000 VND' }} type={'text'} label={"Tổng cộng"} /> 
+                        <Input config={{ editable: false, value: '97.000 VND' }} type={'text'} label={"Tổng cộng"} />
                     </View>
                     <View style={styles.submitButton}>
                         <UButton txt="Thanh toán" iconName="done" />
                     </View>
                 </KeyboardAvoidingView>
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -43,7 +48,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     slider: {
-        marginTop: 10
+        marginTop: 6
     },
     formContainer: {
         width: _width,
@@ -54,6 +59,24 @@ const styles = StyleSheet.create({
         width: _width,
         alignItems: 'center',
         marginTop: 50
+    },
+    titleContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 6
+    },
+    title: {
+        fontFamily: ui.fonts.decor,
+        fontSize: 42,
+        color: 'black'
     }
+
 })
-export default Invoice;
+
+const mapStateToProp = state => {
+    return {
+        cart: state.cart
+    }
+}
+
+export default connect(mapStateToProp)(Invoice);

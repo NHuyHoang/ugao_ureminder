@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated, Image, PanResponder, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux';
 
 import StoreProduct from './storeProduct/StoreProduct';
@@ -155,7 +156,7 @@ const DimmerComponent = (props) => {
     return (
         <TouchableWithoutFeedback onPress={props.onPress}>
             <View style={styles.dimmer}>
-                <Icon size={80} name="highlight-off" color="white" />
+                <Ionicon size={80} name="ios-close-circle-outline" color="white" />
             </View>
         </TouchableWithoutFeedback>
     )

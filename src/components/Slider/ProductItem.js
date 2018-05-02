@@ -11,6 +11,7 @@ export default class ProductItem extends React.PureComponent {
         }
         this.slideAnim = new Animated.Value(100);
         //this.onShowInfo = this.onShowInfoHandler.bind(this);
+
     }
 
     onShowInfoHandler = () => {
@@ -24,9 +25,10 @@ export default class ProductItem extends React.PureComponent {
 
     scaleInfoPanel(show) {
         const arrange = () => {
-            this.myComponent.measure((fx, fy, width, height, px, py) => {
-                this.props.arrange(px);
-            })
+            if (show)
+                this.myComponent.measure((fx, fy, width, height, px, py) => {
+                    this.props.arrange(px);
+                })
         }
         if (show) {
             Animated.timing(this.slideAnim, {
@@ -56,12 +58,15 @@ export default class ProductItem extends React.PureComponent {
         }
     }
 
-    componentDidMount() {
-
-    }
 
     render() {
-        let infoSlideTransform = { width: this.slideAnim }
+        let infoSlideTransform = { width: this.slideAnim };
+        let { _id, img, name, price, weight } = this.props.product;
+        let anotation = 'kg';
+        if (weight < 1) {
+            weight *= 1000;
+            anotation = 'g'
+        };
         return (
             <View>
                 {
@@ -73,14 +78,14 @@ export default class ProductItem extends React.PureComponent {
                 <View ref={view => { this.myComponent = view; }} style={styles.container}>
                     <TouchableWithoutFeedback onPress={this.onShowInfoHandler}>
                         <View style={styles.productImgContainer}>
-                            <Image style={styles.productImg} source={require('../../share/images/phuong-hoang.jpg')} />
-                            <View style={styles.productPrice}><Text style={styles.priceTxt}>89.000 VND</Text></View>
+                            <Image style={styles.productImg} source={{ uri: this.props.product.img }} />
+                            <View style={styles.productPrice}><Text style={styles.priceTxt}>{price}.000 VND</Text></View>
                         </View>
                     </TouchableWithoutFeedback>
                     <Animated.View style={[styles.productInfo, infoSlideTransform]}>
                         <View style={styles.productInfoContainer}>
-                            <View style={styles.productNameContainer}><Text style={styles.productName}>Gạo hạt ngọc trời phương hoàng</Text></View>
-                            <Text style={styles.weight}>60g</Text>
+                            <View style={styles.productNameContainer}><Text style={styles.productName}>{name}</Text></View>
+                            <Text style={styles.weight}>{weight}{anotation}</Text>
                         </View>
                         <View style={styles.addjustmentBtnContainer}>
                             <TouchableOpacity onPress={this.productQuantityHandler.bind(this, "+")} style={styles.btnContainer}>
@@ -174,12 +179,13 @@ const styles = StyleSheet.create({
         width: 120
     },
     productName: {
-        fontFamily: ui.fonts.bold
+        fontFamily: ui.fonts.bold,
+        color: 'black'
     },
     weight: {
         fontFamily: ui.fonts.default,
-        fontSize: ui.fontSize.tiny,
-
+        fontSize: ui.fontSize.semiTiny,
+        color: 'black'
     },
     btnContainer: {
         flex: 1,

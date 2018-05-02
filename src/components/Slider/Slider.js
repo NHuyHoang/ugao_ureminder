@@ -26,6 +26,10 @@ export default class ProducerSlider extends React.Component {
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => gestureState.dx >= 10 || gestureState.dx <= -10,
             onPanResponderMove: (e, gt) => {
                 if (this.maxSlideLenght == 0) return;
+                if (this.sliderWidth <= this._width) {
+                    this.positionX.setValue(0);
+                    return
+                };
                 this.positionX.setValue(this.animationHandler(this.savedPositon, gt.dx))
             },
             onPanResponderRelease: (e, { dx }) => {
@@ -48,24 +52,36 @@ export default class ProducerSlider extends React.Component {
         return 0;
     }
 
-    componentDidMount() {
+    componentWillReceiveProps(props) {
+        //if there are some additonal or removal product from cart
+        //reset the position of slider
+        if (this.props.products &&
+            (this.props.products.length > props.products.length)) {
+            this.positionX.setValue(0);
+            this.savedPositon = 0;
+        }
 
     }
 
+    //prepare for showing product info panel
+    //if the product panel is near the right of screen
+    //the product panel will auto translate to match the panel width
     rearrangeSlider = (x) => {
-        const centerdX = this._width/2;
-        if(this._width - x >= 230) return;
-        const dx = -(x - centerdX + (230/2));
-        Animated.timing(this.positionX,{
-            toValue:dx,
-            duration:200
-        }).start(() => this.savedPositon = this.positionX._value);
+        const centerdX = this._width / 2;
+        //230 is the max width when product item panel expand
+        if (this._width - x >= 230) return;
+        const dx = this.positionX._value - (230 - (this._width - x));
         console.log(dx);
+        Animated.timing(this.positionX, {
+            toValue: dx,
+            duration: 200
+        }).start(() => this.savedPositon = this.positionX._value);
+
     }
 
     render() {
         return (
-            <View style={[styles.container,this.props.style]}>
+            <View style={[styles.container, this.props.style]}>
                 <Animated.View
                     onLayout={(event) => {
                         this.sliderWidth = event.nativeEvent.layout.width;
@@ -73,24 +89,26 @@ export default class ProducerSlider extends React.Component {
                     }}
                     {...this._panResponder.panHandlers}
                     style={[styles.slider, {
+                        backgroundColor: 'red',
                         transform: [{
                             translateX: this.positionX
                         }]
                     }]}>
                     {
-                        this.props.productItem ?
-                        <View style={{ flexDirection: 'row' }}>
-                            <ProductItem arrange={this.rearrangeSlider}/>
-                            <ProductItem arrange={this.rearrangeSlider}/>
-                            <ProductItem arrange={this.rearrangeSlider}/>
-                            <ProductItem arrange={this.rearrangeSlider}/>
-                        </View> :
-                        <View style={{ flexDirection: 'row' }}>
-                            <ProducerItem  imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-gao-sach.png" />
-                            <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-hat-ngoc-troi.png" />
-                            <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-hoa-lua.png" />
-                            <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2017/08/hp2-680x238.jpg" />
-                        </View>
+                        this.props.products ?
+                            <View style={{ flexDirection: 'row' }}>
+                                {
+                                    this.props.products.map(product => (
+                                        <ProductItem key={product._id} product={product} arrange={this.rearrangeSlider} />
+                                    ))
+                                }
+                            </View> :
+                            <View style={{ flexDirection: 'row' }}>
+                                <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-gao-sach.png" />
+                                <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-hat-ngoc-troi.png" />
+                                <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2016/06/logo-hoa-lua.png" />
+                                <ProducerItem imgSource="http://gaosach58.vn/wp-content/uploads/2017/08/hp2-680x238.jpg" />
+                            </View>
                     }
 
                 </Animated.View>
@@ -118,10 +136,9 @@ const SpinnerIndicator = (props) => (
 const styles = StyleSheet.create({
     container: {
         height: 120,
-        width: '100%'
     },
     slider: {
-        minWidth: "100%",
+        //minWidth: "100%",
         alignSelf: 'flex-start',
         height: "100%",
         justifyContent: 'flex-start',
