@@ -1,13 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated, Image, PanResponder, Button } from 'react-native';
-import ui from '../../share/ui.constant';
-import { SearchInput, NavbarTab, CartButton, ProductItem, PayButton } from '../../components';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { connect } from 'react-redux';
+
 import StoreProduct from './storeProduct/StoreProduct';
 import StoreNoti from './storeNoti/StoreNoti';
 import StoreContact from './storeContact/StoreContact';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-
 import Login from '../profile/Login';
+import ui from '../../share/ui.constant';
+import { SearchInput, NavbarTab, CartButton, ProductItem, PayButton } from '../../components';
+import { removeFromCart } from '../../store/actions'
 
 class Store extends React.PureComponent {
     constructor(props) {
@@ -18,18 +20,17 @@ class Store extends React.PureComponent {
             checkCart: false,
             dimmerAnim: new Animated.Value(0),
             addingProduct: false,
-            productArr: [
-                { id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2017/08/BotNem_NguBang.jpg" },
+            /* cart: [
+                 { id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2017/08/BotNem_NguBang.jpg" },
                 { id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2018/02/Gao-dan-toc-gao-ong-tung-gao-sach-58-gao-cha-doi-gao-xay-doi-gao-nguyen-cam.jpg" },
                 { id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2017/07/tn-300x300.jpg" }
-            ]
+            ] */
+
         };
 
-        /* this.onCheckCart = this.onCheckCartHandler.bind(this);
-        this.onAddtoCart = this.onAddToCartHandler.bind(this);
-        this.onSelectTab = (tab) => this.onSelectTabHandler(tab);
- */
     }
+
+
 
     onSelectTabHandler = (tab) => {
         this.setState({ tabSelection: tab })
@@ -45,19 +46,9 @@ class Store extends React.PureComponent {
     }
     //temp
     onRemoveProductFromCart = (id) => {
-        this.setState({
-            productArr: this.state.productArr.filter((item) => item.id != id)
-        })
+        this.props.removeFromCart(id);
     }
 
-    onAddToCartHandler = () => {
-        if (this.state.addingProduct) return;
-        this.setState(prevState => {
-            let arr = [...prevState.productArr];
-            arr.push({ id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2016/07/bac-dau.jpg" });
-            return { productArr: arr, addingProduct: true }
-        })
-    }
 
     render() {
         return (
@@ -72,15 +63,15 @@ class Store extends React.PureComponent {
                         <NavbarTab iconSize={22} selectTab={(tab) => this.onSelectTabHandler(tab)} />
                     </View>
                 </View>
-                <StoreProduct addToCart={this.onAddToCartHandler} show={this.state.tabSelection === 1} />
+                <StoreProduct /* addToCart={this.onAddToCartHandler} */ show={this.state.tabSelection === 1} />
                 {this.state.tabSelection === 2 && <StoreNoti />}
                 {this.state.tabSelection === 3 && <StoreContact />}
                 {
                     this.state.checkCart &&
                     <DimmerComponent onPress={this.onStopCheckCartHandler} />
                 }
-                <CartButton checkCart={this.onCheckCartHandler} quantity={this.state.productArr.length} />
-                {this.state.productArr.map((item, i) => {
+                <CartButton checkCart={this.onCheckCartHandler} quantity={this.props.cart.length} />
+                {this.props.cart.map((item, i) => {
                     if (i >= 4) {
                         return (
                             <ProductItem
@@ -88,8 +79,8 @@ class Store extends React.PureComponent {
                                 zIndex={i}
                                 initPosition={{ x: 30, y: 30 }}
                                 removeProduct={null}
-                                key={item.id}
-                                quantity={"+" + (this.state.productArr.length - i).toString()}
+                                key={item._id}
+                                quantity={"+" + (this.props.cart.length - i).toString()}
                                 translateY={-70 - (4 * 70)}
                                 show={this.state.checkCart} />
                         );
@@ -97,14 +88,14 @@ class Store extends React.PureComponent {
                     return (
                         <ProductItem
                             initPosition={{ x: 30, y: 30 }}
-                            removeProduct={() => this.onRemoveProductFromCart(item.id)}
-                            key={item.id} source={item.img}
+                            removeProduct={() => this.onRemoveProductFromCart(item._id)}
+                            key={item._id} source={item.img}
                             translateY={-70 - (i * 70)}
                             show={this.state.checkCart} />
                     )
                 })}
                 {<PayButton show={this.state.checkCart} />}
-                <AditionalProduct stopAddingProduct={() => this.setState({ addingProduct: false })} addingProduct={this.state.addingProduct} />
+                {/*  <AditionalProduct stopAddingProduct={() => this.setState({ addingProduct: false })} addingProduct={this.state.addingProduct} /> */}
 
             </View>
         )
@@ -123,7 +114,6 @@ class AditionalProduct extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        console.log(props.addingProduct)
         if (props.addingProduct && !this.state.added) {
 
             Animated.sequence([
@@ -233,4 +223,17 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     }
 })
-export default Store;
+
+const mapStateToProps = state => {
+    return {
+        cart: state.cart
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        removeFromCart: (_id) => dispatch(removeFromCart(_id))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Store);

@@ -13,9 +13,9 @@ class StoreList extends React.Component {
 
 
     render() {
-        let templateArr = [];
+        let díplayedProducts = [];
         if (this.props.products)
-            templateArr = this.props.products;
+            díplayedProducts = this.props.products;
         return (
             <SectionList
                 ListHeaderComponent={() => (
@@ -29,10 +29,10 @@ class StoreList extends React.Component {
                     </View>
                 )}
                 sections={[
-                    { data: templateArr },
+                    { data: díplayedProducts },
                 ]}
                 renderItem={(items) => {
-                    console.log(items);
+                   
                     return (
                         <View style={styles.productContainer}>
                             {
@@ -45,7 +45,7 @@ class StoreList extends React.Component {
                 }}
                 keyExtractor={(item, index) => index}
                 onEndReachedThreshold={0.05}
-                onEndReached={(info) => console.log(info)}
+                onEndReached={() => console.log(info)}
                 onRefresh={() => { }}
                 refreshing={false}
             />

@@ -1,11 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableNativeFeedback, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { connect } from 'react-redux';
 import ui from '../../share/ui.constant';
 import Ribbon from './Ribbon';
+import { addToCart } from '../../store/actions';
 
-export default ProductPanel = (props) => {
-    let { img, name, price, weight } = props.product;
+const ProductPanel = (props) => {
+    let { _id, img, name, price, weight } = props.product;
+    let addToCartHandler = (product) => {
+        props.addToCart(product)
+    }
     return (
         <View style={styles.container}>
             <Ribbon weight={weight} />
@@ -17,7 +22,7 @@ export default ProductPanel = (props) => {
                 <View style={styles.productNameContainer}>
                     <Text style={styles.productName}>{name}</Text>
                 </View>
-                <TouchableNativeFeedback onPress={props.pressed}>
+                <TouchableNativeFeedback onPress={() => addToCartHandler({ _id, img, name, price, weight })}>
                     <View style={styles.addToCart}>
                         <Icon name="add-shopping-cart" size={20} color={ui.colors.black} />
                         <Text style={styles.productCost}>{price}k</Text>
@@ -27,6 +32,14 @@ export default ProductPanel = (props) => {
         </View>
     );
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addToCart: (product) => dispatch(addToCart(product))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(ProductPanel);
 
 const _width = Dimensions.get('window').width;
 const borderRadiusConst = 4;

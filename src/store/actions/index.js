@@ -4,6 +4,11 @@ export {
     logout
 } from './customer'
 
-export{
+export {
     trySaveProducts
-}from './products'
+} from './products'
+
+export {
+    addToCart,
+    removeFromCart
+} from './cart'
