@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        cart: state.cart
+        cart: state.cart.products
     }
 }
 

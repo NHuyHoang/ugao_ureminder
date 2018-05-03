@@ -10,6 +10,8 @@ class Invoice extends React.Component {
         this.tempPickerData = [{ key: 'Thanh toán trực tiếp' }, { key: 'VISA' }, { key: 'Internet banking' }];
     }
 
+
+
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -19,7 +21,7 @@ class Invoice extends React.Component {
                         <Text style={styles.title}> Hóa đơn mua hàng</Text>
                     </View>
                     {/*  <HorizonSlider  products={this.props.cart}/> */}
-                    <Slider style={styles.slider} productItem products={this.props.cart} />
+                    <Slider productItem products={this.props.cart} />
                     <View style={styles.formContainer}>
                         {/* <Input type='picker' config={{ data: this.tempPickerData }} label={"Thanh toán"} /> */}
                         <Input
@@ -28,7 +30,7 @@ class Invoice extends React.Component {
                             type='text'
                             label="Nơi nhận"
                             btnEvent={() => this.props.navigation.navigate('Location')} />
-                        <Input config={{ editable: false, value: '97.000 VND' }} type={'text'} label={"Tổng cộng"} />
+                        <Input config={{ editable: false, value: `${this.props.totalPrice}.000 VND` }} type={'text'} label={"Tổng cộng"} />
                     </View>
                     <View style={styles.submitButton}>
                         <UButton txt="Thanh toán" iconName="done" />
@@ -47,9 +49,7 @@ const styles = StyleSheet.create({
         height: "100%",
         backgroundColor: 'white',
     },
-    slider: {
-        marginTop: 6
-    },
+    
     formContainer: {
         width: _width,
         marginTop: 20,
@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProp = state => {
     return {
-        cart: state.cart
+        cart: state.cart.products,
+        totalPrice: state.cart.totalPrice
     }
 }
 

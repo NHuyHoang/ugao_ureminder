@@ -1,8 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, Text, Animated, TouchableWithoutFeedback, Image, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { connect } from 'react-redux';
+import { productQuantityHandler, removeFromCart } from '../../store/actions'
+
 import ui from '../../share/ui.constant';
-export default class ProductItem extends React.PureComponent {
+class ProductItem extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -10,6 +13,7 @@ export default class ProductItem extends React.PureComponent {
             counter: 1,
         }
         this.slideAnim = new Animated.Value(100);
+        this.removeAnim = new Animated.Value(1);
         //this.onShowInfo = this.onShowInfoHandler.bind(this);
 
     }
@@ -44,18 +48,27 @@ export default class ProductItem extends React.PureComponent {
         }
     }
 
-    productQuantityHandler(operation) {
+    productQuantityHandler = (_id, operation) => {
         switch (operation) {
-            case ("+"): this.setState(prevState => {
-                return { counter: prevState.counter + 1 }
-            }); break;
-            case ("-"): {
-                if (this.state.counter <= 1) return;
+            case ("add"):
+                this.setState(prevState => {
+                    return { counter: prevState.counter + 1 }
+                }); break;
+            case ("sub"):
                 this.setState(prevState => {
                     return { counter: prevState.counter - 1 }
                 });
-            } break;
+                break;
+            case ("remove"):
+                Animated.timing(this.removeAnim, {
+                    toValue: 0,
+                    duration: 200,
+                    useNativeDriver: true
+                }).start(() => this.props.removeFromCart(_id));
+                break;
         }
+        if (operation !== "remove")
+            this.props.productQuantityHandler(_id, operation);
     }
 
 
@@ -68,7 +81,7 @@ export default class ProductItem extends React.PureComponent {
             anotation = 'g'
         };
         return (
-            <View>
+            <Animated.View style={{ height: 120, justifyContent: "center", alignItems: "center", opacity: this.removeAnim }}>
                 {
                     this.state.counter > 1 &&
                     <View style={styles.counterContainer}>
@@ -88,19 +101,19 @@ export default class ProductItem extends React.PureComponent {
                             <Text style={styles.weight}>{weight}{anotation}</Text>
                         </View>
                         <View style={styles.addjustmentBtnContainer}>
-                            <TouchableOpacity onPress={this.productQuantityHandler.bind(this, "+")} style={styles.btnContainer}>
+                            <TouchableOpacity onPress={() => this.productQuantityHandler(_id, "add")} style={styles.btnContainer}>
                                 <Icon name="add" size={15} color="black" />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={this.productQuantityHandler.bind(this, "-")} style={styles.btnContainer}>
+                            <TouchableOpacity onPress={() => this.productQuantityHandler(_id, "sub")} style={styles.btnContainer}>
                                 <Icon name="remove" size={15} color="black" />
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.btnContainer}>
+                            <TouchableOpacity onPress={() => this.productQuantityHandler(_id, "remove")} style={styles.btnContainer}>
                                 <Icon name="close" size={15} color={ui.colors.red} />
                             </TouchableOpacity>
                         </View>
                     </Animated.View>
                 </View>
-            </View>
+            </Animated.View>
         );
     }
 }
@@ -150,8 +163,8 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         backgroundColor: ui.colors.highlight,
         position: 'absolute',
-        top: -8,
-        right: -2,
+        top: 0,
+        right: 0,
         zIndex: 2,
         justifyContent: 'center',
         alignItems: 'center',
@@ -193,3 +206,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 })
+
+
+const mapDispatchToProps = dispatch => {
+    return {
+        productQuantityHandler: (_id, operation) => dispatch(productQuantityHandler(_id, operation)),
+        removeFromCart: _id => dispatch(removeFromCart(_id))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(ProductItem);

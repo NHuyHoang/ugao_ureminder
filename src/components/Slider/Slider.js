@@ -57,8 +57,11 @@ export default class ProducerSlider extends React.Component {
         //reset the position of slider
         if (this.props.products &&
             (this.props.products.length > props.products.length)) {
-            this.positionX.setValue(0);
-            this.savedPositon = 0;
+            Animated.timing(this.positionX, {
+                toValue: 0,
+                duration: 300,
+            }).start(() => this.savedPositon = 0)
+
         }
 
     }
@@ -89,18 +92,26 @@ export default class ProducerSlider extends React.Component {
                     }}
                     {...this._panResponder.panHandlers}
                     style={[styles.slider, {
-                        backgroundColor: 'red',
                         transform: [{
                             translateX: this.positionX
                         }]
                     }]}>
                     {
                         this.props.products ?
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row'}}>
+
                                 {
-                                    this.props.products.map(product => (
-                                        <ProductItem key={product._id} product={product} arrange={this.rearrangeSlider} />
-                                    ))
+                                    this.props.products.length === 0 ?
+                                        <View style={styles.sliderTxtPlaceHolder}>
+                                            <Text style={styles.sliderTxt}>Bạn chưa chọn mua sản phẩm</Text>
+                                        </View>
+                                        :
+                                        this.props.products.map((product, index) => (
+                                            <ProductItem
+                                                key={product._id}
+                                                product={product}
+                                                arrange={this.rearrangeSlider} />
+                                        ))
                                 }
                             </View> :
                             <View style={{ flexDirection: 'row' }}>
@@ -136,6 +147,7 @@ const SpinnerIndicator = (props) => (
 const styles = StyleSheet.create({
     container: {
         height: 120,
+       
     },
     slider: {
         //minWidth: "100%",
@@ -170,5 +182,16 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         resizeMode: 'contain'
+    },
+    sliderTxtPlaceHolder: {
+        width: '100%',
+        height: '100%',
+        //justifyContent: 'center',
+        alignItems: 'center',
+    },
+    sliderTxt: {
+        fontFamily: ui.fonts.light,
+        fontSize: ui.fontSize.normal,
+        color: 'black'
     }
 })

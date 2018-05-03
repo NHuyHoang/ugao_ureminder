@@ -10,5 +10,6 @@ export {
 
 export {
     addToCart,
-    removeFromCart
+    removeFromCart,
+    productQuantityHandler
 } from './cart'
