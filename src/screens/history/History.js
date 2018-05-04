@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { Header, InvoiceItem } from '../../components'
+import { connect } from 'react-redux';
+import { Header, InvoiceItem, FecthData, Noti } from '../../components';
 
 class History extends React.PureComponent {
     constructor(props) {
@@ -11,13 +12,18 @@ class History extends React.PureComponent {
         return (
             <View style={styles.container}>
                 <Header />
-                <FlatList
-                    onRefresh={() => { }}
-                    refreshing={false}
-                    data={templateData.reverse()}
-                    keyExtractor={(item, index)  => item._id }
-                    renderItem={({ item }) => <InvoiceItem data={item} />}
-                />
+                {this.props.invoices ?
+
+                    <FlatList
+                        onRefresh={() => { }}
+                        refreshing={false}
+                        data={templateData.reverse()}
+                        keyExtractor={(item, index) => item._id}
+                        renderItem={({ item }) => <InvoiceItem data={item} />}
+                    /> :
+                    <Noti message="Không tồn tại lịch sử đặt hàng" />
+
+                }
             </View>
         )
     }
@@ -25,7 +31,7 @@ class History extends React.PureComponent {
 
 const templateData = [
     {
-        _id:Math.random(),
+        _id: Math.random(),
         recieved_date: "12-03-18",
         delivered_date: "12-03-18",
         price: "93.000 VND",
@@ -33,7 +39,7 @@ const templateData = [
         product: []
     },
     {
-        _id:Math.random(),
+        _id: Math.random(),
         recieved_date: "01-03-18",
         delivered_date: "02-03-18",
         price: "89.000 VND",
@@ -41,7 +47,7 @@ const templateData = [
         product: [],
     },
     {
-        _id:Math.random(),
+        _id: Math.random(),
         recieved_date: "12-03-18",
         delivered_date: "12-03-18",
         price: "93.000 VND",
@@ -49,7 +55,7 @@ const templateData = [
         product: []
     },
     {
-        _id:Math.random(),
+        _id: Math.random(),
         recieved_date: "12-03-18",
         delivered_date: "12-03-18",
         price: "93.000 VND",
@@ -57,7 +63,7 @@ const templateData = [
         product: []
     },
     {
-        _id:Math.random(),
+        _id: Math.random(),
         recieved_date: "12-03-18",
         delivered_date: "12-03-18",
         price: "93.000 VND",
@@ -71,6 +77,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white'
-    }
+    },
 })
-export default History;
+
+const mapStateToProps = state => {
+    return {
+        invoices: state.customer.info.invoices
+    }
+}
+
+export default connect(mapStateToProps)(History);

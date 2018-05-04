@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { trySaveLocalCustomer } from '../../store/actions';
 import ui from '../../share/ui.constant';
-import { Input, UButton, Form } from '../../components';
+import { Input, UButton, Form, Noti } from '../../components';
 import { FecthData } from '../../components';
 
 class Login extends React.Component {
@@ -23,14 +23,18 @@ class Login extends React.Component {
         this.query = `
         {
             authenticatedCustomer(email:"${email}",pass:"${pass}") {
-                _id
-                email
-                name
-                img
-                phone
+                _id email name img phone
                 location{
                     address
                 }
+                invoices {
+                    order_date
+                    tasks { receipt_date }
+                    price
+                    paid
+                    store { owner { phone } }
+                    products {  product { _id name img price weight} quantity }
+                  }
             }
         }
         `;
@@ -59,6 +63,10 @@ class Login extends React.Component {
                 <View
                     style={styles.loginSegment}>
                     {this.state.fetchData && FecthData(this.query, "authenticatedCustomer", null, this.loadedDataHandler, "Tài khoản không tồn tại")}
+                    {
+                        this.props.notiTxt &&
+                        <Noti message={this.props.notiTxt.message}/>
+                    }
                     <Form
                         ref="loginForm"
                         style={styles.loginForm}>
@@ -93,7 +101,7 @@ class Login extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </View >
         )
     }
 }
@@ -111,7 +119,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: ui.colors.smoke,
+        backgroundColor: 'white',
     },
     logo: {
         height: 120,
@@ -137,7 +145,7 @@ const styles = StyleSheet.create({
     loginSegment: {
         height: '70%',
         width: '100%',
-        backgroundColor: ui.colors.smoke,
+        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -161,6 +169,18 @@ const styles = StyleSheet.create({
     },
     btnContainer: {
         marginTop: 32
+    },
+    notiContent: {
+        width: '100%',
+        height: 20,
+        backgroundColor: ui.colors.yellow,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    notiTxt: {
+        color: 'white',
+        fontFamily: ui.fonts.bold,
+        fontSize: ui.fontSize.semiTiny
     }
 })
 

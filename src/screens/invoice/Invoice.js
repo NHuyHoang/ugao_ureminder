@@ -10,7 +10,11 @@ class Invoice extends React.Component {
         this.tempPickerData = [{ key: 'Thanh toán trực tiếp' }, { key: 'VISA' }, { key: 'Internet banking' }];
     }
 
+    onPaidHandler = () => {
+        if (!this.props.customer._id)
+            this.props.navigation.navigate('Profile', { message: "Vui lòng đăng nhập để đặt hàng" });
 
+    }
 
     render() {
         return (
@@ -33,7 +37,10 @@ class Invoice extends React.Component {
                         <Input config={{ editable: false, value: `${this.props.totalPrice}.000 VND` }} type={'text'} label={"Tổng cộng"} />
                     </View>
                     <View style={styles.submitButton}>
-                        <UButton txt="Thanh toán" iconName="done" />
+                        <UButton
+                            onPress={this.onPaidHandler}
+                            disabled={this.props.cart.length === 0}
+                            txt="Thanh toán" iconName="done" />
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>
@@ -49,7 +56,7 @@ const styles = StyleSheet.create({
         height: "100%",
         backgroundColor: 'white',
     },
-    
+
     formContainer: {
         width: _width,
         marginTop: 20,
@@ -76,7 +83,8 @@ const styles = StyleSheet.create({
 const mapStateToProp = state => {
     return {
         cart: state.cart.products,
-        totalPrice: state.cart.totalPrice
+        totalPrice: state.cart.totalPrice,
+        customer: state.customer.info
     }
 }
 

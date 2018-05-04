@@ -95,7 +95,7 @@ class Store extends React.PureComponent {
                             show={this.state.checkCart} />
                     )
                 })}
-                {<PayButton show={this.state.checkCart} />}
+                {<PayButton onPress={()=> this.props.navigation.navigate('Invoice')} show={this.state.checkCart} />}
                 {/*  <AditionalProduct stopAddingProduct={() => this.setState({ addingProduct: false })} addingProduct={this.state.addingProduct} /> */}
 
             </View>

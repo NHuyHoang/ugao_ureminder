@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Animated } from 'react-native';
+import { StyleSheet, Text, View, Animated, TouchableWithoutFeedback } from 'react-native';
 import ui from '../../share/ui.constant';
 import Icon from 'react-native-vector-icons/Ionicons'
 export default class PayButton extends React.PureComponent {
@@ -35,9 +35,12 @@ export default class PayButton extends React.PureComponent {
             }]
         }
         return (
-            <Animated.View style={[styles.container, animTransform]}>
-                <Icon name="ios-card" size={30} color="black" />
-            </Animated.View>
+            <TouchableWithoutFeedback
+                onPress={this.props.onPress}>
+                <Animated.View style={[styles.container, animTransform]}>
+                    <Icon name="ios-card" size={30} color="black" />
+                </Animated.View>
+            </TouchableWithoutFeedback>
         );
     }
 }

@@ -3,7 +3,8 @@ import { StyleSheet, View, Text, ActivityIndicator, Button, ScrollView, RefreshC
 import { gql, graphql } from 'react-apollo';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import ui from '../../share/ui.constant'
+import ui from '../../share/ui.constant';
+import Noti from '../Noti/Noti';
 
 export default (query, type, props, LoadedContent, error) => {
     const configQuery = gql`${query}`;
@@ -11,7 +12,7 @@ export default (query, type, props, LoadedContent, error) => {
         if (data.error) console.log(data.error);
         if (data.loading) return <Spinner />
         if (data.networkStatus === 8) return <NetworkError refetch={data.refetch} />
-        else if (!data[type]) return <FecthDataFailed error={error} />
+        else if (!data[type]) return <Noti message={error} />
         return <LoadedContent {...ownProps} data={data[type]} />
     })
 
@@ -61,31 +62,14 @@ class NetworkError extends React.Component {
                 {
                     this.state.tryConnect ?
                         <Spinner /> :
-                        <FecthDataFailed error="Vui lòng kiểm tra kết nối" />
+                        <Noti message="Vui lòng kiểm tra kết nối" />
                 }
             </View>
         )
     }
 }
 
-FecthDataFailed = (props) => {
-    return (
-        <View style={{
-            width: '100%',
-            height: 20,
-            backgroundColor: ui.colors.yellow,
-            justifyContent: "center",
-            alignItems: "center"
-        }}>
-            <Text
-                style={{
-                    color: 'white',
-                    fontFamily: ui.fonts.bold,
-                    fontSize: ui.fontSize.semiTiny
-                }}>{props.error ? props.error : "Đã xảy ra lỗi"}</Text>
-        </View>
-    )
-}
+
 
 
 const refetchHandler = (funct) => {

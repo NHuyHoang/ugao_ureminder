@@ -31,7 +31,7 @@ class Profile extends React.Component {
                     this.props.customer._id ?
                         //FecthData(this.query, "authenticatedCustomer", this.props, LoadedContent) :
                         <LoadedContent {...this.props} data={this.props.customer} /> :
-                        <Login />
+                        <Login notiTxt={this.props.navigation.state.params} />
                 }
             </View>
         )
