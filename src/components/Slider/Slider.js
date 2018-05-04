@@ -10,6 +10,7 @@ import {
     ActivityIndicator,
     Image
 } from 'react-native';
+import Noti from '../Noti/Noti';
 import ui from '../../share/ui.constant';
 import ProductItem from './ProductItem';
 
@@ -98,12 +99,13 @@ export default class ProducerSlider extends React.Component {
                     }]}>
                     {
                         this.props.products ?
-                            <View style={{ flexDirection: 'row'}}>
+                            <View style={{ flexDirection: 'row' }}>
 
                                 {
                                     this.props.products.length === 0 ?
                                         <View style={styles.sliderTxtPlaceHolder}>
-                                            <Text style={styles.sliderTxt}>Bạn chưa chọn mua sản phẩm</Text>
+                                            <Noti message="Bạn chưa chọn mua sản phẩm" />{/* 
+                                            <Text style={styles.sliderTxt}></Text> */}
                                         </View>
                                         :
                                         this.props.products.map((product, index) => (
@@ -147,7 +149,7 @@ const SpinnerIndicator = (props) => (
 const styles = StyleSheet.create({
     container: {
         height: 120,
-       
+
     },
     slider: {
         //minWidth: "100%",

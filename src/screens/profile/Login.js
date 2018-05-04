@@ -28,6 +28,7 @@ class Login extends React.Component {
                     address
                 }
                 invoices {
+                    _id
                     order_date
                     tasks { receipt_date }
                     price

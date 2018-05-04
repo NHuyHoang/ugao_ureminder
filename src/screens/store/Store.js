@@ -10,7 +10,7 @@ import StoreContact from './storeContact/StoreContact';
 import Login from '../profile/Login';
 import ui from '../../share/ui.constant';
 import { SearchInput, NavbarTab, CartButton, ProductItem, PayButton } from '../../components';
-import { removeFromCart } from '../../store/actions'
+import { removeFromCart, tryGetLocalCustomer } from '../../store/actions'
 
 class Store extends React.PureComponent {
     constructor(props) {
@@ -21,14 +21,8 @@ class Store extends React.PureComponent {
             checkCart: false,
             dimmerAnim: new Animated.Value(0),
             addingProduct: false,
-            /* cart: [
-                 { id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2017/08/BotNem_NguBang.jpg" },
-                { id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2018/02/Gao-dan-toc-gao-ong-tung-gao-sach-58-gao-cha-doi-gao-xay-doi-gao-nguyen-cam.jpg" },
-                { id: Math.random(), img: "http://gaosach58.vn/wp-content/uploads/2017/07/tn-300x300.jpg" }
-            ] */
-
         };
-
+        this.props.tryGetLocalCustomer();
     }
 
 
@@ -95,7 +89,7 @@ class Store extends React.PureComponent {
                             show={this.state.checkCart} />
                     )
                 })}
-                {<PayButton onPress={()=> this.props.navigation.navigate('Invoice')} show={this.state.checkCart} />}
+                {<PayButton onPress={() => this.props.navigation.navigate('Invoice')} show={this.state.checkCart} />}
                 {/*  <AditionalProduct stopAddingProduct={() => this.setState({ addingProduct: false })} addingProduct={this.state.addingProduct} /> */}
 
             </View>
@@ -233,7 +227,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        removeFromCart: (_id) => dispatch(removeFromCart(_id))
+        removeFromCart: (_id) => dispatch(removeFromCart(_id)),
+        tryGetLocalCustomer: () => dispatch(tryGetLocalCustomer())
     }
 }
 

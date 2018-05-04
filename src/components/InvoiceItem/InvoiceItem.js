@@ -4,13 +4,43 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import Slider from '../Slider/Slider';
 import ui from '../../share/ui.constant';
 
-export default class InvoiceItem extends React.Component {
+export default class InvoiceItem extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             showSlider: false,
         }
         this.sliderAnim = new Animated.Value(0);
+    }
+
+    dateTimeConverter = (dateString) => {
+        const d = new Date(dateString);
+        const displayHandler = (time) => {
+            return time < 10 ? `0${time}` : time
+        }
+        return `${displayHandler(d.getDate())}-${displayHandler(d.getMonth() + 1)}-${d.getFullYear()}`;
+    }
+
+    //this function for re-build the products data 
+    productsDataConfig = (products) => {
+        return products.map(element => {
+            return {
+                ...element.product,
+                quantity: element.quantity,
+                readonly: true
+            }
+        })
+    }
+
+    componentWillMount() {
+        let { order_date, tasks, price, paid, products } = this.props.data;
+        this.data = {
+            order_date: this.dateTimeConverter(order_date),
+            receipt_date: this.dateTimeConverter(tasks.receipt_date),
+            price: `${price}.000 VND`,
+            paid,
+            products: this.productsDataConfig(products)
+        }
     }
 
     onShowSliderHandler = () => {
@@ -39,9 +69,9 @@ export default class InvoiceItem extends React.Component {
 
 
     render() {
-        let { recieved_date, delivered_date, price, paid } = this.props.data;
+
         let paidIcon = (<Icon name="close" size={20} color="black" />);
-        if (paid)
+        if (this.data.paid)
             paidIcon = (<Icon name="done" size={20} color={ui.colors.highlight} />)
         return (
             <View style={styles.container}>
@@ -52,15 +82,15 @@ export default class InvoiceItem extends React.Component {
                     <View style={styles.mainInfo}>
                         <View style={styles.txtContainer}>
                             <Icon name="call-made" size={20} color="black" />
-                            <Text style={styles.dateTxt}>{recieved_date}</Text>
+                            <Text style={styles.dateTxt}>{this.data.order_date}</Text>
                         </View>
                         <View style={styles.txtContainer}>
                             <Icon name="call-received" size={20} color="black" />
-                            <Text style={styles.dateTxt}>{delivered_date}</Text>
+                            <Text style={styles.dateTxt}>{this.data.receipt_date}</Text>
                         </View>
                         <View style={styles.txtContainer}>
                             {paidIcon}
-                            <Text style={[styles.costTxt, { color: paid ? ui.colors.highlight : ui.colors.black }]}>{price}</Text>
+                            <Text style={[styles.costTxt, { color: this.data.paid ? ui.colors.highlight : ui.colors.black }]}>{this.data.price}</Text>
                         </View>
                     </View>
                     <TouchableOpacity onPress={this.onShowSliderHandler} style={styles.slideHoriz}>
@@ -69,7 +99,7 @@ export default class InvoiceItem extends React.Component {
                 </View>
                 <Animated.View style={{ height: this.sliderAnim }}></Animated.View>
                 <View style={styles.slideContainer} >
-                    <Slider style={styles.slider} productItem={true} />
+                    <Slider style={styles.slider} products={this.data.products} />
                 </View>
             </View>
         )

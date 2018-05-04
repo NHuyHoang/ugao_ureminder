@@ -25,7 +25,7 @@ class Invoice extends React.Component {
                         <Text style={styles.title}> Hóa đơn mua hàng</Text>
                     </View>
                     {/*  <HorizonSlider  products={this.props.cart}/> */}
-                    <Slider productItem products={this.props.cart} />
+                    <Slider products={this.props.cart} />
                     <View style={styles.formContainer}>
                         {/* <Input type='picker' config={{ data: this.tempPickerData }} label={"Thanh toán"} /> */}
                         <Input

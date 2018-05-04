@@ -17,11 +17,11 @@ class History extends React.PureComponent {
                     <FlatList
                         onRefresh={() => { }}
                         refreshing={false}
-                        data={templateData.reverse()}
+                        data={this.props.invoices.reverse()}
                         keyExtractor={(item, index) => item._id}
                         renderItem={({ item }) => <InvoiceItem data={item} />}
                     /> :
-                    <Noti message="Không tồn tại lịch sử đặt hàng" />
+                    <Noti message="Vui lòng đăng nhập" />
 
                 }
             </View>
@@ -29,49 +29,6 @@ class History extends React.PureComponent {
     }
 }
 
-const templateData = [
-    {
-        _id: Math.random(),
-        recieved_date: "12-03-18",
-        delivered_date: "12-03-18",
-        price: "93.000 VND",
-        paid: true,
-        product: []
-    },
-    {
-        _id: Math.random(),
-        recieved_date: "01-03-18",
-        delivered_date: "02-03-18",
-        price: "89.000 VND",
-        paid: false,
-        product: [],
-    },
-    {
-        _id: Math.random(),
-        recieved_date: "12-03-18",
-        delivered_date: "12-03-18",
-        price: "93.000 VND",
-        paid: true,
-        product: []
-    },
-    {
-        _id: Math.random(),
-        recieved_date: "12-03-18",
-        delivered_date: "12-03-18",
-        price: "93.000 VND",
-        paid: false,
-        product: []
-    },
-    {
-        _id: Math.random(),
-        recieved_date: "12-03-18",
-        delivered_date: "12-03-18",
-        price: "93.000 VND",
-        paid: false,
-        product: []
-    },
-
-]
 
 const styles = StyleSheet.create({
     container: {

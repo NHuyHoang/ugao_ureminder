@@ -6,12 +6,12 @@ import { Header, Input, FecthData } from '../../components';
 import Login from './Login';
 import ui from '../../share/ui.constant';
 
-import { tryGetLocalCustomer, logout } from '../../store/actions'
+import { logout } from '../../store/actions'
 
 class Profile extends React.Component {
     constructor(props) {
         super(props);
-        this.props.tryGetLocalCustomer()
+        
     }
 
     componentWillMount() {
@@ -143,7 +143,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        tryGetLocalCustomer: () => dispatch(tryGetLocalCustomer()),
         logout: () => dispatch(logout())
     }
 }

@@ -10,7 +10,7 @@ class ProductItem extends React.PureComponent {
         super(props);
         this.state = {
             showInfo: false,
-            counter: 1,
+            counter: this.props.product.quantity ? this.props.product.quantity : 1,
         }
         this.slideAnim = new Animated.Value(100);
         this.removeAnim = new Animated.Value(1);
@@ -71,15 +71,31 @@ class ProductItem extends React.PureComponent {
             this.props.productQuantityHandler(_id, operation);
     }
 
+    componentWillMount() {
+        let { _id, img, name, price, weight, readonly } = this.props.product;
+
+        const displayWeight = () => {
+            let measure = 'kg';
+            if (weight < 1) {
+                weight *= 1000;
+                measure = 'g'
+            }
+            return `${weight}${measure}`;
+        }
+
+        this.data = {
+            _id, img, name,
+            price: `${price}.000 VND`,
+            weight: displayWeight(),
+            readonly,
+        }
+
+    }
+
 
     render() {
         let infoSlideTransform = { width: this.slideAnim };
-        let { _id, img, name, price, weight } = this.props.product;
-        let anotation = 'kg';
-        if (weight < 1) {
-            weight *= 1000;
-            anotation = 'g'
-        };
+
         return (
             <Animated.View style={{ height: 120, justifyContent: "center", alignItems: "center", opacity: this.removeAnim }}>
                 {
@@ -92,22 +108,22 @@ class ProductItem extends React.PureComponent {
                     <TouchableWithoutFeedback onPress={this.onShowInfoHandler}>
                         <View style={styles.productImgContainer}>
                             <Image style={styles.productImg} source={{ uri: this.props.product.img }} />
-                            <View style={styles.productPrice}><Text style={styles.priceTxt}>{price}.000 VND</Text></View>
+                            <View style={styles.productPrice}><Text style={styles.priceTxt}>{this.data.price}</Text></View>
                         </View>
                     </TouchableWithoutFeedback>
                     <Animated.View style={[styles.productInfo, infoSlideTransform]}>
                         <View style={styles.productInfoContainer}>
-                            <View style={styles.productNameContainer}><Text style={styles.productName}>{name}</Text></View>
-                            <Text style={styles.weight}>{weight}{anotation}</Text>
+                            <View style={styles.productNameContainer}><Text style={styles.productName}>{this.data.name}</Text></View>
+                            <Text style={styles.weight}>{this.data.weight}</Text>
                         </View>
-                        <View style={styles.addjustmentBtnContainer}>
-                            <TouchableOpacity onPress={() => this.productQuantityHandler(_id, "add")} style={styles.btnContainer}>
+                        <View style={[styles.addjustmentBtnContainer, { opacity: this.data.readonly ? 0.2 : 1 }]}>
+                            <TouchableOpacity disabled={this.data.readonly} onPress={() => this.productQuantityHandler(this.data._id, "add")} style={styles.btnContainer}>
                                 <Icon name="add" size={15} color="black" />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.productQuantityHandler(_id, "sub")} style={styles.btnContainer}>
+                            <TouchableOpacity disabled={this.data.readonly} onPress={() => this.productQuantityHandler(this.data._id, "sub")} style={styles.btnContainer}>
                                 <Icon name="remove" size={15} color="black" />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.productQuantityHandler(_id, "remove")} style={styles.btnContainer}>
+                            <TouchableOpacity disabled={this.data.readonly} onPress={() => this.productQuantityHandler(this.data._id, "remove")} style={styles.btnContainer}>
                                 <Icon name="close" size={15} color={ui.colors.red} />
                             </TouchableOpacity>
                         </View>
