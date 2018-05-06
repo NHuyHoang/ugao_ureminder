@@ -9,12 +9,12 @@ export default class Location extends React.PureComponent {
         super(props);
         this.state = {
             location: {
-                latitude: 10.8537777,
-                longitude: 106.77281550000001,
+                latitude: this.props.navigation.state.params.lat,
+                longitude: this.props.navigation.state.params.lng,
                 latitudeDelta: 0.0122,
                 longitudeDelta: 0.0421,
             },
-            locationChoosen: false
+            locationChoosen: true
         }
     }
 

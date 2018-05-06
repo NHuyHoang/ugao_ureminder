@@ -74,7 +74,7 @@ const LoadedContent = (props) => {
                     type={'text'}
                     label={"Địa chỉ"}
                     iconBtn={{ name: "place" }}
-                    btnEvent={() => props.navigation.navigate('Location')} />
+                    btnEvent={() => props.navigation.navigate('Location', props.customer.location)} />
                 <View style={{ height: 50, width: "100%", backgroundColor: 'transparent' }}></View>
             </KeyboardAvoidingView>
         </ScrollView>

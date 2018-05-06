@@ -26,6 +26,8 @@ class Login extends React.Component {
                 _id email name img phone
                 location{
                     address
+                    lat
+                    lng
                 }
                 invoices {
                     _id

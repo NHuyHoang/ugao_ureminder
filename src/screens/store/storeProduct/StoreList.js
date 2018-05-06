@@ -1,21 +1,30 @@
 import React from 'react';
-import { Text, View, StyleSheet, ScrollView, Dimensions, ActivityIndicator, TouchableWithoutFeedback, SectionList } from 'react-native';
+import { Text, Button, View, StyleSheet, ScrollView, Dimensions, ActivityIndicator, TouchableWithoutFeedback, SectionList } from 'react-native';
 import ui from '../../../share/ui.constant';
 import { connect } from 'react-redux';
 import { Slider, ProductPanel, FecthData } from '../../../components';
 import { trySaveProducts } from '../../../store/actions';
 
-class StoreList extends React.Component {
+class StoreList extends React.PureComponent {
     constructor(props) {
         super(props);
         this.props.trySaveProducts(this.props.data);
+        this.state = {
+            displayedProducts: [],
+            dataFetched: false,
+            loading: true
+        }
+        this.onEndReachedCalledDuringMomentum = false;
+    }
+
+    componentWillReceiveProps(props) {
+        if (props.products && !this.state.dataFetched)
+            this.setState({ dataFetched: true, displayedProducts: props.products.slice(0, 10) })
     }
 
 
     render() {
-        let díplayedProducts = [];
-        if (this.props.products)
-            díplayedProducts = this.props.products;
+
         return (
             <SectionList
                 ListHeaderComponent={() => (
@@ -29,10 +38,10 @@ class StoreList extends React.Component {
                     </View>
                 )}
                 sections={[
-                    { data: díplayedProducts },
+                    { data: this.state.displayedProducts },
                 ]}
                 renderItem={(items) => {
-                   
+
                     return (
                         <View style={styles.productContainer}>
                             {
@@ -44,10 +53,25 @@ class StoreList extends React.Component {
                     )
                 }}
                 keyExtractor={(item, index) => index}
-                onEndReachedThreshold={0.05}
-                onEndReached={() => console.log(info)}
-                onRefresh={() => { }}
-                refreshing={false}
+                //if threshold === 0 the 2nd time endReached will not trigger
+                //if threshold >0 the onEndReached will trigger twice
+                onEndReachedThreshold={0.01}
+                ListFooterComponent={() => {
+                    return this.state.loading
+                        ? <ActivityIndicator size="small" color="black" />
+                        : null
+                }}
+                onEndReached={() => {
+                    if (this.state.displayedProducts.length < this.props.products.length) {
+
+                        this.setState({
+                            displayedProducts: this.props.products.slice(0, this.state.displayedProducts.length + 10)
+                        })
+                    }
+                    else {
+                        this.setState({ loading: false })
+                    }
+                }}
             />
         )
     }

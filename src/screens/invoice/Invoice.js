@@ -17,6 +17,7 @@ class Invoice extends React.Component {
     }
 
     render() {
+        let address = this.props.customer._id ? this.props.customer.location.address : null
         return (
             <ScrollView style={styles.container}>
                 <Header />
@@ -27,13 +28,13 @@ class Invoice extends React.Component {
                     {/*  <HorizonSlider  products={this.props.cart}/> */}
                     <Slider products={this.props.cart} />
                     <View style={styles.formContainer}>
-                        {/* <Input type='picker' config={{ data: this.tempPickerData }} label={"Thanh toán"} /> */}
+                        {/*  <Input type='picker' config={{ data: this.tempPickerData }} label={"Thanh toán"} /> */}
                         <Input
                             iconBtn={{ name: "place" }}
-                            value="Số 1 Võ Văn Ngân,Q.Thủ Đức"
+                            value={address}
                             type='text'
                             label="Nơi nhận"
-                            btnEvent={() => this.props.navigation.navigate('Location')} />
+                            btnEvent={() => this.props.navigation.navigate('Location', this.props.customer.location)} />
                         <Input config={{ editable: false, value: `${this.props.totalPrice}.000 VND` }} type={'text'} label={"Tổng cộng"} />
                     </View>
                     <View style={styles.submitButton}>
