@@ -11,7 +11,7 @@ import { logout } from '../../store/actions'
 class Profile extends React.Component {
     constructor(props) {
         super(props);
-        
+
     }
 
     componentWillMount() {
@@ -74,7 +74,10 @@ const LoadedContent = (props) => {
                     type={'text'}
                     label={"Địa chỉ"}
                     iconBtn={{ name: "place" }}
-                    btnEvent={() => props.navigation.navigate('Location', props.customer.location)} />
+                    btnEvent={() => props.navigation.navigate('Location', {
+                        customerLocation: props.customer.location,
+                        storeLocation: props.store.location
+                    })} />
                 <View style={{ height: 50, width: "100%", backgroundColor: 'transparent' }}></View>
             </KeyboardAvoidingView>
         </ScrollView>
@@ -137,7 +140,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        customer: state.customer.info
+        customer: state.customer.info,
+        store: state.customer.store
     }
 }
 

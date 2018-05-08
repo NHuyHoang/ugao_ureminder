@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MapView from 'react-native-maps';
 import { Header } from '../../components'
@@ -9,12 +9,27 @@ export default class Location extends React.PureComponent {
         super(props);
         this.state = {
             location: {
-                latitude: this.props.navigation.state.params.lat,
-                longitude: this.props.navigation.state.params.lng,
+                latitude: this.props.navigation.state.params.customerLocation.lat,
+                longitude: this.props.navigation.state.params.customerLocation.lng,
                 latitudeDelta: 0.0122,
                 longitudeDelta: 0.0421,
             },
-            locationChoosen: true
+        }
+        if (this.props.navigation.state.params.storeLocation) {
+            let storeLocation = {
+                latitude: this.props.navigation.state.params.storeLocation.lat,
+                longitude: this.props.navigation.state.params.storeLocation.lng,
+                latitudeDelta: 0.0122,
+                longitudeDelta: 0.0421,
+            }
+            this.storeMarker = (
+                <MapView.Marker
+                    coordinate={storeLocation} >
+                    <Image onLoad={() => this.forceUpdate()}
+                        style={{ width: 52, height: 52 }}
+                        source={require('../../share/images/store_marker_2.png')} />
+                </MapView.Marker>
+            )
         }
     }
 
@@ -31,7 +46,6 @@ export default class Location extends React.PureComponent {
                 latitude: coords.latitude,
                 longitude: coords.longitude
             },
-            locationChoosen: true
         }))
     }
 
@@ -52,9 +66,6 @@ export default class Location extends React.PureComponent {
     }
 
     render() {
-        let marker = this.state.locationChoosen &&
-            <MapView.Marker coordinate={this.state.location} />;
-
         return (
             <View style={styles.container}>
                 <Header data={[
@@ -65,9 +76,10 @@ export default class Location extends React.PureComponent {
                     style={{ flex: 1 }}
                     ref={ref => this.map = ref}
                     initialRegion={this.state.location}
-                    onPress={this.onLocationChange}
-                >
-                    {marker}
+                    onPress={this.onLocationChange} >
+                    <MapView.Marker
+                        coordinate={this.state.location} />
+                    {this.storeMarker}
                 </MapView>
             </View>
         )

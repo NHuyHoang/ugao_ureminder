@@ -6,23 +6,29 @@ import { Header, InvoiceItem, FecthData, Noti } from '../../components';
 class History extends React.PureComponent {
     constructor(props) {
         super(props);
+        this.state = {
+            data: this.props.info.invoices
+        }
+    }
+
+    componentWillReceiveProps(props) {
+
     }
 
     render() {
         return (
             <View style={styles.container}>
                 <Header />
-                {this.props.invoices ?
-
-                    <FlatList
-                        onRefresh={() => { }}
-                        refreshing={false}
-                        data={this.props.invoices.reverse()}
-                        keyExtractor={(item, index) => item._id}
-                        renderItem={({ item }) => <InvoiceItem data={item} />}
-                    /> :
-                    <Noti message="Vui lòng đăng nhập" />
-
+                {
+                    this.state.data ?
+                        <FlatList
+                            onRefresh={() => { }}
+                            refreshing={false}
+                            data={this.state.data.reverse()}
+                            keyExtractor={(item, index) => item._id}
+                            renderItem={({ item }) => <InvoiceItem data={item} />}
+                        /> :
+                        <Noti message="Vui lòng đăng nhập" />
                 }
             </View>
         )
@@ -39,7 +45,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        invoices: state.customer.info.invoices
+        info: state.customer.info
     }
 }
 
