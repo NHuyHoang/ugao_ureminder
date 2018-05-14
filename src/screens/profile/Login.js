@@ -35,7 +35,7 @@ class Login extends React.Component {
                     tasks { receipt_date }
                     price
                     paid
-                    store { owner { phone } }
+                    store { name owner { email phone token } }
                     products {  product { _id name img price weight} quantity }
                   }
             }
@@ -68,7 +68,7 @@ class Login extends React.Component {
                     {this.state.fetchData && FecthData(this.query, "authenticatedCustomer", null, this.loadedDataHandler, "Tài khoản không tồn tại")}
                     {
                         this.props.notiTxt &&
-                        <Noti message={this.props.notiTxt.message}/>
+                        <Noti message={this.props.notiTxt.message} />
                     }
                     <Form
                         ref="loginForm"

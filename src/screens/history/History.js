@@ -7,12 +7,12 @@ class History extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            data: this.props.info.invoices
+            data: null
         }
     }
 
-    componentWillReceiveProps(props) {
-
+    componentWillMount(props) {
+        this.setState({ data: this.props.info.invoices })
     }
 
     render() {
