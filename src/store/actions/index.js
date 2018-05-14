@@ -1,6 +1,7 @@
 export {
     tryGetLocalCustomer,
     trySaveLocalCustomer,
+    tryMakeOrder,
     logout
 } from './customer'
 

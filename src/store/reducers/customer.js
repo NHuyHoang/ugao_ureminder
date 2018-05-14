@@ -1,4 +1,4 @@
-import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT, SAVE_NEAREST_STORE } from '../actions/ActionTypes'
+import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT, SAVE_NEAREST_STORE, ADD_INVOICE } from '../actions/ActionTypes'
 const initialState = {
     info: {
         _id: null,
@@ -6,7 +6,8 @@ const initialState = {
         phone: null,
         email: null,
         img: null,
-        location: null
+        location: null,
+        invoices: []
     },
     store: {
         _id: null,
@@ -38,6 +39,17 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 store: action.store,
+            }
+        }
+        case (ADD_INVOICE): {
+            const invoices = [...state.info.invoices];
+            invoices.push(action.invoice);
+            return {
+                ...state,
+                info: {
+                    ...state.info,
+                    invoices,
+                }
             }
         }
         default: return state;

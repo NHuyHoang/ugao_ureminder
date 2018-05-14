@@ -1,13 +1,14 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import * as Reducers from './reducers';
 import { ApolloClient, createNetworkInterface } from 'react-apollo';
+import globalConst from './constant';
 import thunk from 'redux-thunk';
 
 //this setting is used redux v3.7.2
 
 //setup graphQL api uri
 const networkInterface = createNetworkInterface({
-    uri: 'https://gentle-dawn-11577.herokuapp.com/graphql'
+    uri: globalConst.DB_URI
 });
 
 export const client = new ApolloClient({

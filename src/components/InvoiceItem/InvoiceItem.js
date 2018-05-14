@@ -35,10 +35,10 @@ export default class InvoiceItem extends React.PureComponent {
     componentWillMount() {
         let { order_date, tasks, price, paid, products } = this.props.data;
         let { name, owner } = this.props.data.store;
-       
+
         this.data = {
             order_date: this.dateTimeConverter(order_date),
-            receipt_date: this.dateTimeConverter(tasks.receipt_date),
+            receipt_date: !tasks.receipt_date ? "Chưa nhận" : this.dateTimeConverter(tasks.receipt_date),
             price: `${price}.000 VND`,
             paid,
             products: this.productsDataConfig(products)

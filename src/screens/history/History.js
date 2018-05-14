@@ -6,25 +6,21 @@ import { Header, InvoiceItem, FecthData, Noti } from '../../components';
 class History extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            data: null
-        }
+
     }
 
-    componentWillMount(props) {
-        this.setState({ data: this.props.info.invoices })
-    }
 
     render() {
+        let data = [...this.props.info.invoices];
         return (
             <View style={styles.container}>
                 <Header />
                 {
-                    this.state.data ?
+                    this.props.info.invoices.length != 0 ?
                         <FlatList
                             onRefresh={() => { }}
                             refreshing={false}
-                            data={this.state.data.reverse()}
+                            data={data.reverse()}
                             keyExtractor={(item, index) => item._id}
                             renderItem={({ item }) => <InvoiceItem data={item} />}
                         /> :

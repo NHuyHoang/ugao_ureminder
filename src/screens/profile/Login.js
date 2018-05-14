@@ -12,7 +12,7 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            fetchData: false
+            fetchData: false,
         }
         this.query = null;
     }
@@ -51,6 +51,10 @@ class Login extends React.Component {
         this.props.trySaveLocalCustomer(customer);
         return null;
     }
+
+
+
+    
 
 
     render() {

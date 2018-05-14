@@ -4,6 +4,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import ui from '../../share/ui.constant'
 import { Header, Input, UButton, Slider } from '../../components';
+import { tryMakeOrder } from '../../store/actions'
 class Invoice extends React.Component {
     constructor(props) {
         super(props);
@@ -13,6 +14,9 @@ class Invoice extends React.Component {
     onPaidHandler = () => {
         if (!this.props.customer._id)
             this.props.navigation.navigate('Profile', { message: "Vui lòng đăng nhập để đặt hàng" });
+        else {
+            this.props.tryMakeOrder();
+        }
 
     }
 
@@ -93,4 +97,10 @@ const mapStateToProp = state => {
     }
 }
 
-export default connect(mapStateToProp)(Invoice);
+const mapDispatchToProp = dispatch => {
+    return {
+        tryMakeOrder: () => dispatch(tryMakeOrder())
+    }
+}
+
+export default connect(mapStateToProp, mapDispatchToProp)(Invoice);
