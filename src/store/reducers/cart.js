@@ -1,4 +1,4 @@
-import { ADD_TO_CART, REMOVE_FROM_CART, SUB_ONE_PRODUCT, ADD_ONE_PRODUCT } from '../actions/ActionTypes'
+import { ADD_TO_CART, REMOVE_FROM_CART, SUB_ONE_PRODUCT, ADD_ONE_PRODUCT, CART_REMOVE_ALL } from '../actions/ActionTypes'
 const initialState = {
     products: [],
     totalPrice: 0
@@ -28,6 +28,9 @@ export default reducer = (state = initialState, action) => {
                 products: productsCloned,
                 totalPrice: state.totalPrice -= (removedProduct.price * removedProduct.quantity)
             };
+        }
+        case (CART_REMOVE_ALL): {
+            return initialState
         }
         case (SUB_ONE_PRODUCT): {
             let product = state.products.find(e => e._id === action._id);

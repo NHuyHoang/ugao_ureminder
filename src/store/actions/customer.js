@@ -1,6 +1,7 @@
 import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT, SAVE_NEAREST_STORE, ADD_INVOICE } from './ActionTypes';
 import { AsyncStorage } from 'react-native';
 import globalConst from '../constant';
+import { cartRemoveAll } from "./cart";
 
 //const GMAP_API_KEY = "AIzaSyDNW4hwd3ZpDzQRDQsK5Da2I-GMllqvh2s";
 const itemKey = { customerKey: "get:info:customer", storeKey: "get:info:store" }
@@ -106,7 +107,7 @@ const tryFindNearestStore = async (location) => {
 }
 
 //make an order
-export const tryMakeOrder = () => {
+export const tryMakeOrder = (callback) => {
     return async (dispatch, getState) => {
         const customer = getState().customer;
         const customerId = customer.info._id;
@@ -153,6 +154,8 @@ export const tryMakeOrder = () => {
                 method: 'POST',
             }).then(res => res.json());
         } catch (err) {
+            callback(false)
+            return;
             console.log(err)
         }
         //if successful add the new invoice
@@ -174,7 +177,9 @@ export const tryMakeOrder = () => {
             savedCustomer.invoices.push(saveInvoice);
             AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(savedCustomer));
             dispatch(addInvoice(saveInvoice));
+            dispatch(cartRemoveAll());
+            callback(true);
         }
-        console.log(response)
+        else callback(false);
     }
 }

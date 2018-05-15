@@ -12,5 +12,6 @@ export {
 export {
     addToCart,
     removeFromCart,
-    productQuantityHandler
+    productQuantityHandler,
+    cartRemoveAll
 } from './cart'

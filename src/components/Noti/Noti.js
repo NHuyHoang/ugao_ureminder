@@ -7,7 +7,7 @@ export default Noti = props => {
         <View style={{
             width: '100%',
             height: 22,
-            backgroundColor: ui.colors.yellow,
+            backgroundColor: props.success ? ui.colors.highlight : ui.colors.yellow,
             justifyContent: "center",
             alignItems: "center"
         }}>
