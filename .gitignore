@@ -5,6 +5,7 @@
 
 # dependencies
 /node_modules
+/src/store/constant.js
 
 # misc
 .env.local
