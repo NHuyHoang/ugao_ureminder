@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated,
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux';
+import FCM, { scheduleLocalNotification } from 'react-native-fcm';
 
 import StoreProduct from './storeProduct/StoreProduct';
 import StoreNoti from './storeNoti/StoreNoti';
@@ -44,6 +45,22 @@ class Store extends React.PureComponent {
         this.props.removeFromCart(id);
     }
 
+    scheduleLocalNotification = () => {
+        FCM.scheduleLocalNotification({
+            id: 'testnotif',
+            title:"heloooo",
+            fire_date: new Date().getTime() + 10000,
+            vibrate: 500,
+            body: 'Test Scheduled Notification',
+            sub_text: 'sub text',
+            priority: "high",
+            large_icon: "ic_launcher",                           // Android only
+            icon: "ic_launcher",
+            show_in_foreground: true,
+            wake_screen: true,
+        });
+    }
+
 
     render() {
         return (
@@ -57,6 +74,7 @@ class Store extends React.PureComponent {
                     <View style={styles.navbarTab}>
                         <NavbarTab iconSize={22} selectTab={(tab) => this.onSelectTabHandler(tab)} />
                     </View>
+                    <Button title="push noti" onPress={this.scheduleLocalNotification} />
                 </View>
                 <StoreProduct /* addToCart={this.onAddToCartHandler} */ show={this.state.tabSelection === 1} />
                 {this.state.tabSelection === 2 && <StoreNoti />}

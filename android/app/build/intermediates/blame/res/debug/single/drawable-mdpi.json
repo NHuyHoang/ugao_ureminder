@@ -92,12 +92,12 @@
         "source": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\drawable-mdpi\\abc_ic_commit_search_api_mtrl_alpha.png"
     },
     {
-        "merged": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\abc_menu_hardkey_panel_mtrl_mult.9.png",
-        "source": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\drawable-mdpi\\abc_menu_hardkey_panel_mtrl_mult.9.png"
-    },
-    {
         "merged": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\abc_btn_check_to_on_mtrl_000.png",
         "source": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\drawable-mdpi\\abc_btn_check_to_on_mtrl_000.png"
+    },
+    {
+        "merged": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\abc_menu_hardkey_panel_mtrl_mult.9.png",
+        "source": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\drawable-mdpi\\abc_menu_hardkey_panel_mtrl_mult.9.png"
     },
     {
         "merged": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\abc_btn_rating_star_off_mtrl_alpha.png",
