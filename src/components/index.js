@@ -15,3 +15,4 @@ export { default as IconButton } from './IconButton/IconButton';
 export { default as FecthData } from './FecthData/FecthData';
 export { default as Form } from './Form/Form';
 export { default as Noti } from './Noti/Noti';
+export { default as NotiPanel } from './Noti/NotiPanel';

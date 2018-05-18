@@ -26,11 +26,11 @@ class Reminder extends React.PureComponent {
                 <View style={styles.mainContent}>
                     <View style={styles.titleContent}>
                         <Icon name="notifications-none" size={42} color="black" />
-                        <Text style={styles.titleStyle}>Huy Hoàng, gạo của bạn sắp hết</Text>
+                        <Text style={styles.titleStyle}>{this.props.customerName}, gạo của bạn sắp hết</Text>
                         <Text style={styles.subTitle}>Đặt hàng nhanh theo hóa đơn trước</Text>
                     </View>
                     <View style={{ width: "100%", marginTop: 12, marginBottom: 12 }}><Slider products={this.products} /></View>
-                    <Text style={styles.titleStyle}>89.000 VND</Text>
+                    <Text style={styles.titleStyle}>{`${this.props.invoice.price}.000 VND`}</Text>
                     <View style={styles.btnContent}>
                         <UButton txt="Đặt hàng ngay" onPress={() => { }} />
                         <View style={styles.btnRow}>
@@ -101,7 +101,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     const latestInvoice = state.customer.info.invoices[state.customer.info.invoices.length - 1];
     return {
-        invoice: latestInvoice
+        invoice: latestInvoice,
+        customerName: state.customer.info.name,
+
     }
 }
 

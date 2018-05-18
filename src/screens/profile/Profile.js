@@ -6,15 +6,11 @@ import { Header, Input, FecthData } from '../../components';
 import Login from './Login';
 import ui from '../../share/ui.constant';
 
-import { logout } from '../../store/actions'
+import { logout, onTrySetShowNoti } from '../../store/actions'
 
 class Profile extends React.Component {
     constructor(props) {
         super(props);
-
-    }
-
-    componentWillMount() {
 
     }
 
@@ -30,7 +26,7 @@ class Profile extends React.Component {
                 {
                     this.props.customer._id ?
                         //FecthData(this.query, "authenticatedCustomer", this.props, LoadedContent) :
-                        <LoadedContent {...this.props} data={this.props.customer} /> :
+                        <LoadedContent {...this.props} data={this.props.customer}  /> :
                         <Login notiTxt={this.props.navigation.state.params} />
                 }
             </View>
@@ -38,10 +34,7 @@ class Profile extends React.Component {
     }
 }
 
-
-
 const LoadedContent = (props) => {
-
     const { email, img, location, name, phone } = props.data;
     return (
         <ScrollView>
@@ -78,11 +71,18 @@ const LoadedContent = (props) => {
                         customerLocation: props.customer.location,
                         storeLocation: props.store.location
                     })} />
+                <Input
+                    type='checkbox'
+                    checked={props.showNoti}
+                    onToogle={props.onTrySetShowNoti}
+                    title="Nhận thông báo đặt hàng" />
                 <View style={{ height: 50, width: "100%", backgroundColor: 'transparent' }}></View>
             </KeyboardAvoidingView>
         </ScrollView>
     )
 }
+
+
 
 
 const styles = StyleSheet.create({
@@ -141,13 +141,15 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         customer: state.customer.info,
-        store: state.customer.store
+        store: state.customer.store,
+        showNoti: state.customer.showNoti
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        logout: () => dispatch(logout())
+        logout: () => dispatch(logout()),
+        onTrySetShowNoti: (show) => dispatch(onTrySetShowNoti(show))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

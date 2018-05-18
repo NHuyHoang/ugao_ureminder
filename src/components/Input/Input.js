@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, Picker, TouchableWithoutFeedback, TouchableOpacity, Animated, FlatList, KeyboardAvoidingView } from 'react-native';
+import {
+    StyleSheet, View,
+    Text, TextInput,
+    Picker, TouchableWithoutFeedback,
+    TouchableOpacity, Animated,
+    FlatList, KeyboardAvoidingView,
+    TouchableNativeFeedback, CheckBox
+} from 'react-native';
 import IconButton from '../IconButton/IconButton';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ui from '../../share/ui.constant';
@@ -7,7 +14,7 @@ import validator from './validator';
 
 const controlTypes = Object.freeze(['password', 'email']);
 
-export default class Input extends React.Component {
+export default class Input extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -48,6 +55,17 @@ export default class Input extends React.Component {
             if (this.props.checkValidity)
                 this.props.checkValidity(this.props.id, valid, text)
         });
+    }
+
+    onCheckboxToogle = (value) => {
+        this.setState({
+            control: {
+                ...this.state.control,
+                value,
+            }
+        }, () => {
+            this.props.onToogle(value);
+        })
     }
 
     validStyleHandler = (type) => {
@@ -136,11 +154,19 @@ export default class Input extends React.Component {
                     />
                 )
             }; break;
+            case ('checkbox'): {
+                inputType = (
+                    <CustomCheckbox checked={this.props.checked} title={this.props.title} onPress={this.onCheckboxToogle} />
+                )
+            }; break;
             default: inputType = null; break;
         }
         return (
             <View style={[styles.container, this.props.style]}>
-                <Text style={styles.label}>{this.props.label}</Text>
+                {
+                    this.props.label &&
+                    <Text style={styles.label}>{this.props.label}</Text>
+                }
                 <View style={[styles.inputContainer, borderStyle]}>
                     {inputType}
                     {
@@ -239,6 +265,38 @@ class CustomPicker extends React.Component {
     }
 }
 
+class CustomCheckbox extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            checked: this.props.checked
+        }
+    }
+
+    onToogle = () => {
+        this.setState(prevState => ({
+            checked: !prevState.checked
+        }), () => {
+            this.props.onPress(this.state.checked)
+        })
+    }
+
+    render() {
+        return (
+            <View style={checkBoxStyles.container}>
+                <TouchableOpacity onPress={this.onToogle} style={checkBoxStyles.checkboxContent}>
+                    <Text style={checkBoxStyles.titleTxt}>{this.props.title}</Text>
+                    {
+                        this.state.checked
+                            ? <IconButton size={35} name="check" color="green" />
+                            : <IconButton size={35} name="clear" color="red" />
+                    }
+                </TouchableOpacity>
+            </View >
+        )
+    }
+}
+
 
 const styles = StyleSheet.create({
     container: {
@@ -272,6 +330,25 @@ const styles = StyleSheet.create({
         color: 'black',
     }
 
+})
+
+const checkBoxStyles = StyleSheet.create({
+    container: {
+        height: 62,
+        width: '100%',
+    },
+    checkboxContent: {
+        height: '100%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+    },
+    titleTxt: {
+        fontFamily: ui.fonts.bold,
+        fontSize: ui.fontSize.normal,
+        color: 'black'
+    }
 })
 
 const pickerStyles = StyleSheet.create({

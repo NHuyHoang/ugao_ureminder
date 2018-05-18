@@ -104,8 +104,11 @@ export default class ProducerSlider extends React.Component {
                                 {
                                     this.props.products.length === 0 ?
                                         <View style={styles.sliderTxtPlaceHolder}>
-                                            <Noti message="Bạn chưa chọn mua sản phẩm" />{/* 
-                                            <Text style={styles.sliderTxt}></Text> */}
+                                            {
+                                                this.props.success
+                                                    ? <Noti success message="Đặt hàng thành công" />
+                                                    : <Noti message="Bạn chưa chọn mua sản phẩm" />
+                                            }
                                         </View>
                                         :
                                         this.props.products.map((product, index) => (

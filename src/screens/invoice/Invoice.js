@@ -40,7 +40,7 @@ class Invoice extends React.Component {
 
     makeOrderCallback = (success) => {
         this.setState({ isLoading: false }, () => {
-            if (success) {
+            if (success && this.props.showNoti) {
                 this.setState({ orderStatus: "SUCCESS" });
                 FCM.scheduleLocalNotification({
                     id: 'testnotif',
@@ -80,6 +80,7 @@ class Invoice extends React.Component {
         switch (this.state.orderStatus) {
             case ("READY"):
             case ("FAILED"):
+            case ("SUCCESS"):
                 orderBtn = (<UButton
                     onPress={this.onPaidHandler}
                     disabled={this.props.cart.length === 0}
@@ -87,10 +88,10 @@ class Invoice extends React.Component {
                 break;
             case ("ORDERING"):
                 orderBtn = <ActivityIndicator size="small" color="black" />
-                break;
+                break;/* 
             case ("SUCCESS"):
                 orderBtn = <Noti success message="Đặt hàng thành công" />
-                break;
+                break; */
         }
         return (
             <ScrollView style={styles.container}>
@@ -100,7 +101,7 @@ class Invoice extends React.Component {
                         <Text style={styles.title}> Hóa đơn mua hàng</Text>
                     </View>
                     {/*  <HorizonSlider  products={this.props.cart}/> */}
-                    <Slider products={this.props.cart} />
+                    <Slider success={this.state.orderStatus === "SUCCESS"} products={this.props.cart} />
                     <View style={{ marginTop: 8 }}>
                         {
                             this.state.orderStatus === "FAILED"
@@ -124,7 +125,9 @@ class Invoice extends React.Component {
                         {orderBtn}
                     </View>
                 </KeyboardAvoidingView>
+
             </ScrollView>
+
         )
     }
 }
@@ -166,6 +169,7 @@ const mapStateToProp = state => {
         cart: state.cart.products,
         totalPrice: state.cart.totalPrice,
         customer: state.customer.info,
+        showNoti: state.customer.showNoti,
         store: state.customer.store
     }
 }

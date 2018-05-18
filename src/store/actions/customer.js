@@ -1,10 +1,10 @@
-import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT, SAVE_NEAREST_STORE, ADD_INVOICE } from './ActionTypes';
+import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT, SAVE_NEAREST_STORE, ADD_INVOICE, SHOW_NOTI } from './ActionTypes';
 import { AsyncStorage } from 'react-native';
 import globalConst from '../constant';
 import { cartRemoveAll } from "./cart";
 
 //const GMAP_API_KEY = "AIzaSyDNW4hwd3ZpDzQRDQsK5Da2I-GMllqvh2s";
-const itemKey = { customerKey: "get:info:customer", storeKey: "get:info:store" }
+const itemKey = { customerKey: "get:info:customer", storeKey: "get:info:store", notiKey: "get:noti" }
 
 const getCustomerFailed = () => {
     console.log('invoke');
@@ -41,17 +41,33 @@ export const logout = () => {
     }
 }
 
+export const showNoti = (show) => {
+    return {
+        type: SHOW_NOTI,
+        showNoti: show
+    }
+}
+
+export const onTrySetShowNoti = (show) => {
+    return dispatch => {
+        AsyncStorage.setItem(itemKey.notiKey, show.toString());
+        dispatch(showNoti(show))
+    }
+}
+
 export const tryGetLocalCustomer = () => {
     return async dispatch => {
         //AsyncStorage.removeItem(itemKey.customerKey);
         let data = await AsyncStorage.getItem(itemKey.customerKey);
         let storeData = await AsyncStorage.getItem(itemKey.storeKey);
+        let showNotiValue = await AsyncStorage.getItem(itemKey.notiKey);
         if (!data) dispatch(getCustomerFailed());
         else {
             let customer = JSON.parse(data);
             let store = JSON.parse(storeData);
             dispatch(saveLocalCustomer(customer));
             dispatch(saveNearestStore(store));
+            dispatch(showNoti(showNotiValue == "true"));
         }
     }
 }

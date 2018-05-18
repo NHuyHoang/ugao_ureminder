@@ -2,7 +2,8 @@ export {
     tryGetLocalCustomer,
     trySaveLocalCustomer,
     tryMakeOrder,
-    logout
+    logout,
+    onTrySetShowNoti
 } from './customer'
 
 export {

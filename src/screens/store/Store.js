@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated, Image, PanResponder, Button } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated, Image, PanResponder, Button, DatePickerAndroid, TimePickerAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux';
-import FCM, { scheduleLocalNotification } from 'react-native-fcm';
+import FCM from 'react-native-fcm';
 
 import StoreProduct from './storeProduct/StoreProduct';
 import StoreNoti from './storeNoti/StoreNoti';
@@ -47,26 +47,62 @@ class Store extends React.PureComponent {
         this.props.removeFromCart(id);
     }
 
-   /*  scheduleLocalNotification = () => {
-        FCM.scheduleLocalNotification({
-            id: 'testnotif',
-            opened_from_tray: 1,
-            title: "UReminder",
-            fire_date: new Date().getTime() + 3000,
-            vibrate: 300,
-            body: 'Gạo của bạn sắp hết',
-            priority: "high",
-            large_icon: "ic_launcher",                           // Android only
-            icon: "ic_launcher",
-            show_in_foreground: true,
-            targetScreen: "Reminder"
-        });
-    } */
+    scheduleLocalNotification = () => {
+        if (this.props.showNoti)
+            FCM.scheduleLocalNotification({
+                id: 'testnotif',
+                opened_from_tray: 1,
+                title: "UReminder",
+                fire_date: new Date().getTime() + 3000,
+                vibrate: 300,
+                body: 'Gạo của bạn sắp hết',
+                priority: "high",
+                large_icon: "ic_launcher",                           // Android only
+                icon: "ic_launcher",
+                show_in_foreground: true,
+                targetScreen: "Reminder"
+            });
+    }
 
+    showDatePicker = async () => {
+        try {
+            const { action, year, month, day } = await DatePickerAndroid.open({
+                // Use `new Date()` for current date.
+                // May 25 2020. Month 0 is January.
+                date: new Date(2020, 4, 25),
+                mode: 'calendar'
+            });
+            if (action !== DatePickerAndroid.dismissedAction) {
+                try {
+                    const { action, hour, minute } = await TimePickerAndroid.open({
+                        hour: 14,
+                        minute: 0,
+                        is24Hour: false, // Will display '2 PM'
+                    });
+                    if (action !== TimePickerAndroid.dismissedAction) {
+                        // Selected hour (0-23), minute (0-59)
+                    }
+                } catch ({ code, message }) {
+                    console.warn('Cannot open time picker', message);
+                }
+                console.log(month, day, year);
+            }
+        } catch ({ code, message }) {
+            console.warn('Cannot open date picker', message);
+        }
+    }
+
+    cancelNoti = () => {
+        console.log("trigger")
+        //FCM.getScheduledLocalNotifications().then(obj => console.log(obj))
+        FCM.cancelAllLocalNotifications();
+    }
 
     render() {
         return (
             <View style={styles.container}>
+                {/*  <Button title="push noti" onPress={this.cancelNoti} color="red" /> 
+                <Button title="push noti" onPress={this.scheduleLocalNotification} />*/}
                 <View style={styles.navbarContainer}>
                     <View style={styles.navbarInput}>
                         <View style={styles.searchInput}>
@@ -76,8 +112,10 @@ class Store extends React.PureComponent {
                     <View style={styles.navbarTab}>
                         <NavbarTab iconSize={22} selectTab={(tab) => this.onSelectTabHandler(tab)} />
                     </View>
-                    {/* <Button title="push noti" onPress={this.scheduleLocalNotification} /> */}
+
+
                 </View>
+
                 <StoreProduct /* addToCart={this.onAddToCartHandler} */ show={this.state.tabSelection === 1} />
                 {this.state.tabSelection === 2 && <StoreNoti />}
                 {this.state.tabSelection === 3 && <StoreContact />}
@@ -241,7 +279,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        cart: state.cart.products
+        cart: state.cart.products,
+        showNoti: state.customer.showNoti
     }
 }
 
