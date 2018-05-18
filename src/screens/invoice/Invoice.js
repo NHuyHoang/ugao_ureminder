@@ -10,10 +10,13 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import FCM, { scheduleLocalNotification } from 'react-native-fcm';
 import { connect } from 'react-redux';
 import ui from '../../share/ui.constant'
 import { Header, Input, UButton, Slider, Noti } from '../../components';
-import { tryMakeOrder } from '../../store/actions'
+import { tryMakeOrder } from '../../store/actions';
+
+
 class Invoice extends React.Component {
     constructor(props) {
         super(props);
@@ -37,9 +40,32 @@ class Invoice extends React.Component {
 
     makeOrderCallback = (success) => {
         this.setState({ isLoading: false }, () => {
-            if (success) this.setState({ orderStatus: "SUCCESS" });
+            if (success) {
+                this.setState({ orderStatus: "SUCCESS" });
+                FCM.scheduleLocalNotification({
+                    id: 'testnotif',
+                    opened_from_tray: 1,
+                    title: "UReminder",
+                    fire_date: new Date().getTime() + this.calculateOrderDate(),
+                    vibrate: 300,
+                    body: 'Gạo của bạn sắp hết',
+                    priority: "high",
+                    large_icon: "ic_launcher",                           // Android only
+                    icon: "ic_launcher",
+                    show_in_foreground: true,
+                    targetScreen: "Reminder"
+                });
+
+            }
             else this.setState({ orderStatus: "FAILED" });
         });
+    }
+
+    calculateOrderDate = () => {
+        let data = [...this.props.customer.invoices];
+        if (data.length < 2) return null;
+        return new Date(data[data.length - 1].order_date).getTime() -
+            new Date(data[data.length - 2].order_date).getTime();
     }
 
     componentWillReceiveProps(props) {

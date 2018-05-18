@@ -11,7 +11,7 @@ import StoreContact from './storeContact/StoreContact';
 import Login from '../profile/Login';
 import ui from '../../share/ui.constant';
 import { SearchInput, NavbarTab, CartButton, ProductItem, PayButton } from '../../components';
-import { removeFromCart, tryGetLocalCustomer } from '../../store/actions'
+import { removeFromCart } from '../../store/actions'
 
 class Store extends React.PureComponent {
     constructor(props) {
@@ -23,7 +23,9 @@ class Store extends React.PureComponent {
             dimmerAnim: new Animated.Value(0),
             addingProduct: false,
         };
-        this.props.tryGetLocalCustomer();
+    }
+
+    componentDidMount() {
     }
 
 
@@ -45,21 +47,21 @@ class Store extends React.PureComponent {
         this.props.removeFromCart(id);
     }
 
-    scheduleLocalNotification = () => {
+   /*  scheduleLocalNotification = () => {
         FCM.scheduleLocalNotification({
             id: 'testnotif',
-            title:"heloooo",
-            fire_date: new Date().getTime() + 10000,
-            vibrate: 500,
-            body: 'Test Scheduled Notification',
-            sub_text: 'sub text',
+            opened_from_tray: 1,
+            title: "UReminder",
+            fire_date: new Date().getTime() + 3000,
+            vibrate: 300,
+            body: 'Gạo của bạn sắp hết',
             priority: "high",
             large_icon: "ic_launcher",                           // Android only
             icon: "ic_launcher",
             show_in_foreground: true,
-            wake_screen: true,
+            targetScreen: "Reminder"
         });
-    }
+    } */
 
 
     render() {
@@ -74,7 +76,7 @@ class Store extends React.PureComponent {
                     <View style={styles.navbarTab}>
                         <NavbarTab iconSize={22} selectTab={(tab) => this.onSelectTabHandler(tab)} />
                     </View>
-                    <Button title="push noti" onPress={this.scheduleLocalNotification} />
+                    {/* <Button title="push noti" onPress={this.scheduleLocalNotification} /> */}
                 </View>
                 <StoreProduct /* addToCart={this.onAddToCartHandler} */ show={this.state.tabSelection === 1} />
                 {this.state.tabSelection === 2 && <StoreNoti />}
@@ -245,8 +247,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        removeFromCart: (_id) => dispatch(removeFromCart(_id)),
-        tryGetLocalCustomer: () => dispatch(tryGetLocalCustomer())
+        removeFromCart: (_id) => dispatch(removeFromCart(_id))
     }
 }
 
