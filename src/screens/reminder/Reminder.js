@@ -13,11 +13,12 @@ class Reminder extends React.PureComponent {
         this.state = {
             orderStatus: "READY"
         }
+        this.price = 0;
+        this.products = null;
     }
 
     onTryMakeOrder = () => {
         const callback = (success) => {
-            console.log(success);
             if (success) {
                 this.products = [];
                 this.setState({ orderStatus: "SUCCESS" })
@@ -55,14 +56,14 @@ class Reminder extends React.PureComponent {
                         <Text style={styles.subTitle}>Đặt hàng nhanh theo hóa đơn trước</Text>
                     </View>
                     <View style={{ width: "100%", marginTop: 12, marginBottom: 12 }}>
-                        <Slider success={this.state.orderStatus === "SUCCESS"} products={this.products} />
+                        {
+                            this.products &&
+                            <Slider success={this.state.orderStatus === "SUCCESS"} products={this.products} />
+                        }   
                     </View>
-                    {
-                        this.props.invoice.price !== 0 &&
-                        <Text style={styles.titleStyle}>
-                            {`${this.props.invoice.price.toFixed(3)} VND`}
-                        </Text>
-                    }
+                    <Text style={styles.titleStyle}>
+                        {`${this.price.toFixed(3)} VND`}
+                    </Text>
                     <View style={styles.btnContent}>
                         {
                             this.state.orderStatus === "FAILED" &&

@@ -3,6 +3,8 @@ import { AsyncStorage } from 'react-native';
 import globalConst from '../constant';
 import { cartRemoveAll } from "./cart";
 
+import FCM, { scheduleLocalNotification } from 'react-native-fcm';
+
 //const GMAP_API_KEY = "AIzaSyDNW4hwd3ZpDzQRDQsK5Da2I-GMllqvh2s";
 const itemKey = { customerKey: "get:info:customer", storeKey: "get:info:store", notiKey: "get:noti" }
 
@@ -132,7 +134,7 @@ export const tryMakeOrder = (callback, preparedInvoice) => {
         let getProducts;
         //if the order was made by the reminder s
         //we would use the latest invoice
-        
+
         if (preparedInvoice)
             getProducts = preparedInvoice.products;
         else getProducts = getState().cart.products;
@@ -185,7 +187,6 @@ export const tryMakeOrder = (callback, preparedInvoice) => {
             return;
             console.log(err)
         }
-        console.log(response);
 
         //if successful add the new invoice
         if (response.data && response.data.addInvoice) {
@@ -207,8 +208,42 @@ export const tryMakeOrder = (callback, preparedInvoice) => {
             AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(savedCustomer));
             dispatch(addInvoice(saveInvoice));
             dispatch(cartRemoveAll());
+            dispatch(setupScheduleLocalNoti());
             callback(true);
         }
         else callback(false);
     }
 }
+
+const calculateOrderDate = (data) => {
+
+    if (data.length < 2) return null;
+    return new Date(data[data.length - 1].order_date).getTime() -
+        new Date(data[data.length - 2].order_date).getTime();
+
+}
+
+const setupScheduleLocalNoti = () => {
+    return (dispatch, getState) => {
+        const invoices = [...getState().customer.info.invoices];
+        console.log(calculateOrderDate(invoices));
+        if (getState().customer.showNoti) {
+            FCM.scheduleLocalNotification({
+                id: 'testnotif',
+                opened_from_tray: 1,
+                title: "UReminder",
+                fire_date: new Date().getTime() + calculateOrderDate(invoices),
+                vibrate: 300,
+                body: 'Gạo của bạn sắp hết',
+                priority: "high",
+                large_icon: "ic_launcher",
+                icon: "ic_launcher",
+                show_in_foreground: false,
+                targetScreen: "Reminder"
+            });
+        }
+    }
+}
+
+
+

@@ -100,8 +100,8 @@ class Store extends React.PureComponent {
     render() {
         return (
             <View style={styles.container}>
-                {/*  <Button title="push noti" onPress={this.cancelNoti} color="red" /> */}
-                <Button title="push noti" onPress={this.scheduleLocalNotification} />
+                {/*  <Button title="push noti" onPress={this.cancelNoti} color="red" /> 
+                <Button title="push noti" onPress={this.scheduleLocalNotification} />*/}
                 <View style={styles.navbarContainer}>
                     <View style={styles.navbarInput}>
                         <View style={styles.searchInput}>

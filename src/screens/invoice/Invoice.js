@@ -10,7 +10,6 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import FCM, { scheduleLocalNotification } from 'react-native-fcm';
 import { connect } from 'react-redux';
 import ui from '../../share/ui.constant'
 import { Header, Input, UButton, Slider, Noti } from '../../components';
@@ -42,32 +41,9 @@ class Invoice extends React.Component {
         this.setState({ isLoading: false }, () => {
             if (success) {
                 this.setState({ orderStatus: "SUCCESS" });
-                //if customer accept show reminder's noti
-                if (this.props.showNoti) {
-                    FCM.scheduleLocalNotification({
-                        id: 'testnotif',
-                        opened_from_tray: 1,
-                        title: "UReminder",
-                        fire_date: new Date().getTime() + this.calculateOrderDate(),
-                        vibrate: 300,
-                        body: 'Gạo của bạn sắp hết',
-                        priority: "high",
-                        large_icon: "ic_launcher",                          
-                        icon: "ic_launcher",
-                        show_in_foreground: true,
-                        targetScreen: "Reminder"
-                    });
-                }
             }
             else this.setState({ orderStatus: "FAILED" });
         });
-    }
-
-    calculateOrderDate = () => {
-        let data = [...this.props.customer.invoices];
-        if (data.length < 2) return null;
-        return new Date(data[data.length - 1].order_date).getTime() -
-            new Date(data[data.length - 2].order_date).getTime();
     }
 
     componentWillReceiveProps(props) {
@@ -90,10 +66,7 @@ class Invoice extends React.Component {
                 break;
             case ("ORDERING"):
                 orderBtn = <ActivityIndicator size="small" color="black" />
-                break;/* 
-            case ("SUCCESS"):
-                orderBtn = <Noti success message="Đặt hàng thành công" />
-                break; */
+                break;
         }
         return (
             <ScrollView style={styles.container}>
