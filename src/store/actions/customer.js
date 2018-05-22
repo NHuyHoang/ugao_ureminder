@@ -123,26 +123,37 @@ const tryFindNearestStore = async (location) => {
 }
 
 //make an order
-export const tryMakeOrder = (callback) => {
+//the callback will return boolean whether this process success or not
+export const tryMakeOrder = (callback, preparedInvoice) => {
     return async (dispatch, getState) => {
         const customer = getState().customer;
         const customerId = customer.info._id;
         const storeId = getState().customer.store._id
-        /* const customerId = customer.info._id;
-        const storeId = store.info._id; */
-        const getProducts = getState().cart.products;
+        let getProducts;
+        //if the order was made by the reminder s
+        //we would use the latest invoice
+        
+        if (preparedInvoice)
+            getProducts = preparedInvoice.products;
+        else getProducts = getState().cart.products;
         //prepare for products data ---> [{_id:1234,quantity:2}.....]
         const products = getProducts.map(product => ({
             _id: product._id,
             quantity: product.quantity
         }))
+
+        let invoicePrice;
+        if (preparedInvoice)
+            invoicePrice = preparedInvoice.price;
+        else invoicePrice = getState().cart.totalPrice;
+
         const invoice = {
             //because online payment function hasn't been implement yet
             //so only COD payment method is available
             paid: false,
             payment_method: "COD",
             order_date: new Date(),
-            price: getState().cart.totalPrice,
+            price: invoicePrice,
             tasks: {
                 location: { ...customer.info.location },
                 receipt_date: null,
@@ -174,11 +185,13 @@ export const tryMakeOrder = (callback) => {
             return;
             console.log(err)
         }
+        console.log(response);
+
         //if successful add the new invoice
         if (response.data && response.data.addInvoice) {
             const rawCustomer = await AsyncStorage.getItem(itemKey.customerKey);
             const savedCustomer = JSON.parse(rawCustomer);
-            console.log(savedCustomer);
+
             //re-format the products
             const saveProducts = getProducts.map(product => ({
                 product,

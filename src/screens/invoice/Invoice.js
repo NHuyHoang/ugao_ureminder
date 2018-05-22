@@ -40,22 +40,24 @@ class Invoice extends React.Component {
 
     makeOrderCallback = (success) => {
         this.setState({ isLoading: false }, () => {
-            if (success && this.props.showNoti) {
+            if (success) {
                 this.setState({ orderStatus: "SUCCESS" });
-                FCM.scheduleLocalNotification({
-                    id: 'testnotif',
-                    opened_from_tray: 1,
-                    title: "UReminder",
-                    fire_date: new Date().getTime() + this.calculateOrderDate(),
-                    vibrate: 300,
-                    body: 'Gạo của bạn sắp hết',
-                    priority: "high",
-                    large_icon: "ic_launcher",                           // Android only
-                    icon: "ic_launcher",
-                    show_in_foreground: true,
-                    targetScreen: "Reminder"
-                });
-
+                //if customer accept show reminder's noti
+                if (this.props.showNoti) {
+                    FCM.scheduleLocalNotification({
+                        id: 'testnotif',
+                        opened_from_tray: 1,
+                        title: "UReminder",
+                        fire_date: new Date().getTime() + this.calculateOrderDate(),
+                        vibrate: 300,
+                        body: 'Gạo của bạn sắp hết',
+                        priority: "high",
+                        large_icon: "ic_launcher",                          
+                        icon: "ic_launcher",
+                        show_in_foreground: true,
+                        targetScreen: "Reminder"
+                    });
+                }
             }
             else this.setState({ orderStatus: "FAILED" });
         });
@@ -119,7 +121,7 @@ class Invoice extends React.Component {
                                 customerLocation: this.props.customer.location,
                                 storeLocation: this.props.store.location
                             })} />
-                        <Input config={{ editable: false, value: `${this.props.totalPrice}.000 VND` }} type={'text'} label={"Tổng cộng"} />
+                        <Input config={{ editable: false, value: `${this.props.totalPrice.toFixed(3)} VND` }} type={'text'} label={"Tổng cộng"} />
                     </View>
                     <View style={styles.submitButton}>
                         {orderBtn}

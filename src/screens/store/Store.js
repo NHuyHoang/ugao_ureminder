@@ -48,20 +48,19 @@ class Store extends React.PureComponent {
     }
 
     scheduleLocalNotification = () => {
-        if (this.props.showNoti)
-            FCM.scheduleLocalNotification({
-                id: 'testnotif',
-                opened_from_tray: 1,
-                title: "UReminder",
-                fire_date: new Date().getTime() + 3000,
-                vibrate: 300,
-                body: 'Gạo của bạn sắp hết',
-                priority: "high",
-                large_icon: "ic_launcher",                           // Android only
-                icon: "ic_launcher",
-                show_in_foreground: true,
-                targetScreen: "Reminder"
-            });
+        FCM.scheduleLocalNotification({
+            id: 'testnotif',
+            opened_from_tray: 1,
+            title: "UReminder",
+            fire_date: new Date().getTime() + 2000,
+            vibrate: 300,
+            body: 'Gạo của bạn sắp hết',
+            priority: "high",
+            large_icon: "ic_launcher",                           // Android only
+            icon: "ic_launcher",
+            show_in_foreground: false,
+            targetScreen: "Reminder"
+        });
     }
 
     showDatePicker = async () => {
@@ -101,8 +100,8 @@ class Store extends React.PureComponent {
     render() {
         return (
             <View style={styles.container}>
-                {/*  <Button title="push noti" onPress={this.cancelNoti} color="red" /> 
-                <Button title="push noti" onPress={this.scheduleLocalNotification} />*/}
+                {/*  <Button title="push noti" onPress={this.cancelNoti} color="red" /> */}
+                <Button title="push noti" onPress={this.scheduleLocalNotification} />
                 <View style={styles.navbarContainer}>
                     <View style={styles.navbarInput}>
                         <View style={styles.searchInput}>

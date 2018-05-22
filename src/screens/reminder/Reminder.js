@@ -1,15 +1,38 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableNativeFeedback, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableNativeFeedback, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Iconicon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { Slider, Header, UButton } from '../../components';
 import ui from '../../share/ui.constant';
+import { tryMakeOrder } from '../../store/actions';
 class Reminder extends React.PureComponent {
     constructor(props) {
         super(props);
         this.products = null;
+        this.state = {
+            orderStatus: "READY"
+        }
     }
+
+    onTryMakeOrder = () => {
+        const callback = (success) => {
+            console.log(success);
+            if (success) {
+                this.products = [];
+                this.setState({ orderStatus: "SUCCESS" })
+            }
+            else {
+                this.setState({ orderStatus: "FAILED" })
+            }
+        }
+
+        this.setState({ orderStatus: "ORDERING" }, () => {
+            console.log({ products: [...this.products], price: this.props.invoice.price })
+            this.props.tryMakeOrder(callback, { products: [...this.products], price: this.props.invoice.price });
+        })
+    }
+
     render() {
         if (this.props.invoice) {
             this.products = [...this.props.invoice.products];
@@ -22,25 +45,54 @@ class Reminder extends React.PureComponent {
         }
         return (
             <View style={styles.container}>
-                <Header />
+                <Header data={[
+                    { name: 'clear', onPress: () => this.props.navigation.goBack(), color: 'red' },
+                ]} />
                 <View style={styles.mainContent}>
                     <View style={styles.titleContent}>
                         <Icon name="notifications-none" size={42} color="black" />
                         <Text style={styles.titleStyle}>{this.props.customerName}, gạo của bạn sắp hết</Text>
                         <Text style={styles.subTitle}>Đặt hàng nhanh theo hóa đơn trước</Text>
                     </View>
-                    <View style={{ width: "100%", marginTop: 12, marginBottom: 12 }}><Slider products={this.products} /></View>
-                    <Text style={styles.titleStyle}>{`${this.props.invoice.price}.000 VND`}</Text>
+                    <View style={{ width: "100%", marginTop: 12, marginBottom: 12 }}>
+                        <Slider success={this.state.orderStatus === "SUCCESS"} products={this.products} />
+                    </View>
+                    {
+                        this.props.invoice.price !== 0 &&
+                        <Text style={styles.titleStyle}>
+                            {`${this.props.invoice.price.toFixed(3)} VND`}
+                        </Text>
+                    }
                     <View style={styles.btnContent}>
-                        <UButton txt="Đặt hàng ngay" onPress={() => { }} />
-                        <View style={styles.btnRow}>
+                        {
+                            this.state.orderStatus === "FAILED" &&
+                            <View style={{ width: '100%' }}>
+                                <Noti message="Đã xảy ra lỗi" />
+                            </View>
+
+                        }
+                        {
+                            this.state.orderStatus === "READY" ||
+                                this.state.orderStatus === "FAILED" ?
+                                <UButton txt="Đặt hàng ngay" onPress={this.onTryMakeOrder} /> :
+                                null
+                        }
+                        {
+                            this.state.orderStatus === "SUCCESS" &&
+                            <Noti success message="Đặt hàng thành công" />
+                        }
+                        {
+                            this.state.orderStatus === "ORDERING" &&
+                            <ActivityIndicator size="small" color="black" />
+                        }
+                        {/* <View style={styles.btnRow}>
                             <TouchableOpacity style={styles.iconBtn} >
                                 <Iconicon name="ios-cart" size={32} color="black" />
-                            </TouchableOpacity>
+                            </TouchableOpacity> 
                             <TouchableOpacity style={styles.iconBtn} >
-                                <Iconicon name="ios-alarm" size={32} color="black" />
+                                <Iconicon name="ios-close" size={42} color="red" />
                             </TouchableOpacity>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
             </View >
@@ -107,5 +159,10 @@ const mapStateToProps = state => {
     }
 }
 
+const mapDispatchToProp = dispatch => {
+    return {
+        tryMakeOrder: (callback, invoice) => dispatch(tryMakeOrder(callback, invoice))
+    }
+}
 
-export default connect(mapStateToProps)(Reminder);
+export default connect(mapStateToProps, mapDispatchToProp)(Reminder);

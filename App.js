@@ -28,16 +28,6 @@ class App extends React.Component {
       }
     });
 
-    /* AsyncStorage.getItem("FCM:token")
-      .then(data => {
-        if (!data) {
-          FCM.getFCMToken().then(token => {
-            AsyncStorage.setItem("FCM:token", token);
-          })
-        }
-        console.log(data)
-      }) */
-
     //setup push notification
     //this method only doesn't be triggerd when app was killed
     FCM.on(FCMEvent.Notification, notif => {

@@ -39,7 +39,7 @@ export default class InvoiceItem extends React.PureComponent {
         this.data = {
             order_date: this.dateTimeConverter(order_date),
             receipt_date: !tasks.receipt_date ? "Chưa nhận" : this.dateTimeConverter(tasks.receipt_date),
-            price: `${price}.000 VND`,
+            price: `${price.toFixed(3)} VND`,
             paid,
             products: this.productsDataConfig(products)
         };
@@ -77,7 +77,7 @@ export default class InvoiceItem extends React.PureComponent {
 
     render() {
 
-        let paidIcon = (<Icon name="close" size={20} color="black" />);
+        //let paidIcon = (<Icon name="close" size={20} color="black" />);
         if (this.data.paid)
             paidIcon = (<Icon name="done" size={20} color={ui.colors.highlight} />)
         return (
@@ -100,8 +100,8 @@ export default class InvoiceItem extends React.PureComponent {
                             <Text style={styles.dateTxt}>{this.data.receipt_date}</Text>
                         </View>
                         <View style={styles.txtContainer}>
-                            {paidIcon}
-                            <Text style={[styles.costTxt, { color: this.data.paid ? ui.colors.highlight : ui.colors.black }]}>{this.data.price}</Text>
+                           {/*  {paidIcon} */}
+                            <Text style={[styles.costTxt, { color: this.data.paid ?  ui.colors.black : "red" }]}>{this.data.price}</Text>
                         </View>
                     </View>
                     <TouchableOpacity onPress={this.onShowSliderHandler} style={styles.slideHoriz}>

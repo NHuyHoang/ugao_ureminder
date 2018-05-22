@@ -15,6 +15,7 @@ class StoreList extends React.PureComponent {
             loading: true
         }
         this.onEndReachedCalledDuringMomentum = false;
+        
     }
 
     componentWillReceiveProps(props) {
@@ -54,7 +55,7 @@ class StoreList extends React.PureComponent {
                 }}
                 keyExtractor={(item, index) => index}
                 //if threshold === 0 the 2nd time endReached will not trigger
-                //if threshold >0 the onEndReached will trigger twice
+                //if threshold >0.5 the onEndReached will trigger twice
                 onEndReachedThreshold={0.01}
                 ListFooterComponent={() => {
                     return this.state.loading
