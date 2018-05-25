@@ -30,7 +30,10 @@ export default reducer = (state = initialState, action) => {
             };
         }
         case (CART_REMOVE_ALL): {
-            return initialState
+            return{
+                products: [],
+                totalPrice: 0
+            }
         }
         case (SUB_ONE_PRODUCT): {
             let product = state.products.find(e => e._id === action._id);
