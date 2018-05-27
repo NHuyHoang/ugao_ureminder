@@ -18,8 +18,8 @@ class Login extends React.Component {
     }
 
     onLogin = () => {
-       /*  const email = this.refs.loginForm.getInputValue("email_input_01");
-        const pass = this.refs.loginForm.getInputValue("password_input_01"); */
+        /*  const email = this.refs.loginForm.getInputValue("email_input_01");
+         const pass = this.refs.loginForm.getInputValue("password_input_01"); */
         const email = "bluegasus@gmail.com";
         const pass = "huyhoang3562927";
         this.query = `
@@ -82,6 +82,7 @@ class Login extends React.Component {
                         ref="loginForm"
                         style={styles.loginForm}>
                         <Input
+                            hint="vd test@gmail.com"
                             id="email_input_01"
                             ref="emailInput"
                             config={{ keyboardType: "email-address" }}
@@ -97,6 +98,7 @@ class Login extends React.Component {
                             type={'text'}
                             label={"Password"}
                             controlType="password"
+                            hint=""
                             btnEvent={() => { }}
                         />
                         <UButton top={32} onPress={this.onLogin} txt="Đăng nhập" iconName="done" />

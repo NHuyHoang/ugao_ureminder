@@ -1,5 +1,6 @@
 import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT, SAVE_NEAREST_STORE, ADD_INVOICE, SHOW_NOTI } from './ActionTypes';
 import { AsyncStorage } from 'react-native';
+import _ from 'lodash';
 import globalConst from '../constant';
 import { cartRemoveAll } from "./cart";
 
@@ -245,5 +246,64 @@ const setupScheduleLocalNoti = () => {
     }
 }
 
+export const tryUpdateCustomerInfo = (info, callback) => {
+    return async (dispatch, getState) => {
+        let savedCustomer = {
+            ...getState().customer.info
+        };
 
+        const newCustomerInfo = {
+            //address should put into location:{address:"new address",... }
+            //so just omit this property and add later
+            _id: savedCustomer._id,
+            ..._.omit(info, ['address'])
+        }
+        newCustomerInfo.location = {
+            ...savedCustomer.location,
+            address: info.address
+        }
 
+        savedCustomer = {
+            ...savedCustomer,
+            ...newCustomerInfo,
+        }
+
+        const body = {
+            query: `
+                mutation updateCustomer($updateInfo:JSON!){
+                    updateCustomer(updateInfo:$updateInfo)
+                }`,
+            variables: {
+                updateInfo: {
+                    ...newCustomerInfo
+                }
+            }
+        }
+        console.log(body);
+        let success;
+        try {
+            const response = await fetch(globalConst.DB_URI, {
+                body: JSON.stringify(body),
+                headers: {
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+            }).then(res => res.json());
+            //console.log(response);
+            success = response.data.updateCustomer.success;
+            if (success) {
+                AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(savedCustomer));
+                const saveToLoal = await dispatch(saveLocalCustomer(savedCustomer));
+                callback(true);
+            }
+            else {
+                callback(false);
+                return;
+            }
+        } catch (err) {
+            callback(false);
+            return;
+        }
+
+    }
+}

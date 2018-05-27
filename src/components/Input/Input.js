@@ -26,7 +26,7 @@ export default class Input extends React.PureComponent {
                     ? null : this.props.controlType,
                 valid: true,
                 touched: false,
-                hint: this.props.controlType && `${this.props.controlType} của bạn`,
+                hint: this.props.hint ? `${this.props.hint}` : "",
             },
             showPassword: true,
         }

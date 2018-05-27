@@ -3,7 +3,8 @@ export {
     trySaveLocalCustomer,
     tryMakeOrder,
     logout,
-    onTrySetShowNoti
+    onTrySetShowNoti,
+    tryUpdateCustomerInfo
 } from './customer'
 
 export {
