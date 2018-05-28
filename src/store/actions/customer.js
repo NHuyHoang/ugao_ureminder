@@ -112,6 +112,7 @@ const tryFindNearestStore = async (location) => {
         distanceMatrix = await fetch(uri)
             .then(data => data.json())
             .then(data => data.rows[0].elements);
+        console.log(distanceMatrix);
     } catch (err) {
         console.log(err);
     }
@@ -258,14 +259,24 @@ export const tryUpdateCustomerInfo = (info, callback) => {
             _id: savedCustomer._id,
             ..._.omit(info, ['address'])
         }
-        newCustomerInfo.location = {
-            ...savedCustomer.location,
-            address: info.address
+        //if customer only update his/her coordinate
+        if (info.coordinate) {
+            newCustomerInfo.location = {
+                ...savedCustomer.location,
+                lat: info.coordinate.lat,
+                lng: info.coordinate.lng,
+            }
+        } else {
+            newCustomerInfo.location = {
+                ...savedCustomer.location,
+                address: info.address,
+            }
+
         }
 
         savedCustomer = {
             ...savedCustomer,
-            ...newCustomerInfo,
+            ..._.omit(newCustomerInfo, ['coordinate'])
         }
 
         const body = {
@@ -293,7 +304,16 @@ export const tryUpdateCustomerInfo = (info, callback) => {
             success = response.data.updateCustomer.success;
             if (success) {
                 AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(savedCustomer));
-                const saveToLoal = await dispatch(saveLocalCustomer(savedCustomer));
+                await dispatch(saveLocalCustomer(savedCustomer));
+                //customer update his/her location
+                //try to find another nearest store
+                if (info.coordinate){
+                
+                    let store = await tryFindNearestStore(newCustomerInfo.location);
+                    console.log(store);
+                    AsyncStorage.setItem(itemKey.storeKey, JSON.stringify(store))
+                    dispatch(saveNearestStore(store));
+                } 
                 callback(true);
             }
             else {
@@ -307,3 +327,4 @@ export const tryUpdateCustomerInfo = (info, callback) => {
 
     }
 }
+

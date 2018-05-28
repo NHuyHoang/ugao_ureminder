@@ -92,7 +92,7 @@ class Invoice extends React.Component {
                             label="Nơi nhận"
                             btnEvent={() => this.props.navigation.navigate('Location', {
                                 customerLocation: this.props.customer.location,
-                                storeLocation: this.props.store.location
+                              
                             })} />
                         <Input config={{ editable: false, value: `${this.props.totalPrice.toFixed(3)} VND` }} type={'text'} label={"Tổng cộng"} />
                     </View>
@@ -145,7 +145,6 @@ const mapStateToProp = state => {
         totalPrice: state.cart.totalPrice,
         customer: state.customer.info,
         showNoti: state.customer.showNoti,
-        store: state.customer.store
     }
 }
 

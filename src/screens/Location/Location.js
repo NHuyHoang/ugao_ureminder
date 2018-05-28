@@ -1,10 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import MapView from 'react-native-maps';
-import { Header } from '../../components'
+import MapView, { Callout } from 'react-native-maps';
+import { connect } from 'react-redux';
+import { Header, Noti } from '../../components';
 
-export default class Location extends React.PureComponent {
+import { tryUpdateCustomerInfo } from '../../store/actions';
+
+class Location extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -14,23 +17,9 @@ export default class Location extends React.PureComponent {
                 latitudeDelta: 0.0122,
                 longitudeDelta: 0.0421,
             },
+            updateStatus: "READY"
         }
-        if (this.props.navigation.state.params.storeLocation) {
-            let storeLocation = {
-                latitude: this.props.navigation.state.params.storeLocation.lat,
-                longitude: this.props.navigation.state.params.storeLocation.lng,
-                latitudeDelta: 0.0122,
-                longitudeDelta: 0.0421,
-            }
-            this.storeMarker = (
-                <MapView.Marker
-                    coordinate={storeLocation} >
-                    <Image onLoad={() => this.forceUpdate()}
-                        style={{ width: 52, height: 52 }}
-                        source={require('../../share/images/store_marker_2.png')} />
-                </MapView.Marker>
-            )
-        }
+
     }
 
     onLocationChange = (e) => {
@@ -65,13 +54,53 @@ export default class Location extends React.PureComponent {
         })
     }
 
+    updateCustomerLocation = () => {
+        const callback = (success) => {
+            if (success) {
+                this.setState({ updateStatus: "SUCCESS" })
+            } else {
+                this.setState({ updateStatus: "FAILED" })
+            }
+            this.timer = setTimeout(() => {
+                this.setState({ updateStatus: "READY" })
+            }, 3000)
+        }
+        this.setState({ updateStatus: "UPDATING" })
+        this.props.tryUpdateCustomerInfo({
+            coordinate: {
+                lat: this.state.location.latitude,
+                lng: this.state.location.longitude,
+            }
+        }, callback)
+    }
+
+    componentWillUnmount() {
+        if (this.timer)
+            clearTimeout(this.timer);
+    }
+
     render() {
+        let storeMarker = (
+            <MapView.Marker
+                coordinate={{
+                    latitude: this.props.store.location.lat,
+                    longitude: this.props.store.location.lng,
+                    latitudeDelta: 0.0122,
+                    longitudeDelta: 0.0421,
+                }} >
+                <Image onLoad={() => this.forceUpdate()}
+                    style={{ width: 52, height: 52 }}
+                    source={require('../../share/images/store_marker_2.png')} />
+            </MapView.Marker>
+        );
         return (
             <View style={styles.container}>
                 <Header data={[
+                    { name: 'check', onPress: this.updateCustomerLocation, color: 'green' },
                     { name: 'my-location', onPress: this.getCurrentLocationHandler, color: 'black' },
                     { name: 'clear', onPress: () => this.props.navigation.goBack(), color: 'red' },
                 ]} />
+
                 <MapView
                     style={{ flex: 1 }}
                     ref={ref => this.map = ref}
@@ -79,8 +108,26 @@ export default class Location extends React.PureComponent {
                     onPress={this.onLocationChange} >
                     <MapView.Marker
                         coordinate={this.state.location} />
-                    {this.storeMarker}
+                    {storeMarker}
                 </MapView>
+                {
+                    this.state.updateStatus === "UPDATING" &&
+                    <View style={styles.dimmer} >
+                        <ActivityIndicator size="large" color="white" />
+                    </View>
+                }
+                {
+                    this.state.updateStatus === "SUCCESS" &&
+                    <View style={styles.notiContainer}>
+                        <Noti message="Cập nhật thành công" success />
+                    </View>
+                }
+                {
+                    this.state.updateStatus === "FAILED" &&
+                    <View style={styles.notiContainer}>
+                        <Noti message="Cập nhật thất bại" />
+                    </View>
+                }
             </View>
         )
     }
@@ -92,5 +139,39 @@ const styles = StyleSheet.create({
     },
     headerBtn: {
         marginRight: 12
+    },
+    dimmer: {
+        height: '100%',
+        width: '100%',
+        position: "absolute",
+        zIndex: 1,
+        top: 0,
+        left: 0,
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    notiContainer: {
+        position: "absolute",
+        height: 22,
+        width: '100%',
+        zIndex: 1,
+        top: 42,
+        left: 0,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })
+
+const mapStateToProps = state => {
+    return {
+        store: state.customer.store,
+    }
+}
+
+const mapDispatchToprops = dispatch => {
+    return {
+        tryUpdateCustomerInfo: (info, callback) => dispatch(tryUpdateCustomerInfo(info, callback)),
+    }
+}
+export default connect(mapStateToProps, mapDispatchToprops)(Location);

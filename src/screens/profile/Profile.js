@@ -174,7 +174,6 @@ class LoadedContent extends React.PureComponent {
                         iconBtn={{ name: "place" }}
                         btnEvent={() => this.props.navigation.navigate('Location', {
                             customerLocation: this.props.customer.location,
-                            storeLocation: this.props.store.location
                         })} />
                     <Input
                         type='checkbox'
@@ -247,7 +246,6 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         customer: state.customer.info,
-        store: state.customer.store,
         showNoti: state.customer.showNoti
     }
 }
