@@ -262,7 +262,8 @@ export const tryUpdateCustomerInfo = (info, callback) => {
         //if customer only update his/her coordinate
         if (info.coordinate) {
             newCustomerInfo.location = {
-                ...savedCustomer.location,
+                //...savedCustomer.location,
+                address:info.coordinate.address,
                 lat: info.coordinate.lat,
                 lng: info.coordinate.lng,
             }

@@ -323,6 +323,7 @@ const styles = StyleSheet.create({
         fontFamily: ui.fonts.light,
         fontSize: ui.fontSize.small,
         color: ui.colors.black,
+        textAlign:'left'
     },
     hint: {
         fontFamily: ui.fonts.light,

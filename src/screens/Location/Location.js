@@ -1,23 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Dimensions, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MapView, { Callout } from 'react-native-maps';
 import { connect } from 'react-redux';
-import { Header, Noti } from '../../components';
 
+import { Header, Noti } from '../../components';
 import { tryUpdateCustomerInfo } from '../../store/actions';
+import ui from '../../share/ui.constant';
+import constant from '../../store/constant';
 
 class Location extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             location: {
-                latitude: this.props.navigation.state.params.customerLocation.lat,
-                longitude: this.props.navigation.state.params.customerLocation.lng,
+                address: this.props.customerLocation.address,
+                latitude: this.props.customerLocation.lat,
+                longitude: this.props.customerLocation.lng,
                 latitudeDelta: 0.0122,
                 longitudeDelta: 0.0421,
             },
-            updateStatus: "READY"
+
+            updateStatus: "READY",
+            findingStatus: "READY"
         }
 
     }
@@ -68,6 +73,7 @@ class Location extends React.PureComponent {
         this.setState({ updateStatus: "UPDATING" })
         this.props.tryUpdateCustomerInfo({
             coordinate: {
+                address: this.state.location.address,
                 lat: this.state.location.latitude,
                 lng: this.state.location.longitude,
             }
@@ -77,6 +83,37 @@ class Location extends React.PureComponent {
     componentWillUnmount() {
         if (this.timer)
             clearTimeout(this.timer);
+    }
+
+    onFindLocation = async () => {
+        const address = this.refs.placeInput._lastNativeText;
+        const uri = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${constant.GMAP_API_KEY}`;
+        let response;
+        try {
+            this.setState({ findingStatus: "FINDING" });
+            response = await fetch(uri).then(result => result.json());
+            this.setState({ findingStatus: "READY" });
+            let response = response.results[0];
+            console.log(response);
+            const coordsEvent = {
+                nativeEvent: {
+                    coordinate: {
+                        latitude: response.geometry.location.lat,
+                        longitude: response.geometry.location.lng
+                    }
+                }
+            };
+            this.onLocationChange(coordsEvent);
+            this.setState({
+                location: {
+                    ...this.state.location,
+                    address: response.formatted_address
+                }
+            })
+        } catch (err) {
+            console.log(err)
+        }
+
     }
 
     render() {
@@ -96,8 +133,8 @@ class Location extends React.PureComponent {
         return (
             <View style={styles.container}>
                 <Header data={[
-                    { name: 'check', onPress: this.updateCustomerLocation, color: 'green' },
                     { name: 'my-location', onPress: this.getCurrentLocationHandler, color: 'black' },
+                    { name: 'check', onPress: this.updateCustomerLocation, color: 'green' },
                     { name: 'clear', onPress: () => this.props.navigation.goBack(), color: 'red' },
                 ]} />
 
@@ -110,6 +147,25 @@ class Location extends React.PureComponent {
                         coordinate={this.state.location} />
                     {storeMarker}
                 </MapView>
+                <View style={styles.inputContainer}>
+                    {
+                        this.state.findingStatus === "FINDING" ?
+                            <View style={styles.actIndicatorContainer}>
+                                <ActivityIndicator size="small" color="black" />
+                            </View> :
+                            <React.Fragment>
+                                <TextInput
+                                    ref="placeInput"
+                                    placeholder={this.state.location.address}
+                                    style={styles.inputStyle}
+                                    underlineColorAndroid="transparent" />
+                                <TouchableOpacity style={styles.searchBtn}
+                                    onPress={this.onFindLocation}>
+                                    <Icon name="search" size={22} color="black" />
+                                </TouchableOpacity>
+                            </React.Fragment>
+                    }
+                </View>
                 {
                     this.state.updateStatus === "UPDATING" &&
                     <View style={styles.dimmer} >
@@ -132,6 +188,8 @@ class Location extends React.PureComponent {
         )
     }
 }
+
+const _width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     container: {
@@ -156,8 +214,42 @@ const styles = StyleSheet.create({
         height: 22,
         width: '100%',
         zIndex: 1,
-        top: 42,
+        top: "auto",
+        bottom: 0,
         left: 0,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    inputContainer: {
+        position: "absolute",
+        flexDirection: 'row',
+        backgroundColor: "white",
+        height: 46,
+        width: _width * 0.9,
+        zIndex: 1,
+        top: 52,
+        elevation: 3,
+        borderRadius: 6,
+        left: _width * 0.05,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+        paddingLeft: 12.0,
+        paddingRight: 12.0
+    },
+    inputStyle: {
+        width: '90%',
+        fontFamily: ui.fonts.light,
+        fontSize: ui.fontSize.semiTiny
+    },
+    searchBtn: {
+        width: "10%",
+        height: "100%",
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    actIndicatorContainer: {
+        width: '100%',
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center'
     }
@@ -166,6 +258,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         store: state.customer.store,
+        customerLocation: state.customer.info.location
     }
 }
 

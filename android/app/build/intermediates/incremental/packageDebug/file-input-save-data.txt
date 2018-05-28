@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Fri May 25 18:38:52 ICT 2018
+#Mon May 28 15:39:41 ICT 2018
 20.base=D\:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\res\\resources-debug.ap_
 143.base=D\:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\res\\resources-debug.ap_
 340.file=D\:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout-v17\\notification_template_part_time.xml
