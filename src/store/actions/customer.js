@@ -263,10 +263,11 @@ export const tryUpdateCustomerInfo = (info, callback) => {
         if (info.coordinate) {
             newCustomerInfo.location = {
                 //...savedCustomer.location,
-                address:info.coordinate.address,
+                address: info.coordinate.address,
                 lat: info.coordinate.lat,
                 lng: info.coordinate.lng,
             }
+            console.log(newCustomerInfo.location)
         } else {
             newCustomerInfo.location = {
                 ...savedCustomer.location,
@@ -308,13 +309,13 @@ export const tryUpdateCustomerInfo = (info, callback) => {
                 await dispatch(saveLocalCustomer(savedCustomer));
                 //customer update his/her location
                 //try to find another nearest store
-                if (info.coordinate){
-                
+                if (info.coordinate) {
+
                     let store = await tryFindNearestStore(newCustomerInfo.location);
                     console.log(store);
                     AsyncStorage.setItem(itemKey.storeKey, JSON.stringify(store))
                     dispatch(saveNearestStore(store));
-                } 
+                }
                 callback(true);
             }
             else {

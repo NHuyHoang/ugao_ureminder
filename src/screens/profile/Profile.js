@@ -73,7 +73,7 @@ class LoadedContent extends React.PureComponent {
         super(props);
         this.state = {
             initValue: {},
-
+            foo: true,
         }
     }
 
@@ -119,18 +119,31 @@ class LoadedContent extends React.PureComponent {
         }
     }
 
+    truncate = (string) => {
+        if (string.length > 50)
+            return string.substring(0, 30) + '...';
+        else
+            return string;
+    };
+
+    refresh = () => {
+        //this.props.data.address = address;
+        console.log("------ssssssd-", this.props.data.location.address);
+        this.setState({})
+
+    }
+
     render() {
-        this.data = this.props.data;
         return (
             <ScrollView>
                 <KeyboardAvoidingView behavior="position" >
                     <View style={styles.mainInfoContent}>
                         <View style={styles.avatarContainer} >
-                            <Image style={styles.avatar} source={{ uri: this.data.img }} />
+                            <Image style={styles.avatar} source={{ uri: this.props.data.img }} />
                         </View>
                         <View style={styles.infoContainer}>
-                            <Text style={styles.nameTxt}>{this.data.name}</Text>
-                            <Text style={styles.emailTxt}>{this.data.email}</Text>
+                            <Text style={styles.nameTxt}>{this.props.data.name}</Text>
+                            <Text style={styles.emailTxt}>{this.props.data.email}</Text>
                         </View>
                     </View>
                     {
@@ -148,7 +161,7 @@ class LoadedContent extends React.PureComponent {
                     <Input
                         id="name-input"
                         ref="nameInput"
-                        value={this.data.name}
+                        value={this.props.data.name}
                         type={'text'}
                         label={"Họ & tên"} />
                     <Input
@@ -157,23 +170,25 @@ class LoadedContent extends React.PureComponent {
                         config={{ keyboardType: "email-address" }}
                         type='text'
                         label="Email"
-                        value={this.data.email}
+                        value={this.props.data.email}
                         controlType="email"
                     />
                     <Input
                         ref="phoneInput"
                         config={{ keyboardType: 'numeric' }}
-                        value={this.data.phone}
+                        value={this.props.data.phone}
                         type={'text'}
                         label={"Điện thoại"} />
                     <Input
                         ref="addressInput"
-                        value={this.data.location.address}
+                        value={this.truncate(this.props.data.location.address)}
                         type={'text'}
                         label={"Địa chỉ"}
+                        config={{ editable: false }}
                         iconBtn={{ name: "place" }}
                         btnEvent={() => this.props.navigation.navigate('Location', {
                             customerLocation: this.props.customer.location,
+                            onBack: this.refresh,
                         })} />
                     <Input
                         type='checkbox'

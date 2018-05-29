@@ -14,7 +14,7 @@ import validator from './validator';
 
 const controlTypes = Object.freeze(['password', 'email']);
 
-export default class Input extends React.PureComponent {
+export default class Input extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -38,6 +38,19 @@ export default class Input extends React.PureComponent {
     //by ref to this component and invoke this function
     getValue = () => {
         return this.state.control.value;
+    }
+
+    componentWillReceiveProps(props) {
+        //fix the issue: component won't re-render if the props.value change
+        //by the parent component
+        if (props.value && props.value != this.state.control.value) {
+            this.setState({
+                control: {
+                    ...this.state.control,
+                    value: props.value
+                }
+            })
+        }
     }
 
     onChangeTextHandler = (text) => {
@@ -123,7 +136,7 @@ export default class Input extends React.PureComponent {
                     if (this.state.control.controlType === "email")
                         return "Email sai định dạng";
                     if (this.state.control.controlType === "password")
-                        return "Password có tối thiểu 8 ký tự và có ít nhất 1 ký tự ";
+                        return "Password có tối thiểu 8 ký tự và có ít nhất 1 ký tự số";
                 }
                 return this.state.control.hint;
         }
@@ -323,7 +336,7 @@ const styles = StyleSheet.create({
         fontFamily: ui.fonts.light,
         fontSize: ui.fontSize.small,
         color: ui.colors.black,
-        textAlign:'left'
+        textAlign: 'left'
     },
     hint: {
         fontFamily: ui.fonts.light,

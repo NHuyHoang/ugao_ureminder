@@ -18,10 +18,10 @@ class Login extends React.Component {
     }
 
     onLogin = () => {
-        /*  const email = this.refs.loginForm.getInputValue("email_input_01");
-         const pass = this.refs.loginForm.getInputValue("password_input_01"); */
-        const email = "bluegasus@gmail.com";
-        const pass = "huyhoang3562927";
+        const email = this.refs.loginForm.getInputValue("email_input_01");
+         const pass = this.refs.loginForm.getInputValue("password_input_01");
+        /* const email = "bluegasus@gmail.com";
+        const pass = "huyhoang3562927"; */
         this.query = `
         {
             authenticatedCustomer(email:"${email}",pass:"${pass}") {
@@ -63,7 +63,7 @@ class Login extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <UButton top={32} onPress={this.onLogin} txt="Đăng nhập" iconName="done" />
+                {/* <UButton top={32} onPress={this.onLogin} txt="Đăng nhập" iconName="done" /> */}
                 <View style={styles.logoSegment}>
                     <Image style={styles.logo} source={require('../../share/images/ugao_logo.png')} />
                     <View style={styles.txtSegment}>
