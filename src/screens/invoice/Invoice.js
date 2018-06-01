@@ -22,6 +22,8 @@ class Invoice extends React.Component {
         this.state = {
             isLoading: false,
             orderStatus: "READY",
+            setDefaultInvoice: false,
+            setSubscriptionDate: true
         }
         this.tempPickerData = [{ key: 'Thanh toán trực tiếp' }, { key: 'VISA' }, { key: 'Internet banking' }];
     }
@@ -29,6 +31,20 @@ class Invoice extends React.Component {
     onPaidHandler = () => {
         if (!this.props.customer._id)
             this.props.navigation.navigate('Profile', { message: "Vui lòng đăng nhập để đặt hàng" });
+        //if set this invoice to the subscription invoice
+        //you must set the subscription date
+        else if (this.state.setDefaultInvoice) {
+            if (this.refs.subscriptionOrder.getValue() === "") {
+                this.setState({ setSubscriptionDate: false });
+                return;
+            }
+            else {
+                this.setState({ setSubscriptionDate: true, isLoading: true, orderStatus: "ORDERING" }, () => {
+                    this.props.tryMakeOrder(this.makeOrderCallback,null,parseInt(this.refs.subscriptionOrder.getValue()));
+                });
+                return;
+            }
+        }
         else {
             this.setState({ isLoading: true, orderStatus: "ORDERING" }, () => {
                 this.props.tryMakeOrder(this.makeOrderCallback);
@@ -40,7 +56,7 @@ class Invoice extends React.Component {
     makeOrderCallback = (success) => {
         this.setState({ isLoading: false }, () => {
             if (success) {
-                this.setState({ orderStatus: "SUCCESS" });
+                this.setState({ orderStatus: "SUCCESS", setDefaultInvoice: false });
             }
             else this.setState({ orderStatus: "FAILED" });
         });
@@ -50,6 +66,26 @@ class Invoice extends React.Component {
         if (this.state.orderStatus !== "READY" && props.cart.length !== 0) {
             this.setState({ orderStatus: "READY" })
         }
+    }
+
+    onSetDefaultInvoice = () => {
+        this.setState(prev => {
+            return { setDefaultInvoice: !prev.setDefaultInvoice }
+        })
+    }
+
+    truncate = (string) => {
+        if (!string) return "";
+        if (string.length > 50)
+            return string.substring(0, 30) + '...';
+        else
+            return string;
+    }
+
+    isValidForm = () => {
+        if (this.props.cart.length === 0) return false;
+
+        return true;
     }
 
     render() {
@@ -62,47 +98,72 @@ class Invoice extends React.Component {
                 orderBtn = (<UButton
                     onPress={this.onPaidHandler}
                     disabled={this.props.cart.length === 0}
-                    txt="Thanh toán" iconName="done" />)
+                    txt="Đặt hàng" iconName="done" />)
                 break;
             case ("ORDERING"):
                 orderBtn = <ActivityIndicator size="small" color="black" />
                 break;
         }
         return (
-            <ScrollView style={styles.container}>
-                <Header />
-                <KeyboardAvoidingView behavior="position" style={{ flex: 1 }}>
-                    <View style={styles.titleContainer}>
-                        <Text style={styles.title}> Hóa đơn mua hàng</Text>
-                    </View>
-                    {/*  <HorizonSlider  products={this.props.cart}/> */}
-                    <Slider success={this.state.orderStatus === "SUCCESS"} products={this.props.cart} />
-                    <View style={{ marginTop: 8 }}>
+            <React.Fragment>
+
+                <ScrollView style={styles.container}>
+                    <KeyboardAvoidingView behavior="position" style={{ flex: 1 }}>
+                        <View style={styles.titleContainer}>
+                            <Text style={styles.title}> Hóa đơn mua hàng</Text>
+                        </View>
+                        {/*  <HorizonSlider  products={this.props.cart}/> */}
+                        <Slider success={this.state.orderStatus === "SUCCESS"} products={this.props.cart} />
                         {
                             this.state.orderStatus === "FAILED"
-                            && <Noti message="Đã xảy ra lỗi" />
+                            &&
+                            <View style={{ marginTop: 8 }}>
+                                <Noti message="Đã xảy ra lỗi" />
+
+                            </View>
                         }
-                    </View>
-                    <View style={styles.formContainer}>
-                        {/*  <Input type='picker' config={{ data: this.tempPickerData }} label={"Thanh toán"} /> */}
-                        <Input
-                            iconBtn={{ name: "place" }}
-                            value={address}
-                            type='text'
-                            label="Nơi nhận"
-                            btnEvent={() => this.props.navigation.navigate('Location', {
-                                customerLocation: this.props.customer.location,
-                              
-                            })} />
-                        <Input config={{ editable: false, value: `${this.props.totalPrice.toFixed(3)} VND` }} type={'text'} label={"Tổng cộng"} />
-                    </View>
-                    <View style={styles.submitButton}>
-                        {orderBtn}
-                    </View>
-                </KeyboardAvoidingView>
+                        <View style={styles.formContainer}>
+                            {/*  <Input type='picker' config={{ data: this.tempPickerData }} label={"Thanh toán"} /> */}
+                            <Input
+                                iconBtn={{ name: "place" }}
+                                value={this.truncate(address)}
+                                type='text'
+                                label="Nơi nhận"
+                                btnEvent={() => this.props.navigation.navigate('Location', {
+                                    customerLocation: this.props.customer.location,
 
-            </ScrollView>
+                                })} />
+                            <Input config={{ editable: false, value: `${this.props.totalPrice.toFixed(3)} VND` }} type={'text'} label={"Tổng cộng"} />
+                            <Input
+                                type='checkbox'
+                                disabled={this.state.orderStatus === "SUCCESS"}
+                                checked={this.state.setDefaultInvoice}
+                                onToogle={this.onSetDefaultInvoice}
+                                title="Đặt làm hóa đơn định kỳ"
+                            />
+                            {
+                                this.state.setDefaultInvoice &&
+                                < Input
+                                    type='text'
+                                    size="small"
+                                    ref="subscriptionOrder"
+                                    label="Số ngày đặt hàng định kỳ"
+                                    config={{ keyboardType: 'numeric' }}
+                                    textPostFix="ngày"
+                                    error={!this.state.setSubscriptionDate}
+                                    hint={!this.state.setSubscriptionDate && "Thông tin bắt buộc"}
+                                    btnEvent={() => this.props.navigation.navigate('Location', {
+                                        customerLocation: this.props.customer.location,
+                                    })} />
+                            }
+                        </View>
+                        <View style={styles.submitButton}>
+                            {orderBtn}
+                        </View>
+                    </KeyboardAvoidingView>
 
+                </ScrollView>
+            </React.Fragment>
         )
     }
 }
@@ -118,13 +179,14 @@ const styles = StyleSheet.create({
 
     formContainer: {
         width: _width,
-        marginTop: 20,
+        marginTop: 10,
         justifyContent: 'flex-start'
     },
     submitButton: {
         width: _width,
         alignItems: 'center',
-        marginTop: 50
+        marginTop: 50,
+        marginBottom:20
     },
     titleContainer: {
         width: '100%',
@@ -150,7 +212,7 @@ const mapStateToProp = state => {
 
 const mapDispatchToProp = dispatch => {
     return {
-        tryMakeOrder: (callback) => dispatch(tryMakeOrder(callback))
+        tryMakeOrder: (callback,preparedInvoice,date) => dispatch(tryMakeOrder(callback,preparedInvoice,date))
     }
 }
 

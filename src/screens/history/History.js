@@ -9,16 +9,17 @@ class History extends React.Component {
         this.invoicesLength = this.props.info.invoices.length;
         this.state = {
             loading: false,
-            data: [...this.props.info.invoices].splice(this.invoicesLength - 11, this.invoicesLength - 1)
+            data: [...this.props.info.invoices].splice(0, 10)
         }
     }
 
     componentWillReceiveProps(props) {
         //update the list if new invoice added
         if (this.invoicesLength < props.info.invoices.length) {
+            console.log([...props.info.invoices].splice(0, 10));
             this.invoicesLength = props.info.invoices.length;
             this.setState({
-                data: [...props.info.invoices].splice(this.invoicesLength - 11, this.invoicesLength - 1)
+                data: [...props.info.invoices].splice(0, 10)
             })
         }
     }
@@ -28,7 +29,7 @@ class History extends React.Component {
             () => {
                 if (this.invoicesLength > this.state.data.length) {
                     this.setState({
-                        data: [... this.props.info.invoices].splice(this.state.data.length - 11, this.invoicesLength - 1),
+                        data: [... this.props.info.invoices].splice(0, this.state.data.length + 10),
                         loading: false
                     })
                 }
@@ -51,7 +52,7 @@ class History extends React.Component {
                                     <ActivityIndicator style={{ marginTop: 6, marginBottom: 6 }} size="small" color="black" /> :
                                     null
                             }}
-                            data={[...this.state.data].reverse()}
+                            data={this.state.data}
                             keyExtractor={(item, index) => item._id}
                             renderItem={({ item }) => <InvoiceItem data={item} />}
                             onEndReachedThreshold={0.1}

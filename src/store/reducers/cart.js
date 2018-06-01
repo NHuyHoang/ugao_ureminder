@@ -22,7 +22,6 @@ export default reducer = (state = initialState, action) => {
         case (REMOVE_FROM_CART): {
             let removedProduct = state.products.find((item) => item._id === action._id);
             let productsCloned = state.products.filter((item) => item._id != action._id);
-            console.log(productsCloned);
             return {
                 ...state,
                 products: productsCloned,

@@ -14,4 +14,6 @@ export const SUB_ONE_PRODUCT = "SUB_ONE_PRODUCT";
 
 export const ADD_INVOICE = "ADD_INVOICE";
 
-export const SHOW_NOTI = "SHOW_NOTI"
+export const SHOW_NOTI = "SHOW_NOTI";
+
+export const SET_SUBSCRIPTION_ORDER = "SET_SUBSCRIPTION_ORDER";

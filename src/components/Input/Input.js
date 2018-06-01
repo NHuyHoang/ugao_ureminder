@@ -24,8 +24,10 @@ export default class Input extends React.Component {
                 value: this.props.value ? this.props.value : "",
                 controlType: controlTypes.indexOf(this.props.controlType) === -1
                     ? null : this.props.controlType,
-                valid: true,
-                touched: false,
+                //if in the error mode valid always be false
+                //and touchec will be true
+                valid: this.props.error === true ? false : true,
+                touched: this.props.error === true ? true : false,
                 hint: this.props.hint ? `${this.props.hint}` : "",
             },
             showPassword: true,
@@ -51,17 +53,29 @@ export default class Input extends React.Component {
                 }
             })
         }
+        //if input in the error mode set the input to red color
+        if (props.error === true && this.props.error != props.error) {
+            this.setState({
+                control: {
+                    ...this.state.control,
+                    valid: false,
+                    touched: true
+                }
+            })
+        }
     }
 
     onChangeTextHandler = (text) => {
-        let valid = validator(true, this.state.control.controlType, text)
+        let valid = validator(true, this.state.control.controlType, text);
+        //set valid from parent
+        if (this.props.error) valid = false;
         this.setState(prevState => {
             return {
                 control: {
                     ...prevState.control,
                     value: text,
                     valid,
-                    touched: true,
+                    touched: this.propstrue,
                 }
             }
         }, () => {
@@ -138,7 +152,7 @@ export default class Input extends React.Component {
                     if (this.state.control.controlType === "password")
                         return "Password có tối thiểu 8 ký tự và có ít nhất 1 ký tự số";
                 }
-                return this.state.control.hint;
+                return this.props.hint;
         }
     }
 
@@ -169,7 +183,7 @@ export default class Input extends React.Component {
             }; break;
             case ('checkbox'): {
                 inputType = (
-                    <CustomCheckbox checked={this.props.checked} title={this.props.title} onPress={this.onCheckboxToogle} />
+                    <CustomCheckbox disabled={this.props.disabled} checked={this.props.checked} title={this.props.title} onPress={this.onCheckboxToogle} />
                 )
             }; break;
             default: inputType = null; break;
@@ -178,7 +192,7 @@ export default class Input extends React.Component {
             <View style={[styles.container, this.props.style]}>
                 {
                     this.props.label &&
-                    <Text style={styles.label}>{this.props.label}</Text>
+                    <Text style={[styles.label, { color: !this.state.control.valid ? "red" : "black" }]}>{this.props.label}</Text>
                 }
                 <View style={[styles.inputContainer, borderStyle]}>
                     {inputType}
@@ -186,6 +200,10 @@ export default class Input extends React.Component {
                         this.props.iconBtn &&
                         <IconButton ionicon={this.props.ionicon} size={35} onPress={this.props.btnEvent} name={this.props.iconBtn.name} />
 
+                    }
+                    {
+                        this.props.textPostFix &&
+                        <Text style={styles.txtPostFix}>{this.props.textPostFix}</Text>
                     }
                     {
                         this.state.control.controlType &&
@@ -286,6 +304,11 @@ class CustomCheckbox extends React.PureComponent {
         }
     }
 
+    componentWillReceiveProps(props) {
+        if (props.checked !== this.state.checked)
+            this.setState({ checked: props.checked })
+    }
+
     onToogle = () => {
         this.setState(prevState => ({
             checked: !prevState.checked
@@ -297,8 +320,8 @@ class CustomCheckbox extends React.PureComponent {
     render() {
         return (
             <View style={checkBoxStyles.container}>
-                <TouchableOpacity onPress={this.onToogle} style={checkBoxStyles.checkboxContent}>
-                    <Text style={checkBoxStyles.titleTxt}>{this.props.title}</Text>
+                <TouchableOpacity disabled={this.props.disabled} onPress={this.onToogle} style={checkBoxStyles.checkboxContent}>
+                    <Text style={[checkBoxStyles.titleTxt, { color: this.props.disabled ? "grey" : "black" }]}>{this.props.title}</Text>
                     {
                         this.state.checked
                             ? <IconButton size={35} name="check" color="green" />
@@ -317,6 +340,11 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 20,
         marginTop: 8,
+    },
+    txtPostFix: {
+        fontFamily: ui.fonts.light,
+        fontSize: ui.fontSize.semiTiny,
+        color: "black"
     },
     label: {
         fontFamily: ui.fonts.bold,

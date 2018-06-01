@@ -1,4 +1,4 @@
-import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT, SAVE_NEAREST_STORE, ADD_INVOICE, SHOW_NOTI } from '../actions/ActionTypes'
+import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT, SAVE_NEAREST_STORE, ADD_INVOICE, SHOW_NOTI, SET_SUBSCRIPTION_ORDER } from '../actions/ActionTypes'
 const initialState = {
     info: {
         _id: null,
@@ -15,7 +15,8 @@ const initialState = {
         owner: null,
         location: null,
     },
-    showNoti: true
+    showNoti: true,
+    subscriptionOrder: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -44,7 +45,7 @@ const reducer = (state = initialState, action) => {
         }
         case (ADD_INVOICE): {
             const invoices = [...state.info.invoices];
-            invoices.push(action.invoice);
+            invoices.unshift(action.invoice);
             return {
                 ...state,
                 info: {
@@ -57,6 +58,12 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 showNoti: action.showNoti
+            }
+        }
+        case (SET_SUBSCRIPTION_ORDER): {
+            return {
+                ...state,
+                subscriptionOrder: action.invoice
             }
         }
         default: return state;

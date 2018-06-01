@@ -136,10 +136,8 @@ class Location extends React.PureComponent {
                     { name: 'my-location', onPress: this.getCurrentLocationHandler, color: 'black' },
                     { name: 'check', onPress: this.updateCustomerLocation, color: 'green' },
                     {
-                        name: 'clear', onPress: () => {
-                            this.props.navigation.state.params.onBack();
-                            this.props.navigation.goBack()
-                        }, color: 'red'
+                        name: 'clear', onPress: () => this.props.navigation.goBack()
+                        , color: 'red'
                     },
                 ]} />
 

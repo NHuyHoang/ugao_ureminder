@@ -1,4 +1,4 @@
-import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT, SAVE_NEAREST_STORE, ADD_INVOICE, SHOW_NOTI } from './ActionTypes';
+import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT, SAVE_NEAREST_STORE, ADD_INVOICE, SHOW_NOTI, SET_SUBSCRIPTION_ORDER } from './ActionTypes';
 import { AsyncStorage } from 'react-native';
 import _ from 'lodash';
 import globalConst from '../constant';
@@ -7,7 +7,13 @@ import { cartRemoveAll } from "./cart";
 import FCM, { scheduleLocalNotification } from 'react-native-fcm';
 
 //const GMAP_API_KEY = "AIzaSyDNW4hwd3ZpDzQRDQsK5Da2I-GMllqvh2s";
-const itemKey = { customerKey: "get:info:customer", storeKey: "get:info:store", notiKey: "get:noti" }
+const itemKey = {
+    customerKey: "get:info:customer",
+    storeKey: "get:info:store",
+    notiKey: "get:noti",
+    subscriptionOrder: "get:subscription:order",
+    subscriptionInterval: "get:subscription:interval"
+}
 
 const getCustomerFailed = () => {
     console.log('invoke');
@@ -51,6 +57,13 @@ export const showNoti = (show) => {
     }
 }
 
+const setSubscriptionOrder = (invoice) => {
+    return {
+        type: SET_SUBSCRIPTION_ORDER,
+        invoice,
+    }
+}
+
 export const onTrySetShowNoti = (show) => {
     return dispatch => {
         AsyncStorage.setItem(itemKey.notiKey, show.toString());
@@ -64,13 +77,16 @@ export const tryGetLocalCustomer = () => {
         let data = await AsyncStorage.getItem(itemKey.customerKey);
         let storeData = await AsyncStorage.getItem(itemKey.storeKey);
         let showNotiValue = await AsyncStorage.getItem(itemKey.notiKey);
+        let subscriptionOrderData = await AsyncStorage.getItem(itemKey.subscriptionOrder);
         if (!data) dispatch(getCustomerFailed());
         else {
             let customer = JSON.parse(data);
             let store = JSON.parse(storeData);
+            let subscriptionOrder = JSON.parse(subscriptionOrderData);
             dispatch(saveLocalCustomer(customer));
             dispatch(saveNearestStore(store));
             dispatch(showNoti(showNotiValue == "true"));
+            dispatch(setSubscriptionOrder(subscriptionOrder));
         }
     }
 }
@@ -126,9 +142,21 @@ const tryFindNearestStore = async (location) => {
     return stores[index];
 }
 
+
+const trySubscriptOrder = (date, invoice) => {
+    return async (dispatch) => {
+        //save to AsyncStorage
+        AsyncStorage.setItem(itemKey.subscriptionOrder, JSON.stringify(invoice));
+        //save to redux store
+        dispatch(setSubscriptionOrder(invoice));
+        //set the schedule local notification
+        dispatch(setupScheduleLocalNoti(date));
+    }
+}
+
 //make an order
 //the callback will return boolean whether this process success or not
-export const tryMakeOrder = (callback, preparedInvoice) => {
+export const tryMakeOrder = (callback, preparedInvoice, subscriptionDate) => {
     return async (dispatch, getState) => {
         const customer = getState().customer;
         const customerId = customer.info._id;
@@ -208,9 +236,21 @@ export const tryMakeOrder = (callback, preparedInvoice) => {
             }
             savedCustomer.invoices.push(saveInvoice);
             AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(savedCustomer));
+            //if customer set this invoice is the supscription invoice
+            //we will save this invoice and make notify customer
+            if (subscriptionDate) {
+                dispatch(trySubscriptOrder(subscriptionDate, saveInvoice));
+                AsyncStorage.setItem(itemKey.subscriptionInterval, subscriptionDate.toString())
+            }
+            //if order by the reminder screen
+            //we will re-schedule the local schedule notification 
+            if (preparedInvoice) {
+                let date = await AsyncStorage.getItem(itemKey.subscriptionInterval);
+                if (date) dispatch(setupScheduleLocalNoti(parseInt(date)));
+            }
             dispatch(addInvoice(saveInvoice));
             dispatch(cartRemoveAll());
-            dispatch(setupScheduleLocalNoti());
+            //dispatch(setupScheduleLocalNoti());
             callback(true);
         }
         else callback(false);
@@ -225,16 +265,18 @@ const calculateOrderDate = (data) => {
 
 }
 
-const setupScheduleLocalNoti = () => {
+const setupScheduleLocalNoti = (date) => {
     return (dispatch, getState) => {
+        if (!date) return;
         const invoices = [...getState().customer.info.invoices];
-        console.log(calculateOrderDate(invoices));
         if (getState().customer.showNoti) {
             FCM.scheduleLocalNotification({
                 id: 'testnotif',
                 opened_from_tray: 1,
                 title: "UReminder",
-                fire_date: new Date().getTime() + calculateOrderDate(invoices),
+                //fire_date: new Date().getTime() + calculateOrderDate(invoices),
+                fire_date: new Date().getTime() + date * 24 * 60 * 60 * 1000,
+                //fire_date: new Date().getTime() + 5000,
                 vibrate: 300,
                 body: 'Gạo của bạn sắp hết',
                 priority: "high",
@@ -243,6 +285,7 @@ const setupScheduleLocalNoti = () => {
                 show_in_foreground: false,
                 targetScreen: "Reminder"
             });
+           // console.log(new Date().getTime() + date * 24 * 60 * 60 * 1000);
         }
     }
 }

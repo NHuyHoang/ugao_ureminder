@@ -152,11 +152,10 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => {
-    const latestInvoice = state.customer.info.invoices[state.customer.info.invoices.length - 1];
+    //const latestInvoice = state.customer.info.invoices[state.customer.info.invoices.length - 1];
     return {
-        invoice: latestInvoice,
         customerName: state.customer.info.name,
-
+        invoice:state.customer.subscriptionOrder
     }
 }
 

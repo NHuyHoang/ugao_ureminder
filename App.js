@@ -18,12 +18,22 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    AsyncStorage.getItem("FCM:token")
+      .then(data => {
+        if (!data) {
+          FCM.getFCMToken().then(token => {
+
+            AsyncStorage.setItem("FCM:token", token);
+          })
+        }
+        console.log(data)
+      })
     //this function check whether there is any notification exist
     //before the app was open
     FCM.getInitialNotification().then(notif => {
       //if the app was opened by press on the notification tray
       if (notif.local_notification) {
-        console.log(this.props.invoice)
+        console.log(notif);
         NavigationService.navigate(notif.targetScreen);
       }
     });
@@ -51,7 +61,7 @@ class App extends React.Component {
       }
 
       if (notif.local_notification) {
-        NavigationService.navigate(notif.targetScreen, { invoice: this.props.invoice });
+        NavigationService.navigate(notif.targetScreen);
       }
     });
   }
