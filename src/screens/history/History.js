@@ -54,7 +54,7 @@ class History extends React.Component {
                             }}
                             data={this.state.data}
                             keyExtractor={(item, index) => item._id}
-                            renderItem={({ item }) => <InvoiceItem data={item} />}
+                            renderItem={({ item }) => <InvoiceItem navigation={{...this.props.navigation}} data={item} />}
                             onEndReachedThreshold={0.1}
                             onEndReached={() => {
                                 if (!this.state.loading) {

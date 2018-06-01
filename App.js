@@ -135,6 +135,9 @@ const RootStack = StackNavigator(
     },
     Reminder: {
       screen: Screens.Reminder
+    },
+    Shipper:{
+      screen: Screens.Shipper
     }
   },
   {

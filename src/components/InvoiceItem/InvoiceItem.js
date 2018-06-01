@@ -11,6 +11,7 @@ export default class InvoiceItem extends React.PureComponent {
             showSlider: false,
         }
         this.sliderAnim = new Animated.Value(0);
+
     }
 
     dateTimeConverter = (dateString) => {
@@ -33,7 +34,7 @@ export default class InvoiceItem extends React.PureComponent {
     }
 
     componentWillMount() {
-        let { order_date, tasks, price, paid, products } = this.props.data;
+        let { _id, order_date, tasks, price, paid, products } = this.props.data;
         let { name, owner } = this.props.data.store;
 
         this.data = {
@@ -41,7 +42,8 @@ export default class InvoiceItem extends React.PureComponent {
             receipt_date: !tasks.receipt_date ? "Chưa nhận" : this.dateTimeConverter(tasks.receipt_date),
             price: `${price.toFixed(3)} VND`,
             paid,
-            products: this.productsDataConfig(products)
+            products: this.productsDataConfig(products),
+            _id: _id
         };
         this.store = {
             name,
@@ -84,10 +86,10 @@ export default class InvoiceItem extends React.PureComponent {
             <View style={styles.container}>
                 <View style={styles.infoPanel} >
                     <View style={styles.storeInfo}>
-                        <TouchableOpacity style={{ marginLeft: 4 }}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Shipper', { invoiceId: this.data._id })} style={{ marginLeft: 4 }}>
                             <Text style={styles.storeName}>{this.store.name}</Text>
-                            <Text style={styles.storeInfoTxt}>{this.store.email}</Text>
                             <Text style={styles.storeInfoTxt}>{this.store.phone}</Text>
+                            <Text style={styles.moreInfoTxt}>Click để xem chi tiết</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.mainInfo}>
@@ -100,8 +102,8 @@ export default class InvoiceItem extends React.PureComponent {
                             <Text style={styles.dateTxt}>{this.data.receipt_date}</Text>
                         </View>
                         <View style={styles.txtContainer}>
-                           {/*  {paidIcon} */}
-                            <Text style={[styles.costTxt, { color: this.data.paid ?  ui.colors.black : "red" }]}>{this.data.price}</Text>
+                            {/*  {paidIcon} */}
+                            <Text style={[styles.costTxt, { color: this.data.paid ? ui.colors.black : "red" }]}>{this.data.price}</Text>
                         </View>
                     </View>
                     <TouchableOpacity onPress={this.onShowSliderHandler} style={styles.slideHoriz}>
@@ -182,5 +184,11 @@ const styles = StyleSheet.create({
         fontFamily: ui.fonts.bold,
         color: 'black',
         fontSize: ui.fontSize.semiTiny
+    },
+    moreInfoTxt: {
+        fontFamily: ui.fonts.light,
+        color: 'black',
+        fontSize: ui.fontSize.semiTiny,
+        textDecorationLine: "underline"
     }
 })
