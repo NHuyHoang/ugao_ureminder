@@ -32,16 +32,19 @@ class App extends React.Component {
     //before the app was open
     FCM.getInitialNotification().then(notif => {
       //if the app was opened by press on the notification tray
+      console.log(notif);
       if (notif.local_notification) {
-        console.log(notif);
         NavigationService.navigate(notif.targetScreen);
+      }
+      if (notif.invoiceId) {
+        NavigationService.navigate("Shipper", { invoiceId: notif.invoiceId });
       }
     });
 
     //setup push notification
     //this method only doesn't be triggerd when app was killed
     FCM.on(FCMEvent.Notification, notif => {
-
+      console.log(notif);
       if (notif.fcm) {
         FCM.presentLocalNotification({
           id: "UNIQ_ID_STRING",                               // (optional for instant notification)
@@ -62,6 +65,9 @@ class App extends React.Component {
 
       if (notif.local_notification) {
         NavigationService.navigate(notif.targetScreen);
+      }
+      if (notif.invoiceId) {
+        NavigationService.navigate("Shipper", { invoiceId: notif.invoiceId });
       }
     });
   }
@@ -136,7 +142,7 @@ const RootStack = StackNavigator(
     Reminder: {
       screen: Screens.Reminder
     },
-    Shipper:{
+    Shipper: {
       screen: Screens.Shipper
     }
   },

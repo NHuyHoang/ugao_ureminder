@@ -27,7 +27,7 @@ export default class Input extends React.Component {
                 //if in the error mode valid always be false
                 //and touchec will be true
                 valid: this.props.error === true ? false : true,
-                touched: this.props.error === true ? true : false,
+                touched: false,
                 hint: this.props.hint ? `${this.props.hint}` : "",
             },
             showPassword: true,
@@ -113,7 +113,7 @@ export default class Input extends React.Component {
                 return this.state.control.valid ? ui.colors.black : ui.colors.red;
             case "icon":
                 if (this.state.control.controlType === "email") {
-                    if (!this.state.control.touched)
+                    if (!this.state.control.touched && this.state.control.touched !== undefined)
                         return null;
                     if (this.state.control.valid)
                         return (
@@ -124,7 +124,7 @@ export default class Input extends React.Component {
                     );
                 }
                 else if (this.state.control.controlType === "password") {
-                    if (!this.state.control.touched)
+                    if (!this.state.control.touched && this.state.control.touched !== undefined)
                         return null;
                     if (this.state.control.valid)
                         return (
@@ -208,7 +208,6 @@ export default class Input extends React.Component {
                     {
                         this.state.control.controlType &&
                         this.validStyleHandler('icon')
-
                     }
                 </View>
                 <Text style={[styles.hint, { color: this.validStyleHandler('color') }]}>{this.validStyleHandler("hint")}</Text>

@@ -202,7 +202,7 @@ export const tryMakeOrder = (callback, preparedInvoice, subscriptionDate) => {
                 invoice,
             }
         }
-
+        console.log(body);
         let response;
         try {
             response = await fetch(globalConst.DB_URI, {
@@ -214,9 +214,11 @@ export const tryMakeOrder = (callback, preparedInvoice, subscriptionDate) => {
             }).then(res => res.json());
         } catch (err) {
             callback(false)
+            console.log(err);
             return;
-            console.log(err)
+
         }
+        console.log(response);
 
         //if successful add the new invoice
         if (response.data && response.data.addInvoice) {
@@ -234,7 +236,7 @@ export const tryMakeOrder = (callback, preparedInvoice, subscriptionDate) => {
                 products: saveProducts,
                 store: getState().customer.store
             }
-            savedCustomer.invoices.push(saveInvoice);
+            savedCustomer.invoices.unshift(saveInvoice);
             AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(savedCustomer));
             //if customer set this invoice is the supscription invoice
             //we will save this invoice and make notify customer
@@ -285,7 +287,7 @@ const setupScheduleLocalNoti = (date) => {
                 show_in_foreground: false,
                 targetScreen: "Reminder"
             });
-           // console.log(new Date().getTime() + date * 24 * 60 * 60 * 1000);
+            // console.log(new Date().getTime() + date * 24 * 60 * 60 * 1000);
         }
     }
 }
