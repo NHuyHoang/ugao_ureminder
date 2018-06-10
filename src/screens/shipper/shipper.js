@@ -73,7 +73,7 @@ const LoadedContent = (props) => {
         console.log(task.estimationTime);
         let date = new Date(parseInt(task.estimationTime));
         console.log(date);
-        const displayDate = `Ngày ${date.getDate()} tháng ${date.getMonth() + 1} lúc ${date.getHours()}:${date.getMinutes()}`;
+        const displayDate = `Ngày ${date.getDate()} tháng ${date.getMonth() + 1} lúc ${date.getHours()}:${date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()}`;
         if (date.getHours() <= 0) displayDate = `${date.getMinutes()} phút`;
         displayContent = (
             <ScrollView style={styles.container}>
@@ -106,21 +106,21 @@ const LoadedContent = (props) => {
                     id="name-input"
                     value={shipper.phone}
                     type={'text'}
-                    config={{editable:false}}
+                    config={{ editable: false }}
                     label={"Số điện thoại"} />
                 <Input
                     id="email_input_01"
                     config={{ keyboardType: "email-address" }}
                     type='text'
                     label="Biển số xe"
-                    config={{editable:false}}
+                    config={{ editable: false }}
                     value={"59X1-20531"} />
                 <Input
                     id="email_input_01"
                     config={{ keyboardType: "email-address" }}
                     type='text'
                     label="Cửa hàng"
-                    config={{editable:false}}
+                    config={{ editable: false }}
                     value={store.name} />
             </ScrollView >
         )
