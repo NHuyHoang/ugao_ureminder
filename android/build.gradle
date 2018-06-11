@@ -13,7 +13,9 @@ buildscript {
 }
 
 allprojects {
+    buildDir = "D:/UReminder/${rootProject.name}/${project.name}"
     repositories {
+        maven { url "https://maven.google.com" }
         mavenLocal()
         jcenter()
         maven {

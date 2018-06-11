@@ -11,13 +11,13 @@
                     "endOffset": 203
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 4,
+                        "startLine": 2,
                         "startColumn": 4,
-                        "startOffset": 280,
+                        "startOffset": 105,
                         "endColumn": 102,
-                        "endOffset": 378
+                        "endOffset": 203
                     }
                 }
             },
@@ -26,17 +26,17 @@
                     "startLine": 3,
                     "startColumn": 4,
                     "startOffset": 208,
-                    "endColumn": 107,
-                    "endOffset": 311
+                    "endColumn": 97,
+                    "endOffset": 301
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 5,
+                        "startLine": 3,
                         "startColumn": 4,
-                        "startOffset": 383,
-                        "endColumn": 107,
-                        "endOffset": 486
+                        "startOffset": 208,
+                        "endColumn": 97,
+                        "endOffset": 301
                     }
                 }
             },
@@ -44,18 +44,18 @@
                 "to": {
                     "startLine": 4,
                     "startColumn": 4,
-                    "startOffset": 316,
-                    "endColumn": 122,
-                    "endOffset": 434
+                    "startOffset": 306,
+                    "endColumn": 107,
+                    "endOffset": 409
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 6,
+                        "startLine": 4,
                         "startColumn": 4,
-                        "startOffset": 491,
-                        "endColumn": 122,
-                        "endOffset": 609
+                        "startOffset": 306,
+                        "endColumn": 107,
+                        "endOffset": 409
                     }
                 }
             },
@@ -63,18 +63,18 @@
                 "to": {
                     "startLine": 5,
                     "startColumn": 4,
-                    "startOffset": 439,
-                    "endColumn": 97,
-                    "endOffset": 532
+                    "startOffset": 414,
+                    "endColumn": 89,
+                    "endOffset": 499
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 7,
+                        "startLine": 5,
                         "startColumn": 4,
-                        "startOffset": 614,
-                        "endColumn": 97,
-                        "endOffset": 707
+                        "startOffset": 414,
+                        "endColumn": 89,
+                        "endOffset": 499
                     }
                 }
             },
@@ -82,18 +82,18 @@
                 "to": {
                     "startLine": 6,
                     "startColumn": 4,
-                    "startOffset": 537,
-                    "endColumn": 107,
-                    "endOffset": 640
+                    "startOffset": 504,
+                    "endColumn": 104,
+                    "endOffset": 604
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 8,
+                        "startLine": 6,
                         "startColumn": 4,
-                        "startOffset": 712,
-                        "endColumn": 107,
-                        "endOffset": 815
+                        "startOffset": 504,
+                        "endColumn": 104,
+                        "endOffset": 604
                     }
                 }
             },
@@ -101,18 +101,18 @@
                 "to": {
                     "startLine": 7,
                     "startColumn": 4,
-                    "startOffset": 645,
-                    "endColumn": 89,
-                    "endOffset": 730
+                    "startOffset": 609,
+                    "endColumn": 116,
+                    "endOffset": 721
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 9,
+                        "startLine": 7,
                         "startColumn": 4,
-                        "startOffset": 820,
-                        "endColumn": 89,
-                        "endOffset": 905
+                        "startOffset": 609,
+                        "endColumn": 116,
+                        "endOffset": 721
                     }
                 }
             },
@@ -120,18 +120,18 @@
                 "to": {
                     "startLine": 8,
                     "startColumn": 4,
-                    "startOffset": 735,
-                    "endColumn": 104,
-                    "endOffset": 835
+                    "startOffset": 726,
+                    "endColumn": 81,
+                    "endOffset": 803
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 10,
+                        "startLine": 8,
                         "startColumn": 4,
-                        "startOffset": 910,
-                        "endColumn": 104,
-                        "endOffset": 1010
+                        "startOffset": 726,
+                        "endColumn": 81,
+                        "endOffset": 803
                     }
                 }
             },
@@ -139,18 +139,18 @@
                 "to": {
                     "startLine": 9,
                     "startColumn": 4,
-                    "startOffset": 840,
-                    "endColumn": 116,
-                    "endOffset": 952
+                    "startOffset": 808,
+                    "endColumn": 82,
+                    "endOffset": 886
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 11,
+                        "startLine": 9,
                         "startColumn": 4,
-                        "startOffset": 1015,
-                        "endColumn": 116,
-                        "endOffset": 1127
+                        "startOffset": 808,
+                        "endColumn": 82,
+                        "endOffset": 886
                     }
                 }
             },
@@ -158,18 +158,18 @@
                 "to": {
                     "startLine": 10,
                     "startColumn": 4,
-                    "startOffset": 957,
+                    "startOffset": 891,
                     "endColumn": 81,
-                    "endOffset": 1034
+                    "endOffset": 968
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 12,
+                        "startLine": 10,
                         "startColumn": 4,
-                        "startOffset": 1132,
+                        "startOffset": 891,
                         "endColumn": 81,
-                        "endOffset": 1209
+                        "endOffset": 968
                     }
                 }
             },
@@ -177,18 +177,18 @@
                 "to": {
                     "startLine": 11,
                     "startColumn": 4,
-                    "startOffset": 1039,
+                    "startOffset": 973,
                     "endColumn": 100,
-                    "endOffset": 1135
+                    "endOffset": 1069
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 13,
+                        "startLine": 11,
                         "startColumn": 4,
-                        "startOffset": 1214,
+                        "startOffset": 973,
                         "endColumn": 100,
-                        "endOffset": 1310
+                        "endOffset": 1069
                     }
                 }
             },
@@ -196,18 +196,18 @@
                 "to": {
                     "startLine": 12,
                     "startColumn": 4,
-                    "startOffset": 1140,
+                    "startOffset": 1074,
                     "endColumn": 108,
-                    "endOffset": 1244
+                    "endOffset": 1178
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 14,
+                        "startLine": 12,
                         "startColumn": 4,
-                        "startOffset": 1315,
+                        "startOffset": 1074,
                         "endColumn": 108,
-                        "endOffset": 1419
+                        "endOffset": 1178
                     }
                 }
             },
@@ -215,18 +215,18 @@
                 "to": {
                     "startLine": 13,
                     "startColumn": 4,
-                    "startOffset": 1249,
+                    "startOffset": 1183,
                     "endColumn": 98,
-                    "endOffset": 1343
+                    "endOffset": 1277
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 15,
+                        "startLine": 13,
                         "startColumn": 4,
-                        "startOffset": 1424,
+                        "startOffset": 1183,
                         "endColumn": 98,
-                        "endOffset": 1518
+                        "endOffset": 1277
                     }
                 }
             },
@@ -234,18 +234,18 @@
                 "to": {
                     "startLine": 14,
                     "startColumn": 4,
-                    "startOffset": 1348,
+                    "startOffset": 1282,
                     "endColumn": 106,
-                    "endOffset": 1450
+                    "endOffset": 1384
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 16,
+                        "startLine": 14,
                         "startColumn": 4,
-                        "startOffset": 1523,
+                        "startOffset": 1282,
                         "endColumn": 106,
-                        "endOffset": 1625
+                        "endOffset": 1384
                     }
                 }
             },
@@ -253,18 +253,18 @@
                 "to": {
                     "startLine": 15,
                     "startColumn": 4,
-                    "startOffset": 1455,
+                    "startOffset": 1389,
                     "endColumn": 108,
-                    "endOffset": 1559
+                    "endOffset": 1493
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 17,
+                        "startLine": 15,
                         "startColumn": 4,
-                        "startOffset": 1630,
+                        "startOffset": 1389,
                         "endColumn": 108,
-                        "endOffset": 1734
+                        "endOffset": 1493
                     }
                 }
             },
@@ -272,18 +272,18 @@
                 "to": {
                     "startLine": 16,
                     "startColumn": 4,
-                    "startOffset": 1564,
+                    "startOffset": 1498,
                     "endColumn": 104,
-                    "endOffset": 1664
+                    "endOffset": 1598
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 18,
+                        "startLine": 16,
                         "startColumn": 4,
-                        "startOffset": 1739,
+                        "startOffset": 1498,
                         "endColumn": 104,
-                        "endOffset": 1839
+                        "endOffset": 1598
                     }
                 }
             },
@@ -291,18 +291,18 @@
                 "to": {
                     "startLine": 17,
                     "startColumn": 4,
-                    "startOffset": 1669,
-                    "endColumn": 118,
-                    "endOffset": 1783
+                    "startOffset": 1603,
+                    "endColumn": 161,
+                    "endOffset": 1760
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 19,
+                        "startLine": 17,
                         "startColumn": 4,
-                        "startOffset": 1844,
-                        "endColumn": 118,
-                        "endOffset": 1958
+                        "startOffset": 1603,
+                        "endColumn": 161,
+                        "endOffset": 1760
                     }
                 }
             },
@@ -310,18 +310,18 @@
                 "to": {
                     "startLine": 18,
                     "startColumn": 4,
-                    "startOffset": 1788,
+                    "startOffset": 1765,
                     "endColumn": 96,
-                    "endOffset": 1880
+                    "endOffset": 1857
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 20,
+                        "startLine": 18,
                         "startColumn": 4,
-                        "startOffset": 1963,
+                        "startOffset": 1765,
                         "endColumn": 96,
-                        "endOffset": 2055
+                        "endOffset": 1857
                     }
                 }
             },
@@ -329,9 +329,9 @@
                 "to": {
                     "startLine": 19,
                     "startColumn": 4,
-                    "startOffset": 1885,
+                    "startOffset": 1862,
                     "endColumn": 105,
-                    "endOffset": 1986
+                    "endOffset": 1963
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -348,9 +348,9 @@
                 "to": {
                     "startLine": 20,
                     "startColumn": 4,
-                    "startOffset": 1991,
+                    "startOffset": 1968,
                     "endColumn": 187,
-                    "endOffset": 2174
+                    "endOffset": 2151
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -367,9 +367,9 @@
                 "to": {
                     "startLine": 21,
                     "startColumn": 4,
-                    "startOffset": 2179,
+                    "startOffset": 2156,
                     "endColumn": 126,
-                    "endOffset": 2301
+                    "endOffset": 2278
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -386,9 +386,9 @@
                 "to": {
                     "startLine": 22,
                     "startColumn": 4,
-                    "startOffset": 2306,
+                    "startOffset": 2283,
                     "endColumn": 110,
-                    "endOffset": 2412
+                    "endOffset": 2389
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -405,9 +405,9 @@
                 "to": {
                     "startLine": 23,
                     "startColumn": 4,
-                    "startOffset": 2417,
+                    "startOffset": 2394,
                     "endColumn": 221,
-                    "endOffset": 2634
+                    "endOffset": 2611
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -424,9 +424,9 @@
                 "to": {
                     "startLine": 24,
                     "startColumn": 4,
-                    "startOffset": 2639,
+                    "startOffset": 2616,
                     "endColumn": 126,
-                    "endOffset": 2761
+                    "endOffset": 2738
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -443,9 +443,9 @@
                 "to": {
                     "startLine": 25,
                     "startColumn": 4,
-                    "startOffset": 2766,
+                    "startOffset": 2743,
                     "endColumn": 142,
-                    "endOffset": 2904
+                    "endOffset": 2881
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -462,9 +462,9 @@
                 "to": {
                     "startLine": 26,
                     "startColumn": 4,
-                    "startOffset": 2909,
+                    "startOffset": 2886,
                     "endColumn": 204,
-                    "endOffset": 3109
+                    "endOffset": 3086
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-basement\\10.0.1\\res\\values-sw\\values.xml",
@@ -481,9 +481,9 @@
                 "to": {
                     "startLine": 27,
                     "startColumn": 4,
-                    "startOffset": 3114,
+                    "startOffset": 3091,
                     "endColumn": 223,
-                    "endOffset": 3333
+                    "endOffset": 3310
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -500,9 +500,9 @@
                 "to": {
                     "startLine": 28,
                     "startColumn": 4,
-                    "startOffset": 3338,
+                    "startOffset": 3315,
                     "endColumn": 107,
-                    "endOffset": 3441
+                    "endOffset": 3418
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -519,9 +519,9 @@
                 "to": {
                     "startLine": 29,
                     "startColumn": 4,
-                    "startOffset": 3446,
+                    "startOffset": 3423,
                     "endColumn": 184,
-                    "endOffset": 3626
+                    "endOffset": 3603
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -538,9 +538,9 @@
                 "to": {
                     "startLine": 30,
                     "startColumn": 4,
-                    "startOffset": 3631,
+                    "startOffset": 3608,
                     "endColumn": 128,
-                    "endOffset": 3755
+                    "endOffset": 3732
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -557,9 +557,9 @@
                 "to": {
                     "startLine": 31,
                     "startColumn": 4,
-                    "startOffset": 3760,
+                    "startOffset": 3737,
                     "endColumn": 208,
-                    "endOffset": 3964
+                    "endOffset": 3941
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -576,9 +576,9 @@
                 "to": {
                     "startLine": 32,
                     "startColumn": 4,
-                    "startOffset": 3969,
+                    "startOffset": 3946,
                     "endColumn": 188,
-                    "endOffset": 4153
+                    "endOffset": 4130
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -595,9 +595,9 @@
                 "to": {
                     "startLine": 33,
                     "startColumn": 4,
-                    "startOffset": 4158,
+                    "startOffset": 4135,
                     "endColumn": 97,
-                    "endOffset": 4251
+                    "endOffset": 4228
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -614,9 +614,9 @@
                 "to": {
                     "startLine": 34,
                     "startColumn": 4,
-                    "startOffset": 4256,
+                    "startOffset": 4233,
                     "endColumn": 104,
-                    "endOffset": 4356
+                    "endOffset": 4333
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -633,9 +633,9 @@
                 "to": {
                     "startLine": 35,
                     "startColumn": 4,
-                    "startOffset": 4361,
+                    "startOffset": 4338,
                     "endColumn": 124,
-                    "endOffset": 4481
+                    "endOffset": 4458
                 },
                 "from": {
                     "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\10.0.1\\res\\values-sw\\values.xml",
@@ -652,18 +652,37 @@
                 "to": {
                     "startLine": 36,
                     "startColumn": 4,
-                    "startOffset": 4486,
-                    "endColumn": 100,
-                    "endOffset": 4582
+                    "startOffset": 4463,
+                    "endColumn": 81,
+                    "endOffset": 4540
                 },
                 "from": {
-                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.0.1\\res\\values-sw\\values-sw.xml",
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\27.0.2\\res\\values-sw\\values-sw.xml",
                     "position": {
-                        "startLine": 21,
+                        "startLine": 19,
                         "startColumn": 4,
-                        "startOffset": 2060,
+                        "startOffset": 1862,
+                        "endColumn": 81,
+                        "endOffset": 1939
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 37,
+                    "startColumn": 4,
+                    "startOffset": 4545,
+                    "endColumn": 100,
+                    "endOffset": 4641
+                },
+                "from": {
+                    "file": "D:\\KLTN\\SourceCode\\client\\ugao_ureminder\\android\\app\\build\\intermediates\\exploded-aar\\com.android.support\\support-compat\\27.0.2\\res\\values-sw\\values-sw.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
                         "endColumn": 100,
-                        "endOffset": 2156
+                        "endOffset": 151
                     }
                 }
             }

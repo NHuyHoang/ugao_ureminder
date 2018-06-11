@@ -264,21 +264,21 @@
     </item>
     <item
         is-multidex="false"
-        jar="D:\KLTN\SourceCode\client\ugao_ureminder\android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-messaging\10.0.1\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.1"
-        sha1="4b17463c814bdc562fb0392fa3494063623a0904">
-        <dex dex="D:\KLTN\SourceCode\client\ugao_ureminder\android\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-messaging-10.0.1_7a37fd31176a3585749da78b20f16b8a6c46af4d.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="D:\KLTN\SourceCode\client\ugao_ureminder\android\app\build\intermediates\exploded-aar\me.leolin\ShortcutBadger\1.1.17\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.1"
         sha1="248218f163235e6d2a81188eaa1db0ec61193055">
         <dex dex="D:\KLTN\SourceCode\client\ugao_ureminder\android\app\build\intermediates\pre-dexed\debug\me.leolin-ShortcutBadger-1.1.17_41b531404ba66f1f73baf1926841cebd38796dc5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\KLTN\SourceCode\client\ugao_ureminder\android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-messaging\10.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="4b17463c814bdc562fb0392fa3494063623a0904">
+        <dex dex="D:\KLTN\SourceCode\client\ugao_ureminder\android\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-messaging-10.0.1_7a37fd31176a3585749da78b20f16b8a6c46af4d.jar" />
     </item>
     <item
         is-multidex="false"

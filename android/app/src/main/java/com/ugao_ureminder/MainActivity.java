@@ -3,6 +3,7 @@ package com.ugao_ureminder;
 import com.facebook.react.ReactActivity;
 import android.content.Intent;
 
+
 public class MainActivity extends ReactActivity {
 
     /**
@@ -18,5 +19,11 @@ public class MainActivity extends ReactActivity {
     public void onNewIntent(Intent intent) {
          super.onNewIntent(intent);
          setIntent(intent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        MainApplication.getCallbackManager().onActivityResult(requestCode, resultCode, data);
     }
 }
