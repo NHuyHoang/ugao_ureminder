@@ -144,6 +144,9 @@ const RootStack = StackNavigator(
     },
     Shipper: {
       screen: Screens.Shipper
+    },
+    FbSignUp:{
+      screen:Screens.FbSignUp
     }
   },
   {

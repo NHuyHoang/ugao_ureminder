@@ -14,17 +14,17 @@ class Location extends React.PureComponent {
         super(props);
         this.state = {
             location: {
-                address: this.props.customerLocation.address,
-                latitude: this.props.customerLocation.lat,
-                longitude: this.props.customerLocation.lng,
+                address: this.props.customerLocation && this.props.customerLocation.address,
+                latitude: this.props.customerLocation && this.props.customerLocation.lat,
+                longitude: this.props.customerLocation && this.props.customerLocation.lng,
                 latitudeDelta: 0.0122,
                 longitudeDelta: 0.0421,
             },
-
             updateStatus: "READY",
             findingStatus: "READY"
         }
-
+        if (!this.props.customerLocation)
+            this.getCurrentLocationHandler();
     }
 
     onLocationChange = (e) => {
@@ -117,7 +117,7 @@ class Location extends React.PureComponent {
     }
 
     render() {
-        let storeMarker = (
+        let storeMarker = this.props.store && (
             <MapView.Marker
                 coordinate={{
                     latitude: this.props.store.location.lat,
@@ -146,9 +146,14 @@ class Location extends React.PureComponent {
                     ref={ref => this.map = ref}
                     initialRegion={this.state.location}
                     onPress={this.onLocationChange} >
-                    <MapView.Marker
-                        coordinate={this.state.location} />
-                    {storeMarker}
+                    {
+                        this.state.location.latitude &&
+                        < React.Fragment >
+                            <MapView.Marker
+                                coordinate={this.state.location} />
+                            {storeMarker}
+                        </React.Fragment>
+                    }
                 </MapView>
                 <View style={styles.inputContainer}>
                     {
@@ -187,7 +192,7 @@ class Location extends React.PureComponent {
                         <Noti message="Cập nhật thất bại" />
                     </View>
                 }
-            </View>
+            </View >
         )
     }
 }

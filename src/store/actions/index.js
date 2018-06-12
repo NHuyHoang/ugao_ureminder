@@ -4,7 +4,9 @@ export {
     tryMakeOrder,
     logout,
     onTrySetShowNoti,
-    tryUpdateCustomerInfo
+    tryUpdateCustomerInfo,
+    tryRegisterCustomer,
+    OAuthCustomerLogin
 } from './customer'
 
 export {

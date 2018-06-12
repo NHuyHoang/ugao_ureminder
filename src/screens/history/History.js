@@ -62,7 +62,7 @@ class History extends React.Component {
                                 }
                             }}
                         /> :
-                        <Noti message="Vui lòng đăng nhập" />
+                        <Noti message="Không tồn tại lịch sử giao dịch" />
                 }
             </View>
         )

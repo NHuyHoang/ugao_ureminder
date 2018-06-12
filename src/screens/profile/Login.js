@@ -2,6 +2,11 @@ import React, { Fragment } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
+import FBDSK, {
+    LoginButton,
+    AccessToken,
+    LoginManager
+} from 'react-native-fbsdk';
 
 import { trySaveLocalCustomer } from '../../store/actions';
 import ui from '../../share/ui.constant';
@@ -13,13 +18,14 @@ class Login extends React.Component {
         super(props);
         this.state = {
             fetchData: false,
+            oauthFailed: false
         }
         this.query = null;
     }
 
     onLogin = () => {
         const email = this.refs.loginForm.getInputValue("email_input_01");
-         const pass = this.refs.loginForm.getInputValue("password_input_01");
+        const pass = this.refs.loginForm.getInputValue("password_input_01");
         /* const email = "bluegasus@gmail.com";
         const pass = "huyhoang3562927"; */
         this.query = `
@@ -55,10 +61,32 @@ class Login extends React.Component {
         return null;
     }
 
-
-
-
-
+    fbOauth = () => {
+        LoginManager.logInWithReadPermissions(['public_profile', 'email']).then(
+            (result) => {
+                if (result.isCancelled) {
+                    this.setState({ oauthFailed: true }, () => {
+                       setTimeout(() => this.setState({ oauthFailed: false }), 5000)
+                    });
+                } else {
+                    AccessToken.getCurrentAccessToken().then(
+                        (data) => {
+                            console.log(data.accessToken.toString())
+                            this.props.navigation.navigate('FbSignUp', {
+                                accessToken: data.accessToken,
+                            })
+                        }
+                    )
+                }
+            },
+            (error) => {
+                this.setState({ oauthFailed: true }, () => {
+                   setTimeout(() => this.setState({ oauthFailed: false }), 5000)
+                });
+                console.log('Login fail with error: ' + error);
+            }
+        );
+    }
 
     render() {
         return (
@@ -77,6 +105,10 @@ class Login extends React.Component {
                     {
                         this.props.notiTxt &&
                         <Noti message={this.props.notiTxt.message} />
+                    }
+                    {
+                        this.state.oauthFailed &&
+                        <Noti message={"Không thể kết nối facebook"} />
                     }
                     <Form
                         ref="loginForm"
@@ -105,13 +137,14 @@ class Login extends React.Component {
                     </Form>
                     <View style={styles.oauthSegment}>
                         <Text style={styles.oauthTxt}>Sử dụng tài khoản</Text>
-                        <TouchableOpacity style={{ marginLeft: 8, marginRight: 8 }}>
-                            <Icon name="logo-facebook" size={32} color="#44609D" />
+                        <TouchableOpacity onPress={this.fbOauth} style={styles.fbButton}>
+                            <Icon name="logo-facebook" size={28} color="white" />
+                            <Text style={styles.fbTxt}>Facebook</Text>
                         </TouchableOpacity>
-                        <Text style={styles.oauthTxt}>hoặc</Text>
+                        {/* <Text style={styles.oauthTxt}>hoặc</Text>
                         <TouchableOpacity style={{ marginLeft: 8, marginRight: 8 }}>
                             <Icon name="logo-googleplus" size={32} color="#EF2F1E" />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                 </View>
             </View >
@@ -194,7 +227,25 @@ const styles = StyleSheet.create({
         color: 'white',
         fontFamily: ui.fonts.bold,
         fontSize: ui.fontSize.semiTiny
-    }
+    },
+    fbButton: {
+        marginLeft: 8,
+        marginRight: 8,
+        paddingLeft: 4,
+        paddingRight: 4,
+        width: 102,
+        height: 32,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        backgroundColor: '#44609D',
+        borderRadius: 4
+    },
+    fbTxt: {
+        fontFamily: ui.fonts.bold,
+        fontSize: ui.fontSize.semiTiny,
+        color: 'white'
+    },
 })
 
 const mapDispatchToProps = dispatch => {

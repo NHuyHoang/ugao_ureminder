@@ -91,6 +91,13 @@ export const tryGetLocalCustomer = () => {
     }
 }
 
+export const OAuthCustomerLogin = (customer, done) => {
+    return async dispatch => {
+        dispatch(trySaveLocalCustomer(customer))
+            .then( _ => done())
+    }
+}
+
 export const trySaveLocalCustomer = (customer) => {
     return async dispatch => {
         AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(customer))
@@ -98,6 +105,94 @@ export const trySaveLocalCustomer = (customer) => {
         let store = await tryFindNearestStore(customer.location);
         AsyncStorage.setItem(itemKey.storeKey, JSON.stringify(store))
         dispatch(saveNearestStore(store));
+    }
+}
+
+export const tryRegisterCustomer = (info, callback) => {
+    //info = {email,name,img}
+    let { email, name, img } = info;
+    console.log(img);
+    return async dispatch => {
+        //get,set FCM token
+        const tokenPromise = new Promise((resolve, reject) => {
+            FCM.getFCMToken().then(token => {
+                AsyncStorage.setItem("FCM:token", token);
+                resolve(token);
+            }).catch(err => {
+                console.log(err);
+                reject(null)
+            })
+        })
+        //use this user's current location
+        const locationPromise = new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(pos => {
+                let { latitude, longitude } = pos.coords;
+                //try find the address name by coordinate
+                fetch("https://maps.googleapis.com/maps/api/geocode/json?"
+                    + `latlng=${latitude},${longitude}&key=${globalConst.GMAP_API_KEY}`)
+                    .then(data => data.json())
+                    .then(data => data.results[0].formatted_address)
+                    .then(address => resolve({
+                        address,
+                        lat: latitude,
+                        lng: longitude
+                    }))
+                    .catch(err => {
+                        console.log(err);
+                        reject({
+                            address: "",
+                            lat: latitude,
+                            lng: longitude
+                        })
+                    });
+            }, err => {
+                console.log(err);
+                reject({
+                    address: "",
+                    lat: null,
+                    lng: null
+                })
+            }, { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 })
+        })
+        const assembledPromise = await Promise.all([tokenPromise, locationPromise])
+            .then(value => value);
+
+        console.log(assembledPromise);
+        const token = assembledPromise[0];
+        const location = assembledPromise[1];
+        //query to the server
+        const body = {
+            query: `mutation addCustomer($email: String!, $name: String!, $location: JSON,$token:String,$img:String) {
+                    addCustomer(email:$email, name:$name, location:$location,token:$token, img:$img){ 
+                        _id token email name pass img phone 
+                        location { address lat lng }
+                        invoices { _id }
+                    }
+                }`,
+            variables: {
+                email,
+                name,
+                img,
+                token,
+                location
+            }
+        }
+        try {
+            let response = await fetch(globalConst.DB_URI, {
+                body: JSON.stringify(body),
+                headers: {
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+            }).then(res => res.json());
+            //call trySaveLocalCustomer
+            dispatch(trySaveLocalCustomer(response.data.addCustomer))
+                .then(_ => callback(true))
+        } catch (err) {
+            console.log(err);
+            callback(false);
+        }
+
     }
 }
 
@@ -135,6 +230,11 @@ const tryFindNearestStore = async (location) => {
 
     //get the smallest duration travel time
     //from user location to store location
+
+    //this case only appear when using emulator
+    //because its current location is "1599 Amphitheatre Pkwy, Mountain View, CA 94043, USA"
+    //which mean cannot calculate the direction
+    if (distanceMatrix[0].status === "ZERO_RESULTS") return null;
 
     const minDuration = Math.min(...distanceMatrix.map(e => e.duration.value));
     const index = distanceMatrix.findIndex(e => e.duration.value === minDuration);

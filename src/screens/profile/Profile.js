@@ -61,7 +61,7 @@ class Profile extends React.Component {
                             status={this.state.updateStatus}
                             ref="loadedContent" {...this.props}
                             data={this.props.customer} /> :
-                        <Login notiTxt={this.props.navigation.state.params} />
+                        <Login notiTxt={this.props.navigation.state.params} {...this.props} />
                 }
             </View>
         )
@@ -126,12 +126,6 @@ class LoadedContent extends React.PureComponent {
             return string;
     };
 
-    refresh = () => {
-        //this.props.data.address = address;
-        console.log("------ssssssd-", this.props.data.location.address);
-        this.setState({})
-
-    }
 
     render() {
         return (
@@ -167,7 +161,7 @@ class LoadedContent extends React.PureComponent {
                     <Input
                         id="email_input_01"
                         ref="emailInput"
-                        config={{ keyboardType: "email-address" }}
+                        config={{ keyboardType: "email-address", editable: false }}
                         type='text'
                         label="Email"
                         value={this.props.data.email}
@@ -188,7 +182,6 @@ class LoadedContent extends React.PureComponent {
                         iconBtn={{ name: "place" }}
                         btnEvent={() => this.props.navigation.navigate('Location', {
                             customerLocation: this.props.customer.location,
-                            onBack: this.refresh,
                         })} />
                     <Input
                         type='checkbox'
