@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Animated, Image, PanResponder, Button, DatePickerAndroid, TimePickerAndroid } from 'react-native';
+import { StyleSheet, View, Dimensions, TouchableWithoutFeedback, Animated, Image, PanResponder, Button, DatePickerAndroid, TimePickerAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux';
@@ -32,20 +32,20 @@ class Store extends React.PureComponent {
 
     onSelectTabHandler = (tab) => {
         this.setState({ tabSelection: tab })
-    }
+    };
 
     onCheckCartHandler = () => {
-        if (this.state.addingProduct) return
+        if (this.state.addingProduct) return;
         this.setState(prev => ({ checkCart: !prev.checkCart }))
-    }
+    };
 
     onStopCheckCartHandler = () => {
         this.setState(prev => ({ checkCart: false }))
-    }
+    };
     //temp
     onRemoveProductFromCart = (id) => {
         this.props.removeFromCart(id);
-    }
+    };
 
     scheduleLocalNotification = () => {
         FCM.scheduleLocalNotification({
@@ -61,7 +61,7 @@ class Store extends React.PureComponent {
             show_in_foreground: false,
             targetScreen: "Reminder"
         });
-    }
+    };
 
     showDatePicker = async () => {
         try {
@@ -89,13 +89,13 @@ class Store extends React.PureComponent {
         } catch ({ code, message }) {
             console.warn('Cannot open date picker', message);
         }
-    }
+    };
 
     cancelNoti = () => {
-        console.log("trigger")
+        console.log("trigger");
         //FCM.getScheduledLocalNotifications().then(obj => console.log(obj))
         FCM.cancelAllLocalNotifications();
-    }
+    };
 
     render() {
         return (
@@ -194,7 +194,7 @@ class AditionalProduct extends React.Component {
             transform: [{
                 scale: this.scaleAnim,
             }]
-        }
+        };
         return (
             <Animated.View style={[styles.aditionalProduct, animTransform]}>
                 <Image style={styles.additionalProductImg} source={{ uri: "http://gaosach58.vn/wp-content/uploads/2016/07/bac-dau.jpg" }} />
@@ -211,7 +211,7 @@ const DimmerComponent = (props) => {
             </View>
         </TouchableWithoutFeedback>
     )
-}
+};
 
 const _width = Dimensions.get('window').width;
 const _height = Dimensions.get('window').height;
@@ -274,19 +274,19 @@ const styles = StyleSheet.create({
         width: 30,
         resizeMode: 'contain'
     }
-})
+});
 
 const mapStateToProps = state => {
     return {
         cart: state.cart.products,
         showNoti: state.customer.showNoti
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
         removeFromCart: (_id) => dispatch(removeFromCart(_id))
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Store);

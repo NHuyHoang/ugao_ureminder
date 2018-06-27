@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Image, ActivityIndicator, TextInput } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { connect } from 'react-redux';
 
 import { Input, UButton, Noti } from '../../components'
@@ -12,6 +13,7 @@ class FbSignUp extends React.PureComponent {
         super(props);
         this.state = {
             info: null,
+            phone: "",
             status: 'LOADING',
             registering: false,
             registerFailed: false,
@@ -49,7 +51,7 @@ class FbSignUp extends React.PureComponent {
             if (customer.data.OAuthCustomer) {
                 //account exist -> save to local
                 this.props.OAuthCustomerLogin(customer.data.OAuthCustomer, () => {
-                    this.props.navigation.goBack();    
+                    this.props.navigation.goBack();
                 });
             } else {
                 //regist account
@@ -69,16 +71,26 @@ class FbSignUp extends React.PureComponent {
     }
 
     onRegisterCustomer = () => {
-        this.setState({ registering: true });
-        this.props.tryRegisterCustomer(this.state.info, (success) => {
-            if (success)
-                this.props.navigation.goBack();
-            else {
-                this.setState({ registerFailed: true, registering: false }, () => {
-                    setTimeout(() => this.setState({ registerFailed: false }), 5000)
-                })
+        this.setState({
+            registering: true, info: {
+                ...this.state.info,
+                phone: this.state.phone
             }
+        }, () => {
+            this.props.tryRegisterCustomer(this.state.info, (success) => {
+                if (success)
+                    this.props.navigation.goBack();
+                else {
+                    this.setState({ registerFailed: true, registering: false }, () => {
+                        setTimeout(() => this.setState({ registerFailed: false }), 5000)
+                    })
+                }
+            });
         });
+    }
+
+    onChangeText = (text) => {
+        this.setState({ phone: text });
     }
 
     render() {
@@ -102,6 +114,15 @@ class FbSignUp extends React.PureComponent {
                         <Text style={styles.decorateTxt3}>
                             {this.state.info.email}
                         </Text>
+                        <View style={styles.phoneInput}>
+                            <Icon size={22} name="call" color="black" />
+                            <TextInput
+                                onChangeText={(text) => this.onChangeText(text)}
+                                placeholder="Số điện thoại của bạn"
+                                value={this.state.phone}
+                                style={styles.inputStyle}
+                                keyboardType='numeric' />
+                        </View>
                         {
                             this.state.registerFailed &&
                             <React.Fragment>
@@ -111,7 +132,7 @@ class FbSignUp extends React.PureComponent {
                         }
                         {
                             !this.state.registering
-                                ? <UButton top={32} onPress={this.onLogin} txt="Đăng ký" iconName="done" onPress={this.onRegisterCustomer} />
+                                ? <UButton disabled={this.state.phone === ""} top={32} onPress={this.onLogin} txt="Đăng ký" iconName="done" onPress={this.onRegisterCustomer} />
                                 : <ActivityIndicator style={{ marginTop: 8 }} size="small" color="black" />
                         }
                     </React.Fragment>
@@ -173,6 +194,18 @@ const styles = StyleSheet.create({
         paddingRight: 8,
         textDecorationLine: 'underline'
     },
+    phoneInput: {
+        flexDirection: 'row',
+        width: '80%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    inputStyle: {
+        width: "50%",
+        fontFamily: ui.fonts.light,
+        color: 'black',
+        textAlign: 'center'
+    }
 })
 
 const mapDispatchToProps = dispatch => {

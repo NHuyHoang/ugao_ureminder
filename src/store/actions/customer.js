@@ -94,7 +94,7 @@ export const tryGetLocalCustomer = () => {
 export const OAuthCustomerLogin = (customer, done) => {
     return async dispatch => {
         dispatch(trySaveLocalCustomer(customer))
-            .then( _ => done())
+            .then(_ => done())
     }
 }
 
@@ -110,7 +110,7 @@ export const trySaveLocalCustomer = (customer) => {
 
 export const tryRegisterCustomer = (info, callback) => {
     //info = {email,name,img}
-    let { email, name, img } = info;
+    let { email, name, img, phone } = info;
     console.log(img);
     return async dispatch => {
         //get,set FCM token
@@ -162,8 +162,8 @@ export const tryRegisterCustomer = (info, callback) => {
         const location = assembledPromise[1];
         //query to the server
         const body = {
-            query: `mutation addCustomer($email: String!, $name: String!, $location: JSON,$token:String,$img:String) {
-                    addCustomer(email:$email, name:$name, location:$location,token:$token, img:$img){ 
+            query: `mutation addCustomer($email: String!, $name: String!, $location: JSON,$token:String,$img:String, $phone:String) {
+                    addCustomer(email:$email, name:$name, location:$location,token:$token, img:$img, phone:$phone){ 
                         _id token email name pass img phone 
                         location { address lat lng }
                         invoices { _id }
@@ -174,6 +174,7 @@ export const tryRegisterCustomer = (info, callback) => {
                 name,
                 img,
                 token,
+                phone,
                 location
             }
         }
