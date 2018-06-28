@@ -12,6 +12,7 @@ export const CART_REMOVE_ALL = "CART_REMOVE_ALL";
 export const ADD_ONE_PRODUCT = "ADD_ONE_PRODUCT";
 export const SUB_ONE_PRODUCT = "SUB_ONE_PRODUCT";
 
+export const SAVE_INVOICES = "SAVE_INVOICES";
 export const ADD_INVOICE = "ADD_INVOICE";
 
 export const SHOW_NOTI = "SHOW_NOTI";

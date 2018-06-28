@@ -1,4 +1,13 @@
-import { GET_CUSTOMER_FAILED, SAVE_LOCAL_CUSTOMER, LOG_OUT, SAVE_NEAREST_STORE, ADD_INVOICE, SHOW_NOTI, SET_SUBSCRIPTION_ORDER } from './ActionTypes';
+import {
+    GET_CUSTOMER_FAILED,
+    SAVE_LOCAL_CUSTOMER,
+    LOG_OUT,
+    SAVE_NEAREST_STORE,
+    SHOW_NOTI,
+    SET_SUBSCRIPTION_ORDER,
+    SAVE_INVOICES,
+} from './ActionTypes';
+
 import { AsyncStorage } from 'react-native';
 import _ from 'lodash';
 import globalConst from '../constant';
@@ -64,6 +73,13 @@ const setSubscriptionOrder = (invoice) => {
     }
 }
 
+const saveInvoices = (invoices) => {
+    return {
+        type: SAVE_INVOICES,
+        invoices,
+    }
+}
+
 export const onTrySetShowNoti = (show) => {
     return dispatch => {
         AsyncStorage.setItem(itemKey.notiKey, show.toString());
@@ -72,7 +88,7 @@ export const onTrySetShowNoti = (show) => {
 }
 
 export const tryGetLocalCustomer = () => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
         //AsyncStorage.removeItem(itemKey.customerKey);
         let data = await AsyncStorage.getItem(itemKey.customerKey);
         let storeData = await AsyncStorage.getItem(itemKey.storeKey);
@@ -83,6 +99,12 @@ export const tryGetLocalCustomer = () => {
             let customer = JSON.parse(data);
             let store = JSON.parse(storeData);
             let subscriptionOrder = JSON.parse(subscriptionOrderData);
+
+            const invoices = [...getState().customer.info.invoices];
+            //if app was opened by the push notification tray
+            //there may has invoices in store 
+            if (invoices.length !== 0)
+                customer.invoices = invoices;
             dispatch(saveLocalCustomer(customer));
             dispatch(saveNearestStore(store));
             dispatch(showNoti(showNotiValue == "true"));
@@ -476,3 +498,26 @@ export const tryUpdateCustomerInfo = (info, callback) => {
     }
 }
 
+export const tryUpdateInvoiceStatus = (_id, receiptDate) => {
+    return async (dispatch, getState) => {
+        //get the invoices list
+        let data = await AsyncStorage.getItem(itemKey.customerKey);
+        let customer = JSON.parse(data);
+        //let invoices = await [...getState().customer.info.invoices];
+
+        let invoices = customer.invoices;
+        //update invoice stgetItem
+
+        let invoice = invoices.find(inv => inv._id === _id);
+        console.log(invoice);
+        invoice.paid = true;
+        invoice.tasks.receipt_date = receiptDate
+
+        //update async storage
+        customer.invoices = invoices;
+        AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(customer));
+
+        //dispatch SAVE_INVOICES
+        dispatch(saveInvoices(invoices));
+    }
+}

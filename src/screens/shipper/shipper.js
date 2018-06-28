@@ -7,7 +7,6 @@ import ui from '../../share/ui.constant';
 export default class shipper extends React.Component {
     constructor(props) {
         super(props);
-        console.log(this.props.navigation.state.params.invoiceId);
         this.query = `
         {
             invoice(id: "${this.props.navigation.state.params.invoiceId}") {
@@ -49,7 +48,6 @@ export default class shipper extends React.Component {
 }
 
 const LoadedContent = (props) => {
-    console.log(props.data);
     const shipper = props.data.shipper;
     const store = props.data.store;
     const task = props.data.tasks;
@@ -69,10 +67,7 @@ const LoadedContent = (props) => {
         </View>
     )
     else {
-        console.log(props.data.order_date);
-        console.log(task.estimationTime);
         let date = new Date(parseInt(task.estimationTime));
-        console.log(date);
         const displayDate = `Ngày ${date.getDate()} tháng ${date.getMonth() + 1} lúc ${date.getHours()}:${date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()}`;
         if (date.getHours() <= 0) displayDate = `${date.getMinutes()} phút`;
         displayContent = (

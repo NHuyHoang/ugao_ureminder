@@ -6,7 +6,8 @@ export {
     onTrySetShowNoti,
     tryUpdateCustomerInfo,
     tryRegisterCustomer,
-    OAuthCustomerLogin
+    OAuthCustomerLogin,
+    tryUpdateInvoiceStatus
 } from './customer'
 
 export {

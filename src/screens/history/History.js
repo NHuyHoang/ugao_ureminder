@@ -43,7 +43,7 @@ class History extends React.Component {
         //let data = [...this.props.info.invoices.splice(invoicesLength - 11, invoicesLength - 1)];
         return (
             <View style={styles.container}>
-                <Header />
+                <Header  />
                 {
                     this.state.data.length != 0 ?
                         <FlatList
@@ -54,7 +54,7 @@ class History extends React.Component {
                             }}
                             data={this.state.data}
                             keyExtractor={(item, index) => item._id}
-                            renderItem={({ item }) => <InvoiceItem navigation={{...this.props.navigation}} data={item} />}
+                            renderItem={({ item }) => <InvoiceItem navigation={{ ...this.props.navigation }} data={item} />}
                             onEndReachedThreshold={0.1}
                             onEndReached={() => {
                                 if (!this.state.loading) {
