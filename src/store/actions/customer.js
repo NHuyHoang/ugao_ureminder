@@ -6,6 +6,7 @@ import {
     SHOW_NOTI,
     SET_SUBSCRIPTION_ORDER,
     SAVE_INVOICES,
+    ADD_INVOICE
 } from './ActionTypes';
 
 import { AsyncStorage } from 'react-native';

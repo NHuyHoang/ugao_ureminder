@@ -1,6 +1,6 @@
 export default {
     colors:{
-        highlight:"#3DEFA8",
+        highlight:"#00A1F1",
         white:"#ffffff",
         black:"#000",
         light_gray:"#D5D5D5",

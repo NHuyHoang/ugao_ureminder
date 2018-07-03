@@ -36,10 +36,15 @@ export default class Input extends React.Component {
         this.onFocus = () => this.setState(prevState => ({ focus: !prevState.focus }));
 
     }
+
     //parent component can get text value
     //by ref to this component and invoke this function
     getValue = () => {
         return this.state.control.value;
+    }
+
+    getValid = () => {
+        return this.state.control.valid;
     }
 
     componentWillReceiveProps(props) {
@@ -59,7 +64,7 @@ export default class Input extends React.Component {
                 control: {
                     ...this.state.control,
                     valid: false,
-                    touched: true
+                    touched: true,
                 }
             })
         }
@@ -146,6 +151,9 @@ export default class Input extends React.Component {
                     );
                 }
             case "hint":
+                if (this.props.error && this.props.errorMessage) {
+                    return this.props.errorMessage;
+                }
                 if (!this.state.control.valid) {
                     if (this.state.control.controlType === "email")
                         return "Email sai định dạng";
@@ -164,7 +172,9 @@ export default class Input extends React.Component {
                 inputType = (
                     <CustomPicker setFocus={this.onFocus} {...this.props.config} />
                 )
-            }; break;
+            }
+                ;
+                break;
             case ('text'): {
                 inputType = (
                     <TextInput
@@ -180,25 +190,34 @@ export default class Input extends React.Component {
                         {...this.props.config}
                     />
                 )
-            }; break;
+            }
+                ;
+                break;
             case ('checkbox'): {
                 inputType = (
-                    <CustomCheckbox disabled={this.props.disabled} checked={this.props.checked} title={this.props.title} onPress={this.onCheckboxToogle} />
+                    <CustomCheckbox disabled={this.props.disabled} checked={this.props.checked} title={this.props.title}
+                        onPress={this.onCheckboxToogle} />
                 )
-            }; break;
-            default: inputType = null; break;
+            }
+                ;
+                break;
+            default:
+                inputType = null;
+                break;
         }
         return (
             <View style={[styles.container, this.props.style]}>
                 {
                     this.props.label &&
-                    <Text style={[styles.label, { color: !this.state.control.valid ? "red" : "black" }]}>{this.props.label}</Text>
+                    <Text
+                        style={[styles.label, { color: !this.state.control.valid ? "red" : "black" }]}>{this.props.label}</Text>
                 }
                 <View style={[styles.inputContainer, borderStyle]}>
                     {inputType}
                     {
                         this.props.iconBtn &&
-                        <IconButton ionicon={this.props.ionicon} size={35} onPress={this.props.btnEvent} name={this.props.iconBtn.name} />
+                        <IconButton ionicon={this.props.ionicon} size={35} onPress={this.props.btnEvent}
+                            name={this.props.iconBtn.name} />
 
                     }
                     {
@@ -210,7 +229,8 @@ export default class Input extends React.Component {
                         this.validStyleHandler('icon')
                     }
                 </View>
-                <Text style={[styles.hint, { color: this.validStyleHandler('color') }]}>{this.validStyleHandler("hint")}</Text>
+                <Text
+                    style={[styles.hint, { color: this.validStyleHandler('color') }]}>{this.validStyleHandler("hint")}</Text>
             </View>
         )
     }
@@ -238,6 +258,7 @@ class CustomPicker extends React.Component {
             />
         )
     }
+
     showItemHandler() {
 
         if (!this.state.showItem) {
@@ -319,15 +340,17 @@ class CustomCheckbox extends React.PureComponent {
     render() {
         return (
             <View style={checkBoxStyles.container}>
-                <TouchableOpacity disabled={this.props.disabled} onPress={this.onToogle} style={checkBoxStyles.checkboxContent}>
-                    <Text style={[checkBoxStyles.titleTxt, { color: this.props.disabled ? "grey" : "black" }]}>{this.props.title}</Text>
+                <TouchableOpacity disabled={this.props.disabled} onPress={this.onToogle}
+                    style={checkBoxStyles.checkboxContent}>
+                    <Text
+                        style={[checkBoxStyles.titleTxt, { color: this.props.disabled ? "grey" : "black" }]}>{this.props.title}</Text>
                     {
                         this.state.checked
                             ? <IconButton size={35} name="check" color="green" />
                             : <IconButton size={35} name="clear" color="red" />
                     }
                 </TouchableOpacity>
-            </View >
+            </View>
         )
     }
 }

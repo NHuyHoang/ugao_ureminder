@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import {StyleSheet, Text, View, AsyncStorage} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
-import { connect } from 'react-redux';
-import FCM, { FCMEvent } from "react-native-fcm";
+import {TabNavigator, TabBarBottom, StackNavigator} from 'react-navigation';
+import {connect} from 'react-redux';
+import FCM, {FCMEvent} from "react-native-fcm";
 import * as Screens from './src/screens';
 import ui from './src/share/ui.constant';
-import { tryGetLocalCustomer, tryUpdateInvoiceStatus } from './src/store/actions';
+import {tryGetLocalCustomer, tryUpdateInvoiceStatus} from './src/store/actions';
 import NavigationService from './NavigationService';
 
 class App extends React.Component {
@@ -37,7 +37,7 @@ class App extends React.Component {
                 NavigationService.navigate(notif.targetScreen);
             }
             if (notif.invoiceId) {
-                NavigationService.navigate("Shipper", { invoiceId: notif.invoiceId });
+                NavigationService.navigate("Shipper", {invoiceId: notif.invoiceId});
                 //if this is a receipt notification
                 //then update the invoice status
                 if (notif.receiptDate !== "false") {
@@ -72,7 +72,7 @@ class App extends React.Component {
                 NavigationService.navigate(notif.targetScreen);
             }
             if (notif.invoiceId) {
-                NavigationService.navigate("Shipper", { invoiceId: notif.invoiceId });
+                NavigationService.navigate("Shipper", {invoiceId: notif.invoiceId});
                 //if this is a receipt notification
                 //then update the invoice status
                 if (notif.receiptDate !== "false") {
@@ -87,7 +87,7 @@ class App extends React.Component {
     render() {
         return <RootStack style={styles.container} ref={navigatorRef => {
             NavigationService.setTopLevelNavigator(navigatorRef);
-        }} />;
+        }}/>;
         //return <Record/>
     }
 }
@@ -104,15 +104,15 @@ const styles = StyleSheet.create({
 
 const Tabs = TabNavigator(
     {
-        Store: { screen: Screens.Store },
-        Invoice: { screen: Screens.Invoice },
-        Profile: { screen: Screens.Profile },
-        History: { screen: Screens.History },
+        Store: {screen: Screens.Register},
+        Invoice: {screen: Screens.Invoice},
+        Profile: {screen: Screens.Profile},
+        History: {screen: Screens.History},
     },
     {
-        navigationOptions: ({ navigation }) => ({
-            tabBarIcon: ({ focused, tintColor }) => {
-                const { routeName } = navigation.state;
+        navigationOptions: ({navigation}) => ({
+            tabBarIcon: ({focused, tintColor}) => {
+                const {routeName} = navigation.state;
                 let iconName;
                 switch (routeName) {
                     case ('Store'):
@@ -122,12 +122,12 @@ const Tabs = TabNavigator(
                         iconName = 'receipt';
                         break;
                     case ('Profile'):
-                        return <Ionicon name="ios-contact" size={25} color={tintColor} />
+                        return <Ionicon name="ios-contact" size={25} color={tintColor}/>
                     case ('History'):
-                        return <Ionicon name="ios-folder-open-outline" size={25} color={tintColor} />
+                        return <Ionicon name="ios-folder-open-outline" size={25} color={tintColor}/>
                 }
 
-                return <Icon name={iconName} size={25} color={tintColor} />;
+                return <Icon name={iconName} size={25} color={tintColor}/>;
             },
         }),
         tabBarComponent: TabBarBottom,
@@ -163,6 +163,9 @@ const RootStack = StackNavigator(
         },
         FbSignUp: {
             screen: Screens.FbSignUp
+        },
+        Register: {
+            screen: Screens.Register
         }
     },
     {
