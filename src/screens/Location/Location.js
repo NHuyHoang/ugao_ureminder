@@ -1,24 +1,28 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Dimensions, TextInput} from 'react-native';
+import {
+    View, Text, NetInfo,
+    StyleSheet, TouchableOpacity,
+    Image, ActivityIndicator,
+    Dimensions, TextInput
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import MapView, {Callout} from 'react-native-maps';
-import {connect} from 'react-redux';
+import MapView, { Callout } from 'react-native-maps';
+import { connect } from 'react-redux';
 
-import {Header, Noti} from '../../components';
-import {tryUpdateCustomerInfo} from '../../store/actions';
+import { Header, Noti } from '../../components';
+import { tryUpdateCustomerInfo } from '../../store/actions';
 import ui from '../../share/ui.constant';
 import global_const from '../../store/constant';
 
-const SelectType = Object.freeze({inputEntering: "inputEntering", mapTouching: "mapTouching"});
-
+const SelectType = Object.freeze({ inputEntering: "inputEntering", mapTouching: "mapTouching" });
 class Location extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             location: {
                 address: this.props.customerLocation && this.props.customerLocation.address,
-                latitude: this.props.customerLocation && this.props.customerLocation.lat,
-                longitude: this.props.customerLocation && this.props.customerLocation.lng,
+                latitude: this.props.customerLocation ? this.props.customerLocation.lat : 1.0,
+                longitude: this.props.customerLocation ? this.props.customerLocation.lng : 1.0,
                 latitudeDelta: 0.0122,
                 longitudeDelta: 0.0421,
             },
@@ -48,15 +52,18 @@ class Location extends React.PureComponent {
 
     getCurrentLocationHandler = () => {
         navigator.geolocation.getCurrentPosition(pos => {
-            const coordsEvent = {
-                nativeEvent: {
-                    coordinate: {
-                        latitude: pos.coords.latitude,
-                        longitude: pos.coords.longitude
+            const callback = () => {
+                const coordsEvent = {
+                    nativeEvent: {
+                        coordinate: {
+                            latitude: pos.coords.latitude,
+                            longitude: pos.coords.longitude
+                        }
                     }
-                }
-            };
-            this.onLocationChange(coordsEvent);
+                };
+                this.onLocationChange(coordsEvent);
+            }
+            this._getLocationAddress(pos.coords, callback);
         }, err => {
             alert('Failed to fetching position');
         })
@@ -65,15 +72,15 @@ class Location extends React.PureComponent {
     updateCustomerLocation = async () => {
         const callback = (success) => {
             if (success) {
-                this.setState({updateStatus: "SUCCESS"})
+                this.setState({ updateStatus: "SUCCESS" })
             } else {
-                this.setState({updateStatus: "FAILED"})
+                this.setState({ updateStatus: "FAILED" })
             }
             this.timer = setTimeout(() => {
-                this.setState({updateStatus: "READY"})
+                this.setState({ updateStatus: "READY" })
             }, 3000)
         };
-        this.setState({updateStatus: "UPDATING"});
+        this.setState({ updateStatus: "UPDATING" });
 
         const updateLocation = () => {
             this.props.tryUpdateCustomerInfo({
@@ -84,32 +91,46 @@ class Location extends React.PureComponent {
                 }
             }, callback);
         };
+        //if user touch to select the location
         //get the place's name before save
-        if (this.selectType == SelectType.mapTouching) {
-            //TODO:get address name by coordinate
-            const uri = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.location.latitude},${this.state.location.longitude}&key=${global_const.GMAP_API_KEY}`;
-            let address = await fetch(uri)
-                .then(result => result.json())
-                .then(result => {
-                    console.log(result);
-                    if (result.status !== "OK")
-                        return null;
-                    return result.results[0].formatted_address;
-                });
-            console.log(address);
-            if (address !== null)
-                this.setState({
-                    location: {
-                        ...this.state.location,
-                        address
-                    }
-                }, () => updateLocation());
-            else updateLocation();
+        if (this.props.customer._id) {
+            if (this.selectType == SelectType.mapTouching) {
+                //get address name by coordinate
+                this._getLocationAddress(this.state.location, updateLocation);
 
-        } else {
-            updateLocation();
+            } else {
+                updateLocation();
+            }
         }
+        //if user isn't signed in then just update the address
+        else if (this.selectType == SelectType.mapTouching) {
+            //get address name by coordinate
+            this._getLocationAddress(this.state.location, () => { this.setState({ updateStatus: "READY" }) });
+
+        }
+
+
     };
+
+    _getLocationAddress = async (coordinate, callback) => {
+        const uri = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinate.latitude},${coordinate.longitude}&key=${global_const.GMAP_API_KEY}`;
+        let address = await fetch(uri)
+            .then(result => result.json())
+            .then(result => {
+                console.log(result);
+                if (result.status !== "OK")
+                    return null;
+                return result.results[0].formatted_address;
+            });
+        if (address !== null)
+            this.setState({
+                location: {
+                    ...this.state.location,
+                    address
+                }
+            }, () => { if (callback) callback() });
+        else if (callback) callback();
+    }
 
     componentWillUnmount() {
         if (this.timer)
@@ -122,9 +143,9 @@ class Location extends React.PureComponent {
         const uri = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${global_const.GMAP_API_KEY}`;
         let response;
         try {
-            this.setState({findingStatus: "FINDING"});
+            this.setState({ findingStatus: "FINDING" });
             response = await fetch(uri).then(result => result.json());
-            this.setState({findingStatus: "READY"});
+            this.setState({ findingStatus: "READY" });
             let response = response.results[0];
             console.log(response);
             const coordsEvent = {
@@ -148,8 +169,25 @@ class Location extends React.PureComponent {
 
     };
 
+    _checkConnection = async (callback) => {
+        const isConnected = await NetInfo.isConnected.fetch().then(isConnected => isConnected);
+        if (!isConnected) alert("Vui lòng kiểm tra kết nối");
+        else callback();
+
+    }
+
+    _onBackWithCallback = () => {
+        const callback = this.props.navigation.state.params.getLocation;
+        if (callback) {
+            const { address, latitude, longitude } = this.state.location;
+            callback({ address, latitude, longitude });
+        }
+        this.props.navigation.goBack();
+    }
+
+
     render() {
-        let storeMarker = this.props.store && (
+        let storeMarker = this.props.store.location && (
             <MapView.Marker
                 coordinate={{
                     latitude: this.props.store.location.lat,
@@ -158,23 +196,20 @@ class Location extends React.PureComponent {
                     longitudeDelta: 0.0421,
                 }}>
                 <Image onLoad={() => this.forceUpdate()}
-                       style={{width: 52, height: 52}}
-                       source={require('../../share/images/store_marker_2.png')}/>
+                    style={{ width: 52, height: 52 }}
+                    source={require('../../share/images/store_marker_2.png')} />
             </MapView.Marker>
         );
         return (
             <View style={styles.container}>
                 <Header data={[
-                    {name: 'my-location', onPress: this.getCurrentLocationHandler, color: 'black'},
-                    {name: 'check', onPress: this.updateCustomerLocation, color: 'green'},
-                    {
-                        name: 'clear', onPress: () => this.props.navigation.goBack()
-                        , color: 'red'
-                    },
-                ]}/>
+                    { name: 'my-location', onPress: () => this._checkConnection(this.getCurrentLocationHandler), color: 'black' },
+                    { name: 'check', onPress: () => this._checkConnection(this.updateCustomerLocation), color: 'green' },
+                    { name: 'clear', onPress: this._onBackWithCallback, color: 'red' },
+                ]} />
 
                 <MapView
-                    style={{flex: 1}}
+                    style={{ flex: 1 }}
                     ref={ref => this.map = ref}
                     initialRegion={this.state.location}
                     onPress={(e) => {
@@ -186,7 +221,7 @@ class Location extends React.PureComponent {
                         < React.Fragment>
                             <MapView.Marker
                                 coordinate={this.state.location}>
-                                <Callout/>
+                                <Callout />
                             </MapView.Marker>
                             {storeMarker}
                         </React.Fragment>
@@ -196,17 +231,17 @@ class Location extends React.PureComponent {
                     {
                         this.state.findingStatus === "FINDING" ?
                             <View style={styles.actIndicatorContainer}>
-                                <ActivityIndicator size="small" color="black"/>
+                                <ActivityIndicator size="small" color="black" />
                             </View> :
                             <React.Fragment>
                                 <TextInput
                                     ref="placeInput"
                                     placeholder={this.state.location.address}
                                     style={styles.inputStyle}
-                                    underlineColorAndroid="transparent"/>
+                                    underlineColorAndroid="transparent" />
                                 <TouchableOpacity style={styles.searchBtn}
-                                                  onPress={this.onFindLocation}>
-                                    <Icon name="search" size={22} color="black"/>
+                                    onPress={this.onFindLocation}>
+                                    <Icon name="search" size={22} color="black" />
                                 </TouchableOpacity>
                             </React.Fragment>
                     }
@@ -214,19 +249,19 @@ class Location extends React.PureComponent {
                 {
                     this.state.updateStatus === "UPDATING" &&
                     <View style={styles.dimmer}>
-                        <ActivityIndicator size="large" color="white"/>
+                        <ActivityIndicator size="large" color="white" />
                     </View>
                 }
                 {
                     this.state.updateStatus === "SUCCESS" &&
                     <View style={styles.notiContainer}>
-                        <Noti message="Cập nhật thành công" success/>
+                        <Noti message="Cập nhật thành công" success />
                     </View>
                 }
                 {
                     this.state.updateStatus === "FAILED" &&
                     <View style={styles.notiContainer}>
-                        <Noti message="Cập nhật thất bại"/>
+                        <Noti message="Cập nhật thất bại" />
                     </View>
                 }
             </View>
@@ -303,7 +338,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         store: state.customer.store,
-        customerLocation: state.customer.info.location
+        customerLocation: state.customer.info.location,
+        customer: state.customer.info
     }
 };
 

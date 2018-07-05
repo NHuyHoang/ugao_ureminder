@@ -3,16 +3,16 @@ import {
     StyleSheet, View, Text, Image, TouchableOpacity, TouchableNativeFeedback
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import FBDSK, {
     AccessToken,
     LoginManager
 } from 'react-native-fbsdk';
 
-import {trySaveLocalCustomer} from '../../store/actions';
+import { trySaveLocalCustomer } from '../../store/actions';
 import ui from '../../share/ui.constant';
-import {Input, UButton, Form, Noti} from '../../components';
-import {FecthData} from '../../components';
+import { Input, UButton, Form, Noti } from '../../components';
+import { FecthData } from '../../components';
 
 class Login extends React.Component {
     constructor(props) {
@@ -49,7 +49,7 @@ class Login extends React.Component {
         }
         `;
         console.log(this.query);
-        this.setState({fetchData: true})
+        this.setState({ fetchData: true })
 
     };
 
@@ -64,8 +64,8 @@ class Login extends React.Component {
         LoginManager.logInWithReadPermissions(['public_profile', 'email']).then(
             (result) => {
                 if (result.isCancelled) {
-                    this.setState({oauthFailed: true}, () => {
-                        setTimeout(() => this.setState({oauthFailed: false}), 5000)
+                    this.setState({ oauthFailed: true }, () => {
+                        setTimeout(() => this.setState({ oauthFailed: false }), 5000)
                     });
                 } else {
                     AccessToken.getCurrentAccessToken().then(
@@ -79,8 +79,8 @@ class Login extends React.Component {
                 }
             },
             (error) => {
-                this.setState({oauthFailed: true}, () => {
-                    setTimeout(() => this.setState({oauthFailed: false}), 5000)
+                this.setState({ oauthFailed: true }, () => {
+                    setTimeout(() => this.setState({ oauthFailed: false }), 5000)
                 });
                 console.log('Login fail with error: ' + error);
             }
@@ -92,10 +92,10 @@ class Login extends React.Component {
             <View style={styles.container}>
                 {/* <UButton top={32} onPress={this.onLogin} txt="Đăng nhập" iconName="done" /> */}
                 <View style={styles.logoSegment}>
-                    <Image style={styles.logo} source={require('../../share/images/ugao_logo.png')}/>
+                    <Image style={styles.logo} source={require('../../share/images/ugao_logo.png')} />
                     <View style={styles.txtSegment}>
                         <Text style={styles.welcomeTxt}>Welcome to</Text>
-                        <Image style={styles.logoTxt} source={require('../../share/images/logo_txt_2.png')}/>
+                        <Image style={styles.logoTxt} source={require('../../share/images/logo_txt_2.png')} />
                     </View>
                 </View>
                 <View
@@ -103,11 +103,11 @@ class Login extends React.Component {
                     {this.state.fetchData && FecthData(this.query, "authenticatedCustomer", null, this.loadedDataHandler, "Tài khoản không tồn tại")}
                     {
                         this.props.notiTxt &&
-                        <Noti message={this.props.notiTxt.message}/>
+                        <Noti message={this.props.notiTxt.message} />
                     }
                     {
                         this.state.oauthFailed &&
-                        <Noti message={"Không thể kết nối facebook"}/>
+                        <Noti message={"Không thể kết nối facebook"} />
                     }
                     <Form
                         ref="loginForm"
@@ -116,7 +116,7 @@ class Login extends React.Component {
                             hint="vd test@gmail.com"
                             id="email_input_01"
                             ref="emailInput"
-                            config={{keyboardType: "email-address"}}
+                            config={{ keyboardType: "email-address" }}
                             type='text'
                             label="Email"
                             controlType="email"
@@ -134,19 +134,19 @@ class Login extends React.Component {
                             btnEvent={() => {
                             }}
                         />
-                        <UButton top={32} onPress={this.onLogin} txt="Đăng nhập" iconName="done"/>
+                        <UButton top={32} onPress={this.onLogin} txt="Đăng nhập" iconName="done" />
                     </Form>
                     <View style={styles.oauthSegment}>
                         <View style={styles.fbButtonHolder}>
                             <TouchableNativeFeedback onPress={this.fbOauth}
-                                                     background={TouchableNativeFeedback.Ripple("rgba(0,0,0,0.3)", true)}>
+                                background={TouchableNativeFeedback.Ripple("rgba(0,0,0,0.3)", true)}>
                                 <View style={styles.fbButton}>
-                                    <Icon name="logo-facebook" size={28} color="#44609D"/>
+                                    <Icon name="logo-facebook" size={28} color="#44609D" />
                                     <Text style={styles.fbTxt}>Facebook</Text>
                                 </View>
                             </TouchableNativeFeedback>
                         </View>
-                        <TouchableOpacity style={styles.registerBtn}>
+                        <TouchableOpacity style={styles.registerBtn} onPress={() => this.props.navigation.navigate('Register')}>
                             <Text style={styles.oauthTxt}>Đăng ký</Text>
                         </TouchableOpacity>
                     </View>

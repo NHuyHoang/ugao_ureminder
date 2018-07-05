@@ -1,14 +1,13 @@
 import React from 'react';
 import {
     StyleSheet, Text,
-    View, TouchableOpacity,
+    View,
     Image, KeyboardAvoidingView,
-    ScrollView, Button,
-    AsyncStorage, ActivityIndicator
+    ScrollView,
+    ActivityIndicator
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
-import { Header, Input, FecthData, Noti } from '../../components';
+import { Header, Input, AltAvatar, Noti } from '../../components';
 import Login from './Login';
 import ui from '../../share/ui.constant';
 
@@ -132,9 +131,17 @@ class LoadedContent extends React.PureComponent {
             <ScrollView>
                 <KeyboardAvoidingView behavior="position" >
                     <View style={styles.mainInfoContent}>
-                        <View style={styles.avatarContainer} >
-                            <Image style={styles.avatar} source={{ uri: this.props.data.img }} />
-                        </View>
+                        {
+                            <View style={styles.avatarContainer} >
+                                {
+                                    this.props.data.img !== null
+                                        ?
+                                        <Image style={styles.avatar} source={{ uri: this.props.data.img }} />
+                                        :
+                                        <AltAvatar char={this.props.data.name} />
+                                }
+                            </View>
+                        }
                         <View style={styles.infoContainer}>
                             <Text style={styles.nameTxt}>{this.props.data.name}</Text>
                             <Text style={styles.emailTxt}>{this.props.data.email}</Text>

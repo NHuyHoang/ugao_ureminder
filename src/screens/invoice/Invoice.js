@@ -12,7 +12,7 @@ import {
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import ui from '../../share/ui.constant'
-import { Header, Input, UButton, Slider, Noti } from '../../components';
+import { Header, Input, UButton, Slider, Noti, FlatButton } from '../../components';
 import { tryMakeOrder } from '../../store/actions';
 
 
@@ -40,7 +40,7 @@ class Invoice extends React.Component {
             }
             else {
                 this.setState({ setSubscriptionDate: true, isLoading: true, orderStatus: "ORDERING" }, () => {
-                    this.props.tryMakeOrder(this.makeOrderCallback,null,parseInt(this.refs.subscriptionOrder.getValue()));
+                    this.props.tryMakeOrder(this.makeOrderCallback, null, parseInt(this.refs.subscriptionOrder.getValue()));
                 });
                 return;
             }
@@ -95,10 +95,14 @@ class Invoice extends React.Component {
             case ("READY"):
             case ("FAILED"):
             case ("SUCCESS"):
-                orderBtn = (<UButton
+                
+
+                orderBtn = (<FlatButton
+                width="80%"
                     onPress={this.onPaidHandler}
                     disabled={this.props.cart.length === 0}
-                    txt="Đặt hàng" iconName="done" />)
+                    title="Đặt hàng" invert />)
+
                 break;
             case ("ORDERING"):
                 orderBtn = <ActivityIndicator size="small" color="black" />
@@ -186,7 +190,7 @@ const styles = StyleSheet.create({
         width: _width,
         alignItems: 'center',
         marginTop: 50,
-        marginBottom:20
+        marginBottom: 20
     },
     titleContainer: {
         width: '100%',
@@ -212,7 +216,7 @@ const mapStateToProp = state => {
 
 const mapDispatchToProp = dispatch => {
     return {
-        tryMakeOrder: (callback,preparedInvoice,date) => dispatch(tryMakeOrder(callback,preparedInvoice,date))
+        tryMakeOrder: (callback, preparedInvoice, date) => dispatch(tryMakeOrder(callback, preparedInvoice, date))
     }
 }
 

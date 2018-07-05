@@ -5,32 +5,37 @@ import {
     Text,
     Dimensions,
     Animated,
-    Button,
     ActivityIndicator,
     TouchableOpacity,
     NetInfo,
-    ScrollView,
     KeyboardAvoidingView,
+    TouchableNativeFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { connect } from 'react-redux'
 
-import { Input, Noti, FlatButton, AltAvatar } from '../../components';
+import { Input, Noti, FlatButton, Form, RoundedIconButton } from '../../components';
 import ui from '../../share/ui.constant';
 import globalConstant from '../../store/constant';
 
+import { tryRegisterCustomer } from '../../store/actions';
 
-export default class Register extends React.Component {
+
+class Register extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             step: register_procedure.checkExistEmail,
+            compState: ComponentState.idle,
+            notiMessage: "Failed message"
         };
         this.animation = {
             screenPosition: new Animated.Value(0)
         }
     }
 
-    _changeProcedureScreen = (step, isBack) => {
+    _changeProcedureScreen = (step, isBack, callback) => {
+        //go to the next step
         this.setState({ step }, () => {
             let stepNumb = 0;
             switch (this.state.step) {
@@ -44,19 +49,23 @@ export default class Register extends React.Component {
                     stepNumb = 2;
                     break;
             }
+            //if isBack === true go to previous step
             Animated.timing(this.animation.screenPosition, {
                 toValue: isBack ? _width * stepNumb : -1 * _width * stepNumb,
                 duration: 300,
-            }).start();
+            }).start(() => {
+                if (callback)
+                    callback();
+            });
         })
     };
 
     _onTransitVerifyEmail = async (successHandler, errorHandler) => {
         const response = await this._onSendVerificationCode();
         if (response.success) {
-            successHandler();
             this.refs.VerifyEmailScreen._onCountdown(60);
-            this._changeProcedureScreen(register_procedure.verifyEmail);
+            this._changeProcedureScreen(register_procedure.verifyEmail, false, successHandler);
+
         }
         else errorHandler();
     }
@@ -99,9 +108,24 @@ export default class Register extends React.Component {
         return this.verificationCode === code;
     }
 
+    _onTryRegisterCustomer = (info, callback) => {
+        const { name, phone, coordinate, pass } = info;
+        const customer = {
+            email: this.refs.CheckExistEmail._onGetInputValue(),
+            name, img: null, phone, coordinate, pass
+        }
+        this.props.tryRegisterCustomer(customer, callback);
+    }
+
     componentWillUnmount() {
         this.verificationCode = null;
     }
+
+    _onShowNoti = (state, message) => {
+        this.setState({ compState: state, notiMessage: message }, () => {
+            setTimeout(() => this.setState({ compState: ComponentState.idle, notiMessage: "" }), 3000);
+        })
+    };
 
 
     render() {
@@ -112,28 +136,51 @@ export default class Register extends React.Component {
             <View>
                 <Animated.View style={[styles.container, screenTransition]}>
 
-                    {/*  <CheckExistEmail ref="CheckExistEmail" onNext={this._onTransitVerifyEmail} />
+                    <CheckExistEmail
+                        ref="CheckExistEmail"
+                        onNext={this._onTransitVerifyEmail}
+                        onShowNoti={this._onShowNoti}
+                    />
                     <VerifyEmail
                         onNext={() => this._changeProcedureScreen(register_procedure.assignInfomation)}
                         onBack={this._onTransitCheckExistEmail}
                         ref="VerifyEmailScreen"
                         checkCode={this._onCheckVerificationCode}
                         sendCode={this._onSendVerificationCode}
-                    /> */}
-                    <AssignInformation />
+                        onShowNoti={this._onShowNoti}
+                    />
+                    <AssignInformation
+                        navigation={{ ...this.props.navigation }}
+                        onRegister={this._onTryRegisterCustomer}
+                        onShowNoti={this._onShowNoti}
+                    />
 
                 </Animated.View>
-                <View style={styles.exitBtn}>
+                <TouchableOpacity
+                    style={styles.exitBtn}
+                    onPress={() => this.props.navigation.goBack()}>
                     <Icon name="clear" size={20} color="red" />
-                </View>
-            </View>
+                </TouchableOpacity>
+                {
+                    (this.state.compState === ComponentState.failed || this.state.compState === ComponentState.success)
+                    && <View style={styles.notiContainer}>
+                        <Noti
+                            success={this.state.compState === ComponentState.success}
+                            message={this.state.notiMessage} />
+                    </View>
+                }
+            </View >
         )
     }
 }
 const ExitButton = (props) => (
-    <View style={styles.exitBtn}>
-        <Icon name="clear" size={20} color="red" />
-    </View>
+    <TouchableNativeFeedback
+        background={TouchableNativeFeedback.Ripple("rgba(0,0,0,0.3)", false)}
+        onPress={() => { }}>
+        <View style={styles.exitBtn}>
+            <Icon name="clear" size={20} color="red" />
+        </View>
+    </TouchableNativeFeedback>
 );
 
 class CheckExistEmail extends React.Component {
@@ -158,7 +205,7 @@ class CheckExistEmail extends React.Component {
             alert("Vui lòng nhập đúng định dạng email");
             return;
         }
-        //check connection 
+        //check connection
         const isConnected = await NetInfo.isConnected.fetch().then(isConnected => isConnected);
         if (!isConnected) {
             alert("Vui lòng kiểm tra kết nối");
@@ -166,25 +213,21 @@ class CheckExistEmail extends React.Component {
         }
         this.setState({ compState: ComponentState.loading });
         //get the customer
-        const query = `{  OAuthCustomer(email: "${inputValue}") { _id } }`;
+        const query = `{OAuthCustomer(email: "${inputValue}") {_id} }`;
         const response = await fetch(`${globalConstant.DB_URI}?query=${query}`).then(data => data.json());
         if (response.data.OAuthCustomer !== null) {
-            this._onShowNoti(ComponentState.failed, "Email đã được đăng ký")
+            this.props.onShowNoti(ComponentState.failed, "Email đã được đăng ký");
+            this.setState({ compState: ComponentState.idle });
         } else {
             const errorHandler = () => {
-                this._onShowNoti(ComponentState.failed, "Không gửi được email")
+                this.props.onShowNoti(ComponentState.failed, "Không gửi được email");
+                this.setState({ compState: ComponentState.idle });
             };
             const successHandler = () => {
                 this.setState({ compState: ComponentState.idle });
             };
             this.props.onNext(successHandler, errorHandler);
         }
-    };
-
-    _onShowNoti = (state, message) => {
-        this.setState({ compState: state, notiMessage: message }, () => {
-            setTimeout(() => this.setState({ compState: ComponentState.idle, notiMessage: "" }), 2000);
-        })
     };
 
 
@@ -267,11 +310,13 @@ class VerifyEmail extends React.Component {
         }, 1000);
     }
 
+    //check the verification code
     _onCheckVerificationCode = () => {
-        alert(this.props.checkCode(this.refs.codeInput.getValue()));
-        const isValidCode = this.refs.codeInput.getValue();
+        const isValidCode = this.props.checkCode(this.refs.codeInput.getValue());
         if (isValidCode) {
             this.props.onNext();
+        } else {
+            this.props.onShowNoti(ComponentState.failed, "Code không hợp lệ");
         }
     }
 
@@ -341,53 +386,133 @@ class VerifyEmail extends React.Component {
 }
 
 class AssignInformation extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            compState: ComponentState.idle,
+            notiMessage: "Erorr founded",
+            location: {
+                address: "",
+                latitude: null,
+                longitude: null,
+            }
+        }
+    }
+
+    _onPreparedForRegister = async () => {
+        const isConnected = await NetInfo.isConnected.fetch().then(isConnected => isConnected);
+        if (!isConnected) {
+            alert("Vui lòng kiểm tra kết nối");
+            return;
+        }
+        const coordinate = {
+            address: this.state.location.address,
+            lat: this.state.location.latitude,
+            lng: this.state.location.longitude
+        }
+        const info = {
+            name: this.refs.nameInput.getValue(),
+            phone: this.refs.phoneInput.getValue(),
+            pass: this.refs.passwordInput.getValue(),
+            coordinate
+        }
+        this.setState({ compState: ComponentState.loading });
+        const callback = (isSuccess) => {
+            if (isSuccess) {
+               // this.props.onShowNoti(ComponentState.success, "Đăng ký thành công");
+                this.props.navigation.goBack();
+            }
+            else {
+                this.props.onShowNoti(ComponentState.failed, "Đã xảy ra lỗi");
+            }
+            this.setState({ compState: ComponentState.idle, })
+        }
+        this.props.onRegister(info, callback);
+
+    }
+
+    _onGetLocation = (location) => {
+        //this is solution for form validation
+        //because address input is neither editable
+        //nor checking validity in onChangeText
+        this.refs.addressInput.onChangeTextHandler(location.address);
+        this.setState({
+            location: { ...location },
+
+        });
+    }
+
     render() {
         return (
-            <View style={styles.screenView}>
-                <ScrollView>
-                    <View style={styles.titlePanel}>
-                        <Text style={[styles.title, { fontSize: 42.0, width: 'auto' }]}>HOÀN TẤT</Text>
-                        <Text style={[styles.subTitle, { fontSize: 30.0, width: 'auto' }]}>THÔNG TIN CỦA BẠN</Text>
-                    </View>
-                    <KeyboardAvoidingView behavior="position" >
-                        <Input
-                            id="name-input"
-                            ref="nameInput"
-                            type={'text'}
-                            label={"Họ & tên"} />
-                        <Input
-                            ionicon
-                            id="password_input_01"
-                            ref="passwordInput"
-                            type={'text'}
-                            label={"Password"}
-                            controlType="password"
-                            hint=""
-                            btnEvent={() => {
-                            }}
-                        />
-                        <Input
-                            id="email_input_01"
-                            ref="emailInput"
-                            config={{ keyboardType: "email-address", editable: false }}
-                            type='text'
-                            label="Email"
-                            controlType="email"
-                        />
-                        <Input
-                            ref="phoneInput"
-                            config={{ keyboardType: 'numeric' }}
-                            type={'text'}
-                            label={"Điện thoại"} />
-                        <Input
-                            ref="addressInput"
-                            type={'text'}
-                            label={"Địa chỉ"}
-                            config={{ editable: false }}
-                            iconBtn={{ name: "place" }}
-                            btnEvent={() => { }} />
+            <View style={[styles.screenView, { justifyContent: 'flex-start' }]}>
+                <View style={styles.titlePanel}>
+                    <Text style={[styles.title, { fontSize: 42.0, width: 'auto' }]}>HOÀN TẤT</Text>
+                    <Text style={[styles.subTitle, { fontSize: 26.0, width: 'auto' }]}>THÔNG TIN CỦA BẠN</Text>
+                </View>
+                <View style={{ width: '100%', justifyContent: 'center' }}>
+                    <KeyboardAvoidingView behavior="padding" >
+                        <Form style={{
+                            width: "100%", alignItems: 'center'
+                        }}>
+                            <Input
+                                id="name-input"
+                                ref="nameInput"
+                                type={'text'}
+                                label={"Họ & tên"} />
+                            <Input
+                                ionicon
+                                id="password-input"
+                                ref="passwordInput"
+                                type={'text'}
+                                label={"Password"}
+                                controlType="password"
+                                hint=""
+                                btnEvent={() => {
+                                }}
+                            />
+                            <Input
+                                id="phone-input"
+                                ref="phoneInput"
+                                config={{ keyboardType: 'numeric' }}
+                                type={'text'}
+                                label={"Điện thoại"} />
+                            <Input
+                                id="address-input"
+                                ref="addressInput"
+                                type={'text'}
+                                label={"Địa chỉ"}
+                                config={{ editable: false }}
+                                iconBtn={{ name: "place" }}
+                                btnEvent={() => this.props.navigation.navigate('Location', {
+                                    getLocation: this._onGetLocation
+                                })}
+                            />
+                            {
+                                this.state.compState !== ComponentState.loading
+                                    ? <FlatButton top={22} title="Đăng ký" invert width="80%" onPress={this._onPreparedForRegister} />
+                                    : <React.Fragment />
+                            }
+                        </Form>
+                        {
+                            this.state.compState === ComponentState.loading
+                            && <View style={{ marginTop: 22.0 }}><ActivityIndicator size="small" color="black" /></View>
+                        }
+
                     </KeyboardAvoidingView>
-                </ScrollView>
+                </View>
+                {
+                    this.state.compState === ComponentState.failed
+                    && <View style={styles.notiContainer}>
+                        <Noti message={this.state.notiMessage} />
+                    </View>
+                }
+                {
+                    this.state.compState === ComponentState.success
+                    && <View style={styles.notiContainer}>
+                        <Noti success message={this.state.notiMessage} />
+                    </View>
+                }
             </View >
         )
     }
@@ -463,8 +588,11 @@ const styles = StyleSheet.create({
         marginTop: 22.0
     },
     titlePanel: {
-        marginLeft:5.0,
-        alignItems:'flex-start'
+        paddingLeft: 12.0,
+        marginTop: 22.0,
+        marginBottom: 22.0,
+        width: '100%',
+        alignItems: 'flex-start'
     }
 });
 
@@ -480,3 +608,11 @@ const ComponentState = Object.freeze({
     success: "success",
     failed: "failed"
 });
+
+const mapDispatchToProps = dispatch => {
+    return {
+        tryRegisterCustomer: (info, callback) => dispatch(tryRegisterCustomer(info, callback))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Register);

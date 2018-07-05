@@ -1,20 +1,18 @@
 import React from 'react';
-import { View, Image, StyleSheet, TouchableNativeFeedback } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import { View, Image, StyleSheet } from 'react-native';
+import  RoundedIconButton  from '../UButton/RoundedIconButton';
 
 export default Header = (props) => {
-    const buttons = {
-
-    }
     return (
         <View style={styles.headerBar}>
             <Image style={styles.logo} source={require('../../share/images/logo_txt_2.png')} />
             {
                 props.data && <View style={styles.btnContainer}>
                     {
-                        props.data.map((button, i) => (
-                            <IconButton key={i} {...button} />
-                        ))
+                        props.data.map((button, i) => {
+                            if (!button) return null;
+                            return <RoundedIconButton key={i} {...button} />
+                        })
                     }
                 </View>
             }
@@ -22,15 +20,7 @@ export default Header = (props) => {
     )
 }
 
-const IconButton = (props) => (
-    <TouchableNativeFeedback
-        onPress={props.onPress}
-        background={TouchableNativeFeedback.Ripple('rgba(0,0,0,0.3)', true)}>
-        <View style={styles.iconBtnContainer}>
-            <Icon name={props.name} size={20} color={props.color} />
-        </View>
-    </TouchableNativeFeedback>
-)
+
 
 const styles = StyleSheet.create({
     headerBar: {
@@ -50,12 +40,4 @@ const styles = StyleSheet.create({
     btnContainer: {
         flexDirection: 'row'
     },
-    iconBtnContainer: {
-        marginRight: 14,
-        width: 30,
-        height: 30,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 12,
-    }
 })

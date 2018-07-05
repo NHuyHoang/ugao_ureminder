@@ -3,33 +3,44 @@ import { StyleSheet, View, Text, TouchableNativeFeedback } from 'react-native';
 
 import ui from '../../share/ui.constant';
 
-export default FlatButton = (props) => {
-    let color = ui.colors.highlight;
-    if (props.disabled) color = 'grey';
-    if (props.invert) color = 'white';
-    return (
-        <View style={[
-            styles.container,
-            {
-                width: !props.width ? '100%' : props.width,
-                height: !props.height ? 42 : props.height,
-                backgroundColor: props.invert ? ui.colors.highlight : 'transparent'
-            }]}>
-            <TouchableNativeFeedback
-                disabled={props.disabled}
-                onPress={props.onPress}
-                background={TouchableNativeFeedback.Ripple('rgba(0,0,0,0.2)', true)} >
-                <View style={styles.inkwell}>
-                    <Text style={
-                        [styles.txt,
-                        { color: props.color ? props.color : color }
-                        ]}>
-                        {props.title.toUpperCase()}
-                    </Text>
-                </View>
-            </TouchableNativeFeedback>
-        </View>
-    )
+export default class FlatButton extends React.PureComponent {
+    render() {
+        let color = ui.colors.highlight;
+        let backgroundColor = "transparent";
+        if (this.props.invert) {
+            color = 'white';
+            if (this.props.disabled) backgroundColor = ui.colors.light_gray;
+            else backgroundColor = ui.colors.highlight;
+        } else {
+            if (this.props.disabled)
+                color = ui.colors.highlight;
+        }
+        return (
+            <View style={[
+                styles.container,
+                {
+                    width: !this.props.width ? '100%' : this.props.width,
+                    height: !this.props.height ? 42 : this.props.height,
+                    marginTop: this.props.top ? this.props.top : 0.0,
+                    marginBottom: this.props.bottom ? this.props.bottom : 0.0,
+                    backgroundColor,
+                }]}>
+                <TouchableNativeFeedback
+                    disabled={this.props.disabled}
+                    onPress={this.props.onPress}
+                    background={TouchableNativeFeedback.Ripple('rgba(0,0,0,0.2)', true)} >
+                    <View style={styles.inkwell}>
+                        <Text style={
+                            [styles.txt,
+                            { color: this.props.color ? this.props.color : color }
+                            ]}>
+                            {this.props.title.toUpperCase()}
+                        </Text>
+                    </View>
+                </TouchableNativeFeedback>
+            </View>
+        )
+    }
 }
 
 

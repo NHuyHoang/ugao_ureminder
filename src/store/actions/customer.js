@@ -133,8 +133,8 @@ export const trySaveLocalCustomer = (customer) => {
 
 export const tryRegisterCustomer = (info, callback) => {
     //info = {email,name,img}
-    let { email, name, img, phone } = info;
-    console.log(img);
+    let { email, name, img, phone, coordinate, pass } = info;
+    console.log(info);
     return async dispatch => {
         //get,set FCM token
         const tokenPromise = new Promise((resolve, reject) => {
@@ -148,6 +148,7 @@ export const tryRegisterCustomer = (info, callback) => {
         })
         //use this user's current location
         const locationPromise = new Promise((resolve, reject) => {
+            if (coordinate) resolve(coordinate);
             navigator.geolocation.getCurrentPosition(pos => {
                 let { latitude, longitude } = pos.coords;
                 //try find the address name by coordinate
@@ -185,8 +186,8 @@ export const tryRegisterCustomer = (info, callback) => {
         const location = assembledPromise[1];
         //query to the server
         const body = {
-            query: `mutation addCustomer($email: String!, $name: String!, $location: JSON,$token:String,$img:String, $phone:String) {
-                    addCustomer(email:$email, name:$name, location:$location,token:$token, img:$img, phone:$phone){ 
+            query: `mutation addCustomer($email: String!, $name: String!, $location: JSON,$token:String,$img:String, $phone:String, $pass:String) {
+                    addCustomer(email:$email, name:$name, location:$location,token:$token, img:$img, phone:$phone,pass:$pass){ 
                         _id token email name pass img phone 
                         location { address lat lng }
                         invoices { _id }
@@ -198,6 +199,7 @@ export const tryRegisterCustomer = (info, callback) => {
                 img,
                 token,
                 phone,
+                pass,
                 location
             }
         }

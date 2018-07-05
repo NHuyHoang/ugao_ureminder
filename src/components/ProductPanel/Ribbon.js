@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         top: 11,
         left: 'auto',
         right: "-38%",
-        backgroundColor: ui.colors.dark_gray,
+        backgroundColor: ui.colors.s,
         justifyContent: 'center',
         alignItems: 'center',
         transform: [{

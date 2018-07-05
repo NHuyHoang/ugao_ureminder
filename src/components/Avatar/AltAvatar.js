@@ -8,7 +8,7 @@ export default AltAvatar = (props) => {
     return (
         <View style={[styles.avatarContainer, { backgroundColor }]} >
             <Text style={styles.txt}>
-                {props.char.toUpperCase()}
+                {props.char.charAt(0).toUpperCase()}
             </Text>
         </View>
     )
@@ -16,12 +16,12 @@ export default AltAvatar = (props) => {
 
 const styles = StyleSheet.create({
     avatarContainer: {
-        height: 100.0,
-        width: 100.0,
+        height: 80.0,
+        width: 80.0,
         justifyContent: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius:50.0
+        borderRadius: 50.0
     },
     txt: {
         fontSize: 50.0,

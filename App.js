@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
 
 const Tabs = TabNavigator(
     {
-        Store: {screen: Screens.Register},
+        Store: {screen: Screens.Store},
         Invoice: {screen: Screens.Invoice},
         Profile: {screen: Screens.Profile},
         History: {screen: Screens.History},

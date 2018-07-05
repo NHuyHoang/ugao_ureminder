@@ -18,7 +18,7 @@ export default class Form extends React.Component {
         if (isValid === false && this.state.validForm === true)
             this.setState({ validForm: false })
         for (key in this.input) {
-            if (this.input[key].valid === false) return;
+            if (this.input[key].valid === false || this.input[key].value === "") return;
         }
         this.setState({ validForm: true })
     }
@@ -41,7 +41,8 @@ export default class Form extends React.Component {
         //clone this.props.children and
         //add checkvalidity prop to Input element only
         this.clonedChildren = React.Children.map(this.props.children, (child) => {
-            if (child.type.displayName === "UButton")
+            if(!child.type) return null;
+            if (child.type.displayName === "UButton" || child.type.displayName === "FlatButton")
                 return React.cloneElement(child, { disabled: !this.state.validForm })
             return React.cloneElement(child, { checkValidity: this.checkValidity })
         })

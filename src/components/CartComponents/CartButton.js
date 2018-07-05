@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, PanResponder } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import ui from '../../share/ui.constant';
 
 export default CartButton = (props) => {
@@ -9,7 +9,7 @@ export default CartButton = (props) => {
         <TouchableWithoutFeedback onPress={props.checkCart}>
             <View style={styles.container}>
                 <View style={styles.cartBtn}>
-                    <Icon name="ios-cart-outline" size={30} color={ui.colors.black} />
+                    <Icon name="shopping-cart" size={30} color="white" />
                 </View>
                 {
                     props.quantity > 0 &&
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         width: 60,
         position: 'absolute',
         zIndex: 3,
-        backgroundColor: 'white',
+        backgroundColor: ui.colors.highlight,
         justifyContent: 'center',
         alignItems: 'center',
         elevation: 4,

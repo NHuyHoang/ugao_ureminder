@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import { Header, InvoiceItem, FecthData, Noti } from '../../components';
-
+import { Header, InvoiceItem, FecthData, Noti, FlatButton } from '../../components';
+import ui from '../../share/ui.constant';
 class History extends React.Component {
     constructor(props) {
         super(props);
@@ -38,29 +38,33 @@ class History extends React.Component {
         )
     }
 
+    _onLoadMorePressed = () => {
+        this.setState({ loading: true });
+        this.onAddListProduct();
+    }
+
     render() {
+        let footerComponent = <FlatButton title="Tải thêm" onPress={this._onLoadMorePressed} />;
+        if (this.state.loading) footerComponent = <ActivityIndicator size="small" color={ui.colors.highlight} />;
+        if (this.invoicesLength <= this.state.data.length) footerComponent = null;
         //display 10 latest invoices
         //let data = [...this.props.info.invoices.splice(invoicesLength - 11, invoicesLength - 1)];
         return (
             <View style={styles.container}>
-                <Header  />
+                <Header />
                 {
                     this.state.data.length != 0 ?
                         <FlatList
-                            ListFooterComponent={() => {
-                                return this.state.loading ?
-                                    <ActivityIndicator style={{ marginTop: 6, marginBottom: 6 }} size="small" color="black" /> :
-                                    null
-                            }}
+                            ListFooterComponent={footerComponent}
                             data={this.state.data}
                             keyExtractor={(item, index) => item._id}
                             renderItem={({ item }) => <InvoiceItem navigation={{ ...this.props.navigation }} data={item} />}
-                            onEndReachedThreshold={0.1}
-                            onEndReached={() => {
-                                if (!this.state.loading) {
-                                    this.setState({ loading: true }, this.onAddListProduct);
-                                }
-                            }}
+                        /*  onEndReachedThreshold={0.1}
+                         onEndReached={() => {
+                             if (!this.state.loading) {
+                                 this.setState({ loading: true }, this.onAddListProduct);
+                             }
+                         }} */
                         /> :
                         <Noti message="Không tồn tại lịch sử giao dịch" />
                 }

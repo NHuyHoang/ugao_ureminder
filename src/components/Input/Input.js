@@ -183,7 +183,6 @@ export default class Input extends React.Component {
                         onChangeText={(text) => this.onChangeTextHandler(text)}
                         onFocus={() => this.onFocus()}
                         onBlur={() => this.onFocus()}
-
                         //defaultValue="Số 1 Võ Văn Ngân, Q.Thủ Đức, TP.HCM"
                         style={styles.txtInput}
                         underlineColorAndroid="transparent"

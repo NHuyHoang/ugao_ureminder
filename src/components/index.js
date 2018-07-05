@@ -11,6 +11,7 @@ export { default as Header } from './Header/Header';
 export { default as Input } from './Input/Input';
 export { default as UButton } from './UButton/UButton';
 export { default as FlatButton } from './UButton/FlatButton';
+export { default as RoundedIconButton } from './UButton/RoundedIconButton';
 export { default as InvoiceItem } from './InvoiceItem/InvoiceItem';
 export { default as IconButton } from './IconButton/IconButton';
 export { default as FecthData } from './FecthData/FecthData';
