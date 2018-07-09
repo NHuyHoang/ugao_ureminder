@@ -11,7 +11,7 @@ import FBDSK, {
 
 import { trySaveLocalCustomer } from '../../store/actions';
 import ui from '../../share/ui.constant';
-import { Input, UButton, Form, Noti } from '../../components';
+import { Input, UButton, Form, Noti, FlatButton } from '../../components';
 import { FecthData } from '../../components';
 
 class Login extends React.Component {
@@ -70,7 +70,7 @@ class Login extends React.Component {
                 } else {
                     AccessToken.getCurrentAccessToken().then(
                         (data) => {
-                            console.log(data.accessToken.toString())
+                           // console.log(data.accessToken.toString())
                             this.props.navigation.navigate('FbSignUp', {
                                 accessToken: data.accessToken,
                             })
@@ -134,7 +134,8 @@ class Login extends React.Component {
                             btnEvent={() => {
                             }}
                         />
-                        <UButton top={32} onPress={this.onLogin} txt="Đăng nhập" iconName="done" />
+                        <FlatButton width="90%" invert  top={32} onPress={this.onLogin} title="Đăng nhập" />
+                        {/* <UButton color={ui.colors.highlight} top={32} onPress={this.onLogin} txt="Đăng nhập" iconName="done" /> */}
                     </Form>
                     <View style={styles.oauthSegment}>
                         <View style={styles.fbButtonHolder}>
@@ -146,9 +147,13 @@ class Login extends React.Component {
                                 </View>
                             </TouchableNativeFeedback>
                         </View>
-                        <TouchableOpacity style={styles.registerBtn} onPress={() => this.props.navigation.navigate('Register')}>
+                        <FlatButton 
+                            color="black"
+                            onPress={() => this.props.navigation.navigate('Register')} 
+                            width='30%' title="Đăng ký"/>
+                        {/* <TouchableOpacity style={styles.registerBtn} onPress={() => this.props.navigation.navigate('Register')}>
                             <Text style={styles.oauthTxt}>Đăng ký</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                 </View>
             </View>
@@ -205,6 +210,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
+        marginTop:8.0
     },
     oauthTxt: {
         fontFamily: ui.fonts.thin,

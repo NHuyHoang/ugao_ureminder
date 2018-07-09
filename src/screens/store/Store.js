@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions, TouchableWithoutFeedback, Animated, Image, PanResponder, Button, DatePickerAndroid, TimePickerAndroid } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { StyleSheet, View, Dimensions, TouchableWithoutFeedback, Animated, Image, DatePickerAndroid, TimePickerAndroid } from 'react-native';
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux';
 import FCM from 'react-native-fcm';
@@ -8,7 +7,6 @@ import FCM from 'react-native-fcm';
 import StoreProduct from './storeProduct/StoreProduct';
 import StoreNoti from './storeNoti/StoreNoti';
 import StoreContact from './storeContact/StoreContact';
-import Login from '../profile/Login';
 import ui from '../../share/ui.constant';
 import { SearchInput, NavbarTab, CartButton, ProductItem, PayButton } from '../../components';
 import { removeFromCart } from '../../store/actions'

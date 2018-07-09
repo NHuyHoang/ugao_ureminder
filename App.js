@@ -18,16 +18,6 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        AsyncStorage.getItem("FCM:token")
-            .then(data => {
-                if (!data) {
-                    FCM.getFCMToken().then(token => {
-
-                        AsyncStorage.setItem("FCM:token", token);
-                    })
-                }
-                console.log(data)
-            })
         //this function check whether there is any notification exist
         //before the app was open
         FCM.getInitialNotification().then(notif => {

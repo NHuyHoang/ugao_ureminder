@@ -38,7 +38,7 @@ export default class UButton extends React.Component {
             },
         })
         this.colors = {
-            highlight: this.props.color ? this.props.highlight : 'black',
+            highlight: this.props.color ? this.props.color  : 'black',
             fadeColor: this.props.fadeColor ? this.props.fadeColor : ui.colors.dark_gray,
         }
     }

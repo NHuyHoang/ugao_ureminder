@@ -22,7 +22,8 @@ const itemKey = {
     storeKey: "get:info:store",
     notiKey: "get:noti",
     subscriptionOrder: "get:subscription:order",
-    subscriptionInterval: "get:subscription:interval"
+    subscriptionInterval: "get:subscription:interval",
+    fcmTokenKey: "FCM:token"
 }
 
 const getCustomerFailed = () => {
@@ -53,10 +54,39 @@ const addInvoice = (invoice) => {
     }
 }
 
-export const logout = () => {
-    AsyncStorage.removeItem(itemKey.customerKey);
+export const onLogout = () => {
     return {
         type: LOG_OUT
+    }
+}
+
+export const logout = () => {
+    return (dispatch,getState) => {
+        //remove the token 
+        const body = {
+            query: `
+                mutation updateCustomer($updateInfo:JSON!){
+                    updateCustomer(updateInfo:$updateInfo)
+                }`,
+            variables: {
+                updateInfo: {
+                    _id: getState().customer.info._id,
+                    token: null,
+                }
+            }
+        }
+
+        fetch(globalConst.DB_URI, {
+            body: JSON.stringify(body),
+            headers: {
+                'content-type': 'application/json'
+            },
+            method: 'POST',
+        }).then(res => res.json());
+
+        AsyncStorage.clear();
+
+        dispatch(onLogout())
     }
 }
 
@@ -121,15 +151,59 @@ export const OAuthCustomerLogin = (customer, done) => {
     }
 }
 
+const getFCMToken = () => {
+    return new Promise((resolve, reject) => {
+        AsyncStorage.getItem("FCM:token")
+            .then(data => {
+                if (!data) {
+                    FCM.getFCMToken().then(token => {
+                        AsyncStorage.setItem(itemKey.fcmTokenKey, token);
+                        resolve(token);
+                    }).catch(err => {
+                        console.log(err);
+                        reject(null)
+                    })
+                } else resolve(data);
+            })
+    })
+}
+
 export const trySaveLocalCustomer = (customer) => {
     return async dispatch => {
-        AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(customer))
+        //get devices's FCM token and save to database
+        console.log("try get token------");
+        const token = await getFCMToken();
+        console.log(token);
+        const body = {
+            query: `
+                mutation updateCustomer($updateInfo:JSON!){
+                    updateCustomer(updateInfo:$updateInfo)
+                }`,
+            variables: {
+                updateInfo: {
+                    _id: customer._id,
+                    token,
+                }
+            }
+        }
+        fetch(globalConst.DB_URI, {
+            body: JSON.stringify(body),
+            headers: {
+                'content-type': 'application/json'
+            },
+            method: 'POST',
+        }).then(res => res.json());
+
+        AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(customer));
         dispatch(saveLocalCustomer(customer));
+
         let store = await tryFindNearestStore(customer.location);
         AsyncStorage.setItem(itemKey.storeKey, JSON.stringify(store))
         dispatch(saveNearestStore(store));
     }
 }
+
+
 
 export const tryRegisterCustomer = (info, callback) => {
     //info = {email,name,img}
@@ -137,15 +211,7 @@ export const tryRegisterCustomer = (info, callback) => {
     console.log(info);
     return async dispatch => {
         //get,set FCM token
-        const tokenPromise = new Promise((resolve, reject) => {
-            FCM.getFCMToken().then(token => {
-                AsyncStorage.setItem("FCM:token", token);
-                resolve(token);
-            }).catch(err => {
-                console.log(err);
-                reject(null)
-            })
-        })
+        const tokenPromise = await getFCMToken();
         //use this user's current location
         const locationPromise = new Promise((resolve, reject) => {
             if (coordinate) resolve(coordinate);

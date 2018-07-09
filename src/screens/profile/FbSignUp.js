@@ -28,7 +28,7 @@ class FbSignUp extends React.PureComponent {
                 .then(info => info.json());
             const query = `${globalConst.DB_URI}?query={
                 OAuthCustomer(email:"${userInfo.email}") {
-                    _id email name img phone
+                    _id email name img phone token
                     location{
                         address
                         lat
