@@ -25,7 +25,8 @@ const initialState = {
         location: null,
     },
     showNoti: true,
-    subscriptionOrder: null
+    subscriptionOrder: null,
+    hasChange:true
 }
 
 const reducer = (state = initialState, action) => {

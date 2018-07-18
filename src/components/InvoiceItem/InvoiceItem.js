@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Animted, TouchableWithoutFeedback, Animated, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Button, Animated, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Slider from '../Slider/Slider';
 import ui from '../../share/ui.constant';
@@ -33,8 +33,8 @@ export default class InvoiceItem extends React.PureComponent {
         })
     }
 
-    componentWillMount() {
-        let { _id, order_date, tasks, price, paid, products } = this.props.data;
+  /*   componentWillMount() {
+        let { _id, order_date, tasks, price, paid, products, shipper } = this.props.data;
         let { name, owner } = this.props.data.store;
 
         this.data = {
@@ -42,6 +42,27 @@ export default class InvoiceItem extends React.PureComponent {
             receipt_date: !tasks.receipt_date ? "Chưa nhận" : this.dateTimeConverter(tasks.receipt_date),
             price: `${price.toFixed(3)} VND`,
             paid,
+            shipper,
+            products: this.productsDataConfig(products),
+            _id: _id
+        };
+        this.store = {
+            name,
+            email: owner.email,
+            phone: owner.phone
+        }
+    } */
+
+    _dataHandler = () => {
+        let { _id, order_date, tasks, price, paid, products, shipper } = this.props.data;
+        let { name, owner } = this.props.data.store;
+
+        this.data = {
+            order_date: this.dateTimeConverter(order_date),
+            receipt_date: !tasks.receipt_date ? "Chưa nhận" : this.dateTimeConverter(tasks.receipt_date),
+            price: `${price.toFixed(3)} VND`,
+            paid,
+            shipper,
             products: this.productsDataConfig(products),
             _id: _id
         };
@@ -76,9 +97,35 @@ export default class InvoiceItem extends React.PureComponent {
 
     }
 
+    _onStatusHandler = () => {
+        if (!this.data.shipper) {
+            return (
+                <React.Fragment>
+                    <Icon name="autorenew" size={30} color="grey" />
+                    <Text style={styles.statusTxt}>Đang xử lý</Text>
+                </React.Fragment>
+            )
+        } else {
+            if (!this.data.paid) {
+                return (
+                    <React.Fragment>
+                        <Icon name="motorcycle" size={30} color="grey" />
+                        <Text style={styles.statusTxt}>Đang giao</Text>
+                    </React.Fragment>
+                )
+            } else {
+                return (
+                    <React.Fragment>
+                        <Icon name="done" size={30} color={ui.colors.highlight} />
+                        <Text style={[styles.statusTxt,{color:ui.colors.highlight}]}>Đã nhận</Text>
+                    </React.Fragment>
+                )
+            }
+        }
+    }
 
     render() {
-
+        this._dataHandler();
         //let paidIcon = (<Icon name="close" size={20} color="black" />);
         if (this.data.paid)
             paidIcon = (<Icon name="done" size={20} color={ui.colors.highlight} />)
@@ -86,10 +133,15 @@ export default class InvoiceItem extends React.PureComponent {
             <View style={styles.container}>
                 <View style={styles.infoPanel} >
                     <View style={styles.storeInfo}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Shipper', { invoiceId: this.data._id })} style={{ marginLeft: 4 }}>
-                            <Text style={styles.storeName}>{this.store.name}</Text>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('Shipper', { invoiceId: this.data._id })}
+                            style={{ width: 70, alignItems: 'center' }}>
+                            {/*  <Text style={styles.storeName}>{this.store.name}</Text>
                             <Text style={styles.storeInfoTxt}>{this.store.phone}</Text>
-                            <Text style={styles.moreInfoTxt}>Click để xem chi tiết</Text>
+                            <Text style={styles.moreInfoTxt}>Click để xem chi tiết</Text> */}
+                            {
+                                this._onStatusHandler()
+                            }
                         </TouchableOpacity>
                     </View>
                     <View style={styles.mainInfo}>
@@ -103,7 +155,7 @@ export default class InvoiceItem extends React.PureComponent {
                         </View>
                         <View style={styles.txtContainer}>
                             {/*  {paidIcon} */}
-                            <Text style={[styles.costTxt, { color: this.data.paid ? ui.colors.black : "red" }]}>{this.data.price}</Text>
+                            <Text style={[styles.costTxt, { color: this.data.paid ? ui.colors.highlight : "black" }]}>{this.data.price}</Text>
                         </View>
                     </View>
                     <TouchableOpacity onPress={this.onShowSliderHandler} style={styles.slideHoriz}>
@@ -190,5 +242,10 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: ui.fontSize.semiTiny,
         textDecorationLine: "underline"
+    },
+    statusTxt: {
+        fontFamily: ui.fonts.bold,
+        color: 'grey',
+        fontSize: ui.fontSize.semiTiny
     }
 })

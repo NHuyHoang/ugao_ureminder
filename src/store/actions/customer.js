@@ -61,7 +61,7 @@ export const onLogout = () => {
 }
 
 export const logout = () => {
-    return (dispatch,getState) => {
+    return (dispatch, getState) => {
         //remove the token 
         const body = {
             query: `
@@ -575,15 +575,19 @@ export const tryUpdateInvoiceStatus = (_id, receiptDate) => {
         //let invoices = await [...getState().customer.info.invoices];
 
         let invoices = customer.invoices;
-        //update invoice stgetItem
+        //update invoice 
 
         let invoice = invoices.find(inv => inv._id === _id);
-        console.log(invoice);
-        invoice.paid = true;
-        invoice.tasks.receipt_date = receiptDate
+        if (receiptDate) {
+            invoice.paid = true;
+            invoice.tasks.receipt_date = receiptDate;
 
+        }
+
+        invoice.shipper = true;
         //update async storage
         customer.invoices = invoices;
+        console.log(customer.invoices);
         AsyncStorage.setItem(itemKey.customerKey, JSON.stringify(customer));
 
         //dispatch SAVE_INVOICES

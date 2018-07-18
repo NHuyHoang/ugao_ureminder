@@ -42,6 +42,7 @@ class Login extends React.Component {
                     tasks { receipt_date }
                     price
                     paid
+                    shipper{ _id }
                     store { name owner { email phone token } }
                     products {  product { _id name img price weight} quantity }
                   }

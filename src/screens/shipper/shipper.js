@@ -1,16 +1,23 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, ScrollView, TouchableNativeFeedback } from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView, TouchableNativeFeedback, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Header, Input, FecthData, Noti } from '../../components';
+import { Input, FecthData, Noti } from '../../components';
 import ui from '../../share/ui.constant';
+import globalConst from '../../store/constant';
+
+const ComponentState = Object.freeze({ idle: "idle", loading: "loading", success: "success", failed: "failed" })
 
 export default class shipper extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            compState: ComponentState.loading
+        }
         this.query = `
         {
             invoice(id: "${this.props.navigation.state.params.invoiceId}") {
               order_date
+              paid
               tasks{
                   estimationTime
                   receipt_date
@@ -28,7 +35,40 @@ export default class shipper extends React.Component {
             }
           }
         `;
-        this.fectData = FecthData(this.query, "invoice", this.props, LoadedContent);
+        this._onFetchInvoice();
+        //this.fectData = FecthData(this.query, "invoice", this.props, LoadedContent);
+    }
+
+    _onFetchInvoice = async () => {
+        const url = `${globalConst.DB_URI}?query=${this.query}`;
+        console.log("url-----:", url);
+        const response = await fetch(url)
+            .then(data => data.json());
+        if (!response) {
+            this.setState({ compState: ComponentState.failed });
+            return;
+        }
+        this.invoice = response.data.invoice;
+        this.setState({ compState: ComponentState.success });
+    }
+
+    _onRenderContent = () => {
+        switch (this.state.compState) {
+            case (ComponentState.idle):
+                return null;
+            case (ComponentState.loading):
+                return (
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:'white' }}>
+                        <ActivityIndicator size="small" color="black" />
+                    </View>
+                )
+            case (ComponentState.success): {
+                console.log(this.invoice);
+                return <LoadedContent data={this.invoice} />
+            }
+            case (ComponentState.failed):
+                return <Noti message="Đã xảy ra lỗi" />
+        }
     }
 
     render() {
@@ -41,7 +81,7 @@ export default class shipper extends React.Component {
                         <Icon name='clear' size={20} color='red' />
                     </View>
                 </TouchableNativeFeedback>
-                {this.fectData}
+                {this._onRenderContent()}
             </React.Fragment>
         )
     }
@@ -51,6 +91,8 @@ const LoadedContent = (props) => {
     const shipper = props.data.shipper;
     const store = props.data.store;
     const task = props.data.tasks;
+    const paid = props.data.paid;
+    console.log("-----paid", paid);
     let displayContent;
     if (!shipper) displayContent = (
         <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
@@ -82,7 +124,7 @@ const LoadedContent = (props) => {
                     {shipper.name}
                 </Text>
                 {
-                    !task.receipt_date ?
+                    !paid ?
                         <React.Fragment>
                             <Text style={styles.decorateTxt3}>
                                 Bạn sẽ nhận được hàng vào
@@ -143,7 +185,7 @@ const styles = StyleSheet.create({
         height: 150,
         width: 150,
         borderRadius: 9999,
-        resizeMode: 'contain',
+        resizeMode: 'cover',
     },
     decorateTxt: {
         width: "100%",

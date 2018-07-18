@@ -40,6 +40,7 @@ class FbSignUp extends React.PureComponent {
                         tasks { receipt_date }
                         price
                         paid
+                        shipper{ _id }
                         store { name owner { email phone token } }
                         products {  product { _id name img price weight} quantity }
                     }
